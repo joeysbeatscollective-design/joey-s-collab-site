@@ -3,214 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JoeyFlavour — Beats</title>
+    <title>JoeyFlavour — Beats That Need Vocals</title>
 
-    <!-- Preload critical resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Wavesurfer.js for real waveforms -->
+    <!-- Wavesurfer.js for waveform -->
     <script src="https://unpkg.com/wavesurfer.js@7"></script>
 
     <style>
         /* ============================================
-           CYMATICS-EXACT DESIGN SYSTEM
+           CSS RESET & VARIABLES (CYMATICS PALETTE)
            ============================================ */
         :root {
-            /* Colors */
-            --black: #000000;
-            --black-soft: #0a0a0a;
-            --black-card: #0d0d0d;
-            --black-elevated: #121212;
-            --black-border: #1a1a1a;
-            
-            --white: #ffffff;
-            --gray-100: #e5e5e5;
-            --gray-200: #cccccc;
-            --gray-300: #a3a3a3;
-            --gray-400: #737373;
-            --gray-500: #525252;
-            --gray-600: #404040;
-            --gray-700: #2e2e2e;
-            --gray-800: #1f1f1f;
-            
-            --pink: #ff0080;
-            --pink-light: #ff4da6;
-            --purple: #9333ea;
-            --purple-light: #a855f7;
-            --cyan: #00d4ff;
-            --green: #00ff88;
-            --red: #ef4444;
-            
-            /* Spacing (8px grid) */
-            --space-1: 4px;
-            --space-2: 8px;
-            --space-3: 12px;
-            --space-4: 16px;
-            --space-5: 20px;
-            --space-6: 24px;
-            --space-8: 32px;
-            --space-10: 40px;
-            --space-12: 48px;
-            --space-16: 64px;
-            --space-20: 80px;
-            --space-24: 96px;
-            
-            /* Typography */
-            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            
-            /* Radius */
+            /* Cymatics exact colors */
+            --cm-black: #000000;
+            --cm-bg: #0a0a0a;
+            --cm-card: #111111;
+            --cm-card-hover: #161616;
+            --cm-border: #1c1c1c;
+            --cm-border-light: #2a2a2a;
+
+            --cm-white: #ffffff;
+            --cm-text: #e0e0e0;
+            --cm-text-muted: #888888;
+            --cm-text-dim: #555555;
+
+            /* Cymatics signature gradient: hot pink → purple */
+            --cm-pink: #ff0050;
+            --cm-magenta: #e91e8c;
+            --cm-purple: #9333ea;
+            --cm-violet: #7c3aed;
+            --cm-cyan: #00d4ff;
+            --cm-green: #22c55e;
+
+            /* Cymatics-style button gradient */
+            --cm-btn-gradient: linear-gradient(135deg, #ff0050, #e91e8c, #9333ea);
+            --cm-btn-gradient-hover: linear-gradient(135deg, #ff1a66, #f02e99, #a855f7);
+
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
             --radius-sm: 6px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
-            --radius-2xl: 20px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 20px;
             --radius-full: 9999px;
-            
-            /* Shadows */
-            --shadow-glow-pink: 
-                0 0 20px rgba(255, 0, 128, 0.3),
-                0 0 40px rgba(255, 0, 128, 0.2);
-            
-            /* Transitions */
-            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-            --duration-fast: 150ms;
-            --duration-normal: 300ms;
-            --duration-slow: 500ms;
         }
 
-        /* ============================================
-           PRELOADER
-           ============================================ */
-        .preloader {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: var(--black);
-            transition: opacity 0.6s var(--ease-out-expo), visibility 0.6s;
-        }
-
-        .preloader.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .preloader-logo {
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--pink), var(--purple));
-            border-radius: var(--radius-lg);
-            font-size: 1.5rem;
-            margin-bottom: var(--space-6);
-            animation: pulse-logo 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse-logo {
-            0%, 100% { 
-                transform: scale(1); 
-                box-shadow: 0 0 0 0 rgba(255, 0, 128, 0.4);
-            }
-            50% { 
-                transform: scale(1.05); 
-                box-shadow: 0 0 30px 10px rgba(255, 0, 128, 0.2);
-            }
-        }
-
-        .preloader-bar {
-            width: 200px;
-            height: 3px;
-            background: var(--gray-800);
-            border-radius: var(--radius-full);
-            overflow: hidden;
-        }
-
-        .preloader-progress {
-            height: 100%;
-            background: linear-gradient(90deg, var(--pink), var(--purple), var(--cyan));
-            background-size: 200% 100%;
-            border-radius: var(--radius-full);
-            animation: loading-bar 1.5s ease-in-out infinite;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        @keyframes loading-bar {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
-        }
-
-        .preloader-text {
-            margin-top: var(--space-4);
-            font-size: 0.75rem;
-            color: var(--gray-500);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        /* ============================================
-           PAGE TRANSITION
-           ============================================ */
-        .page-content {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: 
-                opacity 0.8s var(--ease-out-expo),
-                transform 0.8s var(--ease-out-expo);
-        }
-
-        .page-content.loaded {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ============================================
-           SCROLL REVEAL ANIMATIONS
-           ============================================ */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: 
-                opacity 0.8s var(--ease-out-expo),
-                transform 0.8s var(--ease-out-expo);
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Staggered card animations */
-        .card {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: 
-                opacity 0.6s var(--ease-out-expo),
-                transform 0.6s var(--ease-out-expo);
-        }
-
-        .card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .card:nth-child(1) { transition-delay: 0ms; }
-        .card:nth-child(2) { transition-delay: 100ms; }
-        .card:nth-child(3) { transition-delay: 200ms; }
-        .card:nth-child(4) { transition-delay: 300ms; }
-
-        /* ============================================
-           BASE STYLES
-           ============================================ */
         *, *::before, *::after {
             margin: 0;
             padding: 0;
@@ -220,74 +60,202 @@
         html {
             scroll-behavior: smooth;
             scrollbar-width: thin;
-            scrollbar-color: var(--gray-700) var(--black);
+            scrollbar-color: #333 #0a0a0a;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+        ::selection {
+            background: var(--cm-magenta);
+            color: var(--cm-white);
         }
 
         body {
-            font-family: var(--font-sans);
-            background: var(--black);
-            color: var(--white);
-            line-height: 1.5;
+            font-family: var(--font);
+            background: var(--cm-bg);
+            color: var(--cm-text);
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
             overflow-x: hidden;
         }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--black); }
-        ::-webkit-scrollbar-thumb { background: var(--gray-700); border-radius: 4px; }
-
-        ::selection {
-            background: var(--pink);
-            color: var(--white);
+        a {
+            text-decoration: none;
+            color: inherit;
         }
 
-        a { color: inherit; text-decoration: none; }
-        button { font-family: inherit; cursor: pointer; border: none; background: none; }
-        img { max-width: 100%; display: block; }
+        img {
+            max-width: 100%;
+            display: block;
+        }
 
         /* ============================================
-           BACKGROUND
+           PRELOADER (Cymatics style)
            ============================================ */
-        .bg-gradient {
+        .preloader {
             position: fixed;
             inset: 0;
-            z-index: -1;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--cm-black);
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
             pointer-events: none;
-            background: 
-                radial-gradient(ellipse 100% 80% at 50% -40%, rgba(255, 0, 128, 0.07), transparent 60%),
-                radial-gradient(ellipse 80% 60% at 100% 0%, rgba(147, 51, 234, 0.04), transparent 50%),
-                radial-gradient(ellipse 60% 60% at 0% 100%, rgba(0, 212, 255, 0.03), transparent 50%);
+        }
+
+        .preloader-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-lg);
+            background: var(--cm-btn-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 24px;
+            animation: preloaderPulse 1.5s ease-in-out infinite;
+            box-shadow: 0 0 60px rgba(255, 0, 80, 0.4);
+        }
+
+        @keyframes preloaderPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(255, 0, 80, 0.3); }
+            50% { transform: scale(1.06); box-shadow: 0 0 80px rgba(255, 0, 80, 0.5); }
+        }
+
+        .preloader-bar {
+            width: 200px;
+            height: 3px;
+            background: #1a1a1a;
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .preloader-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--cm-btn-gradient);
+            border-radius: var(--radius-full);
+            transition: width 0.3s ease;
+        }
+
+        .preloader-text {
+            margin-top: 16px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--cm-text-dim);
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
         }
 
         /* ============================================
-           HEADER
+           AMBIENT BACKGROUND GLOW
            ============================================ */
-        .header {
+        .ambient-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            height: 72px;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transform: translateY(-100%);
-            transition: transform 0.6s var(--ease-out-expo);
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 0, 80, 0.07), transparent 70%),
+                radial-gradient(ellipse 60% 40% at 100% 0%, rgba(147, 51, 234, 0.05), transparent 60%),
+                radial-gradient(ellipse 50% 50% at 0% 100%, rgba(0, 212, 255, 0.03), transparent 60%);
         }
 
-        .header.visible {
+        /* Noise texture overlay for that premium feel */
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+        }
+
+        /* ============================================
+           LAYOUT WRAPPER
+           ============================================ */
+        .page-wrap {
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .page-wrap.loaded {
+            opacity: 1;
             transform: translateY(0);
         }
 
+        /* ============================================
+           TOP ANNOUNCEMENT BAR (Cymatics does this)
+           ============================================ */
+        .announcement-bar {
+            width: 100%;
+            background: var(--cm-btn-gradient);
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--cm-white);
+            position: relative;
+            z-index: 101;
+        }
+
+        .announcement-bar span {
+            opacity: 0.9;
+        }
+
+        .announcement-bar a {
+            color: var(--cm-white);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        /* ============================================
+           HEADER / NAVBAR
+           ============================================ */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 64px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--cm-border);
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            background: rgba(0, 0, 0, 0.95);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
         .header-inner {
-            max-width: 1400px;
+            max-width: 1280px;
             height: 100%;
             margin: 0 auto;
-            padding: 0 var(--space-10);
+            padding: 0 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -296,1766 +264,1596 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: var(--space-3);
-            transition: opacity var(--duration-fast) var(--ease-out-expo);
+            gap: 10px;
+            transition: opacity 0.2s;
         }
 
         .logo:hover { opacity: 0.8; }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--pink), var(--purple));
-            border-radius: var(--radius-md);
-            font-size: 0.9rem;
+            background: var(--cm-btn-gradient);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            box-shadow: 0 0 20px rgba(255, 0, 80, 0.25);
         }
 
         .logo-text {
-            font-size: 1.1rem;
-            font-weight: 700;
+            font-size: 1.05rem;
+            font-weight: 800;
             letter-spacing: -0.02em;
+            color: var(--cm-white);
         }
 
         .nav {
             display: flex;
             align-items: center;
-            gap: var(--space-10);
+            gap: 32px;
         }
 
         .nav-link {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--gray-400);
-            transition: color var(--duration-fast) var(--ease-out-expo);
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--cm-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.2s;
+            position: relative;
         }
 
-        .nav-link:hover { color: var(--white); }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--cm-btn-gradient);
+            border-radius: 1px;
+            transition: width 0.3s ease;
+        }
 
-        .mobile-menu-btn {
+        .nav-link:hover { color: var(--cm-white); }
+        .nav-link:hover::after,
+        .nav-link.active::after { width: 100%; }
+        .nav-link.active { color: var(--cm-white); }
+
+        .nav-cta {
+            padding: 8px 20px;
+            background: var(--cm-btn-gradient);
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: var(--font);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--cm-white);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 20px rgba(255, 0, 80, 0.2);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 30px rgba(255, 0, 80, 0.35);
+        }
+
+        .mobile-toggle {
             display: none;
-            padding: var(--space-2);
-            font-size: 1.25rem;
-            color: var(--white);
+            background: none;
+            border: none;
+            color: var(--cm-white);
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 4px;
         }
 
         /* ============================================
-           HERO
+           HERO SECTION (Cymatics store vibe)
            ============================================ */
         .hero {
-            min-height: 85vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 140px var(--space-10) var(--space-20);
+            position: relative;
+            padding: 100px 32px 60px;
             text-align: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 500px;
+            background: radial-gradient(ellipse, rgba(255, 0, 80, 0.12), rgba(147, 51, 234, 0.06), transparent 70%);
+            pointer-events: none;
+            animation: heroBreath 6s ease-in-out infinite;
+        }
+
+        @keyframes heroBreath {
+            0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
         }
 
         .hero-content {
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
-        /* Badge with color-shifting glow */
-        .badge {
+        .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: var(--space-3);
-            padding: var(--space-3) var(--space-6);
-            margin-bottom: var(--space-8);
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 8px;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 0, 80, 0.25);
             border-radius: var(--radius-full);
-            font-size: 0.7rem;
-            font-weight: 600;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: var(--gray-200);
-            animation: badge-glow 4s ease-in-out infinite;
+            color: var(--cm-magenta);
+            margin-bottom: 28px;
+            backdrop-filter: blur(8px);
         }
 
-        @keyframes badge-glow {
-            0%, 100% {
-                border-color: rgba(255, 0, 128, 0.4);
-                box-shadow: 0 0 20px rgba(255, 0, 128, 0.15), inset 0 0 20px rgba(255, 0, 128, 0.03);
-            }
-            33% {
-                border-color: rgba(147, 51, 234, 0.4);
-                box-shadow: 0 0 20px rgba(147, 51, 234, 0.15), inset 0 0 20px rgba(147, 51, 234, 0.03);
-            }
-            66% {
-                border-color: rgba(0, 212, 255, 0.4);
-                box-shadow: 0 0 20px rgba(0, 212, 255, 0.15), inset 0 0 20px rgba(0, 212, 255, 0.03);
-            }
-        }
-
-        .badge-dot {
+        .hero-badge .dot {
             width: 6px;
             height: 6px;
-            background: var(--green);
+            background: var(--cm-pink);
             border-radius: 50%;
-            box-shadow: 0 0 10px var(--green);
-            animation: pulse-dot 2s ease-in-out infinite;
+            animation: dotPulse 2s ease-in-out infinite;
         }
 
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.5); }
+        @keyframes dotPulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 4px rgba(255, 0, 80, 0.6); }
+            50% { opacity: 0.4; box-shadow: 0 0 12px rgba(255, 0, 80, 0.8); }
         }
 
-        .hero-title {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            font-weight: 800;
+        .hero h1 {
+            font-size: clamp(2.4rem, 6vw, 4.2rem);
+            font-weight: 900;
             line-height: 1.05;
-            letter-spacing: -0.04em;
-            margin-bottom: var(--space-6);
+            letter-spacing: -0.03em;
+            color: var(--cm-white);
+            margin-bottom: 20px;
         }
 
-        .gradient-text {
-            background: linear-gradient(135deg, var(--pink), var(--purple-light), var(--cyan), var(--pink));
-            background-size: 300% 100%;
+        .hero h1 .gradient-text {
+            background: var(--cm-btn-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: gradient-flow 6s ease infinite;
         }
 
-        @keyframes gradient-flow {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .hero-subtitle {
-            max-width: 500px;
-            font-size: 1.1rem;
-            color: var(--gray-400);
+        .hero p {
+            font-size: 1.05rem;
+            color: var(--cm-text-muted);
+            max-width: 520px;
+            margin: 0 auto 36px;
             line-height: 1.7;
-            margin-bottom: var(--space-10);
         }
 
-        .btn-group {
+        .hero-buttons {
             display: flex;
-            gap: var(--space-4);
+            gap: 14px;
+            justify-content: center;
             flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-2);
-            padding: var(--space-4) var(--space-8);
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-            border-radius: var(--radius-full);
-            transition: 
-                transform var(--duration-normal) var(--ease-out-expo),
-                box-shadow var(--duration-normal) var(--ease-out-expo);
-        }
-
-        .btn-primary {
-            background: var(--pink);
-            color: var(--white);
-            box-shadow: 0 0 0 1px rgba(255, 0, 128, 0.5), 0 4px 20px rgba(255, 0, 128, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 0 1px rgba(255, 0, 128, 0.6), 0 8px 30px rgba(255, 0, 128, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--white);
-            box-shadow: inset 0 0 0 1px var(--gray-700);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.03);
-            box-shadow: inset 0 0 0 1px var(--gray-500);
-            transform: translateY(-2px);
         }
 
         /* ============================================
-           STATS
+           BUTTONS (Cymatics EXACT style)
            ============================================ */
-        .stats {
-            display: flex;
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
-            gap: var(--space-16);
-            padding: var(--space-6) var(--space-10);
-            margin-bottom: var(--space-20);
+            gap: 8px;
+            padding: 14px 32px;
+            background: var(--cm-btn-gradient);
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: var(--font);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--cm-white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 25px rgba(255, 0, 80, 0.25);
+            position: relative;
+            overflow: hidden;
         }
 
-        .stat { text-align: center; }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-        .stat-value {
-            font-size: 1.75rem;
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(255, 0, 80, 0.4);
+        }
+
+        .btn-primary:hover::before {
+            opacity: 1;
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 32px;
+            background: transparent;
+            border: 1px solid var(--cm-border-light);
+            border-radius: var(--radius-full);
+            font-family: var(--font);
+            font-size: 0.82rem;
             font-weight: 700;
-            letter-spacing: -0.03em;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--cm-white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--cm-magenta);
+            background: rgba(255, 0, 80, 0.06);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(255, 0, 80, 0.1);
+        }
+
+        /* Small card button */
+        .btn-card {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 22px;
+            background: var(--cm-btn-gradient);
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: var(--font);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--cm-white);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 15px rgba(255, 0, 80, 0.2);
+            width: 100%;
+        }
+
+        .btn-card:hover {
+            box-shadow: 0 4px 25px rgba(255, 0, 80, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-card {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 22px;
+            background: transparent;
+            border: 1px solid var(--cm-border-light);
+            border-radius: var(--radius-full);
+            font-family: var(--font);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--cm-text);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            width: 100%;
+        }
+
+        .btn-outline-card:hover {
+            border-color: var(--cm-magenta);
+            color: var(--cm-white);
+        }
+
+        /* ============================================
+           STATS BAR (Social proof strip)
+           ============================================ */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            padding: 40px 32px;
+            border-top: 1px solid var(--cm-border);
+            border-bottom: 1px solid var(--cm-border);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--cm-white);
+            letter-spacing: -0.02em;
+        }
+
+        .stat-number .accent {
+            background: var(--cm-btn-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .stat-label {
             font-size: 0.7rem;
-            font-weight: 500;
+            font-weight: 600;
+            color: var(--cm-text-dim);
             text-transform: uppercase;
             letter-spacing: 0.12em;
-            color: var(--gray-500);
-            margin-top: var(--space-2);
+            margin-top: 4px;
         }
 
         /* ============================================
-           SECTION
+           FILTER TABS (Cymatics store categories)
            ============================================ */
-        .section {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: var(--space-20) var(--space-10);
-        }
-
         .section-header {
-            display: flex;
-            align-items: center;
-            gap: var(--space-4);
-            margin-bottom: var(--space-12);
-        }
-
-        .section-icon {
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--black-elevated);
-            border: 1px solid var(--black-border);
-            border-radius: var(--radius-lg);
-            font-size: 1.2rem;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 60px 32px 0;
         }
 
         .section-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--cm-white);
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
         }
 
-        .section-count {
-            margin-left: var(--space-3);
-            padding: var(--space-2) var(--space-4);
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: var(--gray-500);
-            background: var(--black-card);
-            border: 1px solid var(--black-border);
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: var(--cm-text-muted);
+            margin-bottom: 28px;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            background: var(--cm-card);
+            border: 1px solid var(--cm-border);
             border-radius: var(--radius-full);
-        }
-
-        /* ============================================
-           GRID
-           ============================================ */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: var(--space-5);
-        }
-
-        /* ============================================
-           CARD
-           ============================================ */
-        .card {
-            position: relative;
-            background: var(--black-card);
-            border: 1px solid transparent;
-            border-radius: var(--radius-xl);
-            overflow: hidden;
+            font-family: var(--font);
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--cm-text-muted);
             cursor: pointer;
-            transition: 
-                transform var(--duration-slow) var(--ease-out-expo),
-                border-color var(--duration-slow) var(--ease-out-expo),
-                box-shadow var(--duration-slow) var(--ease-out-expo);
+            transition: all 0.2s ease;
         }
 
-        .card:hover {
-            transform: translateY(-8px) scale(1.01);
-            animation: card-glow 3s ease-in-out infinite;
+        .filter-btn:hover {
+            border-color: var(--cm-text-dim);
+            color: var(--cm-white);
         }
 
-        @keyframes card-glow {
-            0%, 100% {
-                border-color: var(--pink);
-                box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 40px rgba(255,0,128,0.1);
-            }
-            33% {
-                border-color: var(--purple);
-                box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 40px rgba(147,51,234,0.1);
-            }
-            66% {
-                border-color: var(--cyan);
-                box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 40px rgba(0,212,255,0.1);
-            }
+        .filter-btn.active {
+            background: var(--cm-btn-gradient);
+            border-color: transparent;
+            color: var(--cm-white);
+            box-shadow: 0 0 15px rgba(255, 0, 80, 0.2);
         }
 
-        .card-image {
-            position: relative;
-            aspect-ratio: 1;
+        /* ============================================
+           BEAT CARDS GRID (Cymatics store layout)
+           ============================================ */
+        .beats-grid {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .beat-card {
+            background: var(--cm-card);
+            border: 1px solid var(--cm-border);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            background: linear-gradient(135deg, var(--black-soft), var(--black-elevated));
+            transition: all 0.35s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            position: relative;
         }
 
-        .card-image img {
+        .beat-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .beat-card:hover {
+            border-color: var(--cm-border-light);
+            transform: translateY(-4px);
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 0, 80, 0.08);
+        }
+
+        /* Card artwork area */
+        .card-artwork {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #0d0d0d;
+            overflow: hidden;
+        }
+
+        .card-artwork img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.6s var(--ease-out-expo);
+            transition: transform 0.5s ease, filter 0.5s ease;
         }
 
-        .card:hover .card-image img {
-            transform: scale(1.08);
+        .beat-card:hover .card-artwork img {
+            transform: scale(1.05);
+            filter: brightness(0.7);
         }
 
-        .card-badge {
-            position: absolute;
-            top: var(--space-4);
-            left: var(--space-4);
-            padding: 6px 12px;
-            font-size: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-radius: var(--radius-full);
-            backdrop-filter: blur(12px);
-            z-index: 10;
-        }
-
-        .card-badge.open {
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--green);
-            border: 1px solid rgba(0, 255, 136, 0.25);
-        }
-
-        .card-badge.featured {
-            background: rgba(255, 0, 128, 0.15);
-            color: var(--pink-light);
-            border: 1px solid rgba(255, 0, 128, 0.25);
-        }
-
-        .card-badge.urgent {
-            background: rgba(239, 68, 68, 0.15);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.25);
-        }
-
-        .card-bpm {
-            position: absolute;
-            top: var(--space-4);
-            right: var(--space-4);
-            padding: 6px 12px;
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--white);
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(12px);
-            border-radius: var(--radius-full);
-            z-index: 10;
-        }
-
-        /* Play Overlay */
-        .card-overlay {
+        /* Play overlay */
+        .card-play-overlay {
             position: absolute;
             inset: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.5);
             opacity: 0;
-            transition: opacity var(--duration-normal) var(--ease-out-expo);
+            transition: opacity 0.3s ease;
         }
 
-        .card:hover .card-overlay {
+        .beat-card:hover .card-play-overlay {
             opacity: 1;
         }
 
-        .play-btn-large {
+        .play-circle {
             width: 64px;
             height: 64px;
+            background: var(--cm-btn-gradient);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--pink);
-            border-radius: 50%;
-            box-shadow: var(--shadow-glow-pink);
-            transition: transform var(--duration-normal) var(--ease-spring);
+            font-size: 1.4rem;
+            box-shadow: 0 0 30px rgba(255, 0, 80, 0.5);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            border: none;
+            color: white;
         }
 
-        .play-btn-large:hover {
+        .play-circle:hover {
             transform: scale(1.1);
         }
 
-        .play-btn-large svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--white);
-            margin-left: 4px;
-        }
-
-        /* Waveform Container */
-        .waveform-container {
+        /* Genre tag on artwork */
+        .card-genre-tag {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
-            padding: 0 var(--space-4);
-            z-index: 5;
+            top: 12px;
+            left: 12px;
+            padding: 4px 12px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-full);
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--cm-white);
         }
 
-        .waveform-container > div {
-            height: 40px !important;
-            margin-top: 12px;
+        /* BPM / Key tags */
+        .card-meta-tags {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            right: 12px;
+            display: flex;
+            gap: 6px;
         }
 
-        /* Card Content */
-        .card-content {
-            padding: var(--space-5);
+        .meta-tag {
+            padding: 3px 10px;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(6px);
+            border-radius: var(--radius-full);
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            color: var(--cm-text-muted);
+        }
+
+        /* Card body */
+        .card-body {
+            padding: 16px;
         }
 
         .card-title {
-            font-size: 1rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--cm-white);
+            margin-bottom: 4px;
+            letter-spacing: -0.01em;
+        }
+
+        .card-producer {
+            font-size: 0.75rem;
+            color: var(--cm-text-dim);
+            margin-bottom: 12px;
+        }
+
+        .card-producer span {
+            color: var(--cm-magenta);
             font-weight: 600;
-            letter-spacing: -0.02em;
-            margin-bottom: var(--space-1);
         }
 
-        .card-meta {
-            font-size: 0.8rem;
-            color: var(--gray-500);
-            margin-bottom: var(--space-4);
-        }
-
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-2);
-            margin-bottom: var(--space-4);
-        }
-
-        .tag {
-            padding: 5px 12px;
-            font-size: 11px;
-            font-weight: 500;
-            color: var(--pink-light);
-            background: rgba(255, 0, 128, 0.08);
-            border-radius: var(--radius-full);
-        }
-
-        .tag.secondary {
-            color: var(--gray-400);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        /* ============================================
-           AUDIO PLAYER (Real Working Player)
-           ============================================ */
-        .player {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            padding: var(--space-3) var(--space-4);
-            background: var(--black-soft);
-            border: 1px solid var(--black-border);
-            border-radius: var(--radius-lg);
-        }
-
-        .play-btn {
-            width: 40px;
+        /* Waveform in card */
+        .card-waveform {
+            width: 100%;
             height: 40px;
-            min-width: 40px;
+            margin-bottom: 14px;
+            border-radius: 4px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Card tags */
+        .card-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .card-tag {
+            padding: 3px 10px;
+            background: rgba(255, 0, 80, 0.08);
+            border: 1px solid rgba(255, 0, 80, 0.15);
+            border-radius: var(--radius-full);
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--cm-magenta);
+        }
+
+        /* Card price area */
+        .card-price-row {
             display: flex;
             align-items: center;
-            justify-content: center;
-            background: var(--pink);
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(255, 0, 128, 0.3);
-            transition: 
-                transform var(--duration-fast) var(--ease-spring),
-                box-shadow var(--duration-fast) var(--ease-out-expo);
-        }
-
-        .play-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 30px rgba(255, 0, 128, 0.4);
-        }
-
-        .play-btn svg {
-            width: 14px;
-            height: 14px;
-            fill: var(--white);
-        }
-
-        .play-btn .play-icon { margin-left: 2px; }
-        .play-btn .pause-icon { display: none; }
-        .play-btn.playing .play-icon { display: none; }
-        .play-btn.playing .pause-icon { display: block; }
-
-        .player-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .player-progress {
-            height: 4px;
-            background: var(--gray-800);
-            border-radius: var(--radius-full);
-            overflow: hidden;
-            cursor: pointer;
-            margin-bottom: 6px;
-        }
-
-        .player-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--pink), var(--purple));
-            border-radius: var(--radius-full);
-            width: 0%;
-            transition: width 0.1s linear;
-        }
-
-        .player-time {
-            display: flex;
             justify-content: space-between;
-            font-size: 0.65rem;
-            color: var(--gray-600);
-            font-variant-numeric: tabular-nums;
+            margin-bottom: 14px;
+        }
+
+        .card-price {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--cm-white);
+        }
+
+        .card-price .free-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            background: var(--cm-btn-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-status {
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--cm-green);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .card-status .dot {
+            width: 5px;
+            height: 5px;
+            background: var(--cm-green);
+            border-radius: 50%;
+            animation: dotPulse 2s ease infinite;
+        }
+
+        .card-buttons {
+            display: flex;
+            gap: 8px;
         }
 
         /* ============================================
-           GLOBAL AUDIO PLAYER (Bottom Bar)
+           BOTTOM PLAYER BAR (fixed)
            ============================================ */
-        .global-player {
+        .player-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             z-index: 200;
-            background: rgba(10, 10, 10, 0.95);
+            height: 72px;
+            background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border-top: 1px solid var(--black-border);
-            padding: var(--space-4) var(--space-8);
-            display: none;
+            border-top: 1px solid var(--cm-border);
+            display: flex;
             align-items: center;
-            gap: var(--space-6);
+            padding: 0 32px;
+            gap: 20px;
             transform: translateY(100%);
-            transition: transform 0.4s var(--ease-out-expo);
+            transition: transform 0.4s ease;
         }
 
-        .global-player.active {
-            display: flex;
+        .player-bar.active {
             transform: translateY(0);
         }
 
-        .global-player-cover {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .global-player-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .global-player-info {
-            flex-shrink: 0;
-            min-width: 120px;
-        }
-
-        .global-player-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .global-player-meta {
-            font-size: 0.75rem;
-            color: var(--gray-500);
-        }
-
-        .global-player-controls {
+        .player-track-info {
             display: flex;
             align-items: center;
-            gap: var(--space-4);
-        }
-
-        .global-player-waveform {
-            flex: 1;
-            height: 40px;
+            gap: 12px;
             min-width: 200px;
         }
 
-        .global-player-time {
-            font-size: 0.75rem;
-            color: var(--gray-500);
+        .player-thumb {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: var(--cm-card);
+        }
+
+        .player-track-name {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--cm-white);
+        }
+
+        .player-track-artist {
+            font-size: 0.7rem;
+            color: var(--cm-text-dim);
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .player-btn {
+            background: none;
+            border: none;
+            color: var(--cm-text-muted);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 4px;
+        }
+
+        .player-btn:hover { color: var(--cm-white); }
+
+        .player-btn-play {
+            width: 40px;
+            height: 40px;
+            background: var(--cm-btn-gradient);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 20px rgba(255, 0, 80, 0.25);
+        }
+
+        .player-btn-play:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 0, 80, 0.4);
+        }
+
+        .player-waveform {
+            flex: 1;
+            height: 40px;
+            min-width: 0;
+        }
+
+        .player-time {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--cm-text-dim);
             font-variant-numeric: tabular-nums;
             min-width: 80px;
             text-align: right;
         }
 
-        .global-player-close {
-            width: 32px;
-            height: 32px;
+        .player-volume {
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: var(--gray-500);
-            font-size: 1rem;
-            border-radius: 50%;
-            transition: color var(--duration-fast), background var(--duration-fast);
+            gap: 8px;
         }
 
-        .global-player-close:hover {
-            color: var(--white);
-            background: var(--gray-800);
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 80px;
+            height: 3px;
+            background: var(--cm-border-light);
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: var(--cm-white);
+            border-radius: 50%;
+            cursor: pointer;
         }
 
         /* ============================================
-           MODAL
+           CALL TO ACTION SECTION
            ============================================ */
-        .modal-backdrop {
-            position: fixed;
-            inset: 0;
-            z-index: 300;
-            display: none;
-            align-items: flex-start;
-            justify-content: center;
-            padding: var(--space-10);
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(20px);
-            overflow-y: auto;
-            opacity: 0;
-            transition: opacity var(--duration-normal) var(--ease-out-expo);
+        .cta-section {
+            max-width: 1280px;
+            margin: 60px auto;
+            padding: 0 32px;
         }
 
-        .modal-backdrop.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal {
-            width: 100%;
-            max-width: 850px;
-            margin: var(--space-12) auto;
-            background: var(--black-soft);
-            border: 1px solid var(--black-border);
-            border-radius: var(--radius-2xl);
-            overflow: hidden;
-            transform: translateY(30px) scale(0.97);
-            opacity: 0;
-            transition: 
-                transform var(--duration-slow) var(--ease-out-expo),
-                opacity var(--duration-slow) var(--ease-out-expo);
-        }
-
-        .modal-backdrop.active .modal {
-            transform: translateY(0) scale(1);
-            opacity: 1;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: var(--space-5);
-            right: var(--space-5);
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--black-elevated);
-            border: 1px solid var(--black-border);
-            border-radius: 50%;
-            color: var(--gray-400);
-            font-size: 1.1rem;
-            z-index: 10;
-            transition: all var(--duration-normal) var(--ease-spring);
-        }
-
-        .modal-close:hover {
-            background: var(--pink);
-            color: var(--white);
-            transform: rotate(90deg);
-        }
-
-        .modal-header {
+        .cta-box {
             position: relative;
-            display: flex;
-            gap: var(--space-8);
-            padding: var(--space-8);
-            border-bottom: 1px solid var(--black-border);
-        }
-
-        .modal-cover {
-            width: 200px;
-            height: 200px;
-            min-width: 200px;
-            border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .modal-info { flex: 1; padding-top: var(--space-2); }
-
-        .modal-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-2);
-            padding: 6px 14px;
-            margin-bottom: var(--space-4);
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            border-radius: var(--radius-full);
-            animation: badge-glow 4s ease-in-out infinite;
-        }
-
-        .modal-title {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            margin-bottom: var(--space-2);
-        }
-
-        .modal-genre {
-            font-size: 1rem;
-            color: var(--gray-400);
-            margin-bottom: var(--space-6);
-        }
-
-        .modal-meta {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-3);
-        }
-
-        .meta-box {
-            padding: var(--space-4);
-            background: var(--black-card);
-            border: 1px solid var(--black-border);
-            border-radius: var(--radius-lg);
-        }
-
-        .meta-label {
-            font-size: 0.65rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: var(--gray-600);
-            margin-bottom: 4px;
-        }
-
-        .meta-value {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--pink);
-        }
-
-        .modal-body { padding: var(--space-8); }
-
-        .modal-section { margin-bottom: var(--space-8); }
-        .modal-section:last-child { margin-bottom: 0; }
-
-        .modal-section-title {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: var(--gray-500);
-            padding-bottom: var(--space-4);
-            margin-bottom: var(--space-4);
-            border-bottom: 1px solid var(--black-border);
-        }
-
-        .prefs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-3);
-        }
-
-        .pref-tag {
-            padding: var(--space-3) var(--space-5);
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--pink-light);
-            background: rgba(255, 0, 128, 0.06);
-            border: 1px solid rgba(255, 0, 128, 0.1);
-            border-radius: var(--radius-full);
-            transition: all var(--duration-fast);
-        }
-
-        .pref-tag:hover {
-            background: rgba(255, 0, 128, 0.12);
-            border-color: rgba(255, 0, 128, 0.2);
-        }
-
-        .text-box {
-            padding: var(--space-6);
-            font-size: 0.9rem;
-            line-height: 1.8;
-            color: var(--gray-300);
-            background: var(--black-card);
-            border: 1px solid var(--black-border);
-            border-radius: var(--radius-lg);
-            white-space: pre-wrap;
-        }
-
-        .modal-player {
-            margin-top: var(--space-6);
-            padding: var(--space-4);
-            background: var(--black-card);
-            border: 1px solid var(--black-border);
-            border-radius: var(--radius-lg);
-        }
-
-        .modal-player-waveform {
-            height: 80px;
-            margin-bottom: var(--space-4);
-        }
-
-        .modal-cta {
-            display: flex;
-            justify-content: center;
-            padding-top: var(--space-8);
-            margin-top: var(--space-8);
-            border-top: 1px solid var(--black-border);
-        }
-
-        /* ============================================
-           CONTACT
-           ============================================ */
-        .contact {
-            display: flex;
-            justify-content: center;
-            padding: var(--space-24) var(--space-10);
-        }
-
-        .contact-card {
-            max-width: 520px;
-            padding: var(--space-12) var(--space-10);
+            border-radius: var(--radius-xl);
+            padding: 60px 48px;
             text-align: center;
-            background: var(--black-card);
-            border: 1px solid var(--black-border);
-            border-radius: var(--radius-2xl);
+            background: var(--cm-card);
+            border: 1px solid var(--cm-border);
         }
 
-        .contact-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            margin-bottom: var(--space-3);
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(255, 0, 80, 0.08), transparent 70%);
+            pointer-events: none;
         }
 
-        .contact-subtitle {
-            font-size: 1rem;
-            color: var(--gray-400);
-            line-height: 1.7;
-            margin-bottom: var(--space-8);
+        .cta-box h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--cm-white);
+            margin-bottom: 12px;
+            position: relative;
         }
 
-        .contact-links {
+        .cta-box p {
+            color: var(--cm-text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 28px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+        }
+
+        .cta-socials {
             display: flex;
-            flex-direction: column;
-            gap: var(--space-3);
+            justify-content: center;
+            gap: 12px;
+            position: relative;
         }
 
-        .contact-link {
+        .social-btn {
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: var(--space-3);
-            padding: var(--space-4) var(--space-6);
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--white);
-            background: var(--black-soft);
-            border: 1px solid var(--black-border);
-            border-radius: var(--radius-lg);
-            transition: all var(--duration-normal) var(--ease-out-expo);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--cm-border);
+            border-radius: 50%;
+            font-size: 1.1rem;
+            color: var(--cm-text-muted);
+            transition: all 0.25s ease;
+            cursor: pointer;
         }
 
-        .contact-link:hover {
-            transform: translateY(-3px);
-            border-color: var(--pink);
-            box-shadow: 0 10px 30px rgba(255, 0, 128, 0.1);
-        }
-
-        .contact-link .icon { font-size: 1.1rem; }
-        .contact-link .label {
-            margin-left: auto;
-            color: var(--gray-600);
-            font-weight: 400;
+        .social-btn:hover {
+            border-color: var(--cm-magenta);
+            color: var(--cm-white);
+            background: rgba(255, 0, 80, 0.1);
+            transform: translateY(-2px);
         }
 
         /* ============================================
            FOOTER
            ============================================ */
         .footer {
-            padding: var(--space-8) var(--space-10);
+            border-top: 1px solid var(--cm-border);
+            padding: 40px 32px 120px; /* extra bottom for player bar */
             text-align: center;
-            font-size: 0.8rem;
-            color: var(--gray-600);
-            border-top: 1px solid var(--black-border);
         }
 
-        /* Extra padding for global player */
-        body.player-active .footer {
-            padding-bottom: 100px;
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
         }
+
+        .footer-text {
+            font-size: 0.72rem;
+            color: var(--cm-text-dim);
+            letter-spacing: 0.05em;
+        }
+
+        .footer-text a {
+            color: var(--cm-magenta);
+            font-weight: 600;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .footer-link {
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: var(--cm-text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover { color: var(--cm-white); }
+
+        /* ============================================
+           SCROLL REVEAL ANIMATION DELAYS
+           ============================================ */
+        .beat-card:nth-child(1) { transition-delay: 0ms; }
+        .beat-card:nth-child(2) { transition-delay: 80ms; }
+        .beat-card:nth-child(3) { transition-delay: 160ms; }
+        .beat-card:nth-child(4) { transition-delay: 240ms; }
+        .beat-card:nth-child(5) { transition-delay: 320ms; }
+        .beat-card:nth-child(6) { transition-delay: 400ms; }
+        .beat-card:nth-child(7) { transition-delay: 480ms; }
+        .beat-card:nth-child(8) { transition-delay: 560ms; }
 
         /* ============================================
            RESPONSIVE
            ============================================ */
-        @media (max-width: 1200px) {
-            .grid { grid-template-columns: repeat(3, 1fr); }
+        @media (max-width: 1024px) {
+            .beats-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
         }
 
-        @media (max-width: 900px) {
-            .grid { grid-template-columns: repeat(2, 1fr); }
-            
-            .header-inner, .section, .stats, .contact, .footer {
-                padding-left: var(--space-6);
-                padding-right: var(--space-6);
-            }
+        @media (max-width: 768px) {
+            .nav { display: none; }
+            .mobile-toggle { display: block; }
 
-            .nav {
-                display: none;
-                position: fixed;
-                top: 72px;
-                left: 0;
-                right: 0;
-                flex-direction: column;
-                gap: var(--space-4);
-                padding: var(--space-8);
-                background: rgba(0, 0, 0, 0.95);
-                backdrop-filter: blur(24px);
-                border-bottom: 1px solid var(--black-border);
-            }
+            .hero { padding: 70px 20px 40px; }
+            .hero h1 { font-size: 2rem; }
 
-            .nav.open { display: flex; }
-            .mobile-menu-btn { display: block; }
-
-            .modal-header {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            .stats { gap: var(--space-10); }
-
-            .global-player {
+            .stats-bar {
+                gap: 24px;
                 flex-wrap: wrap;
-                padding: var(--space-3) var(--space-4);
+                padding: 28px 20px;
             }
 
-            .global-player-waveform { 
-                order: 10; 
-                width: 100%; 
-                min-width: 100%;
-                margin-top: var(--space-2);
+            .beats-grid {
+                padding: 20px;
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 12px;
             }
+
+            .card-body { padding: 12px; }
+            .card-title { font-size: 0.82rem; }
+
+            .section-header { padding: 40px 20px 0; }
+
+            .player-bar {
+                padding: 0 16px;
+                gap: 12px;
+            }
+
+            .player-waveform { display: none; }
+            .player-volume { display: none; }
+            .player-track-info { min-width: auto; }
+
+            .cta-box { padding: 40px 24px; }
+            .cta-box h2 { font-size: 1.5rem; }
+
+            .card-buttons { flex-direction: column; }
         }
 
-        @media (max-width: 600px) {
-            .grid { gap: var(--space-4); }
-            .hero-title { font-size: 2.2rem; }
-            .hero-subtitle { font-size: 1rem; }
-            .btn { padding: var(--space-3) var(--space-6); }
-            .card-content { padding: var(--space-4); }
-            
-            .modal-cover {
-                width: 160px;
-                height: 160px;
-                min-width: 160px;
+        @media (max-width: 480px) {
+            .beats-grid {
+                grid-template-columns: 1fr;
+                max-width: 360px;
+                margin: 0 auto;
             }
+            
+            .announcement-bar { font-size: 0.62rem; padding: 8px 12px; }
+        }
 
-            .modal-meta { grid-template-columns: 1fr 1fr; }
-            .stats { gap: var(--space-8); }
-            .stat-value { font-size: 1.4rem; }
+        /* ============================================
+           MOBILE NAV OVERLAY
+           ============================================ */
+        .mobile-nav {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: rgba(0, 0, 0, 0.97);
+            backdrop-filter: blur(24px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 28px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-nav-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: none;
+            border: none;
+            color: var(--cm-white);
+            font-size: 1.6rem;
+            cursor: pointer;
+        }
+
+        .mobile-nav a {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--cm-white);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: color 0.2s;
+        }
+
+        .mobile-nav a:hover {
+            color: var(--cm-magenta);
+        }
+
+        /* ============================================
+           PLACEHOLDER ARTWORK GRADIENTS
+           ============================================ */
+        .artwork-gradient-1 {
+            background: linear-gradient(135deg, #1a0015, #3d0030, #ff0050, #9333ea);
+        }
+        .artwork-gradient-2 {
+            background: linear-gradient(135deg, #0a0020, #1e0060, #7c3aed, #00d4ff);
+        }
+        .artwork-gradient-3 {
+            background: linear-gradient(135deg, #001a10, #003820, #22c55e, #00d4ff);
+        }
+        .artwork-gradient-4 {
+            background: linear-gradient(135deg, #1a0000, #4a0000, #ff0050, #ff6600);
+        }
+        .artwork-gradient-5 {
+            background: linear-gradient(135deg, #0a0a1a, #1a1040, #9333ea, #ff0050);
+        }
+        .artwork-gradient-6 {
+            background: linear-gradient(135deg, #001020, #002040, #00d4ff, #7c3aed);
         }
     </style>
 </head>
 <body>
 
-    <!-- Preloader -->
+    <!-- PRELOADER -->
     <div class="preloader" id="preloader">
-        <div class="preloader-logo">🎹</div>
+        <div class="preloader-icon">🎵</div>
         <div class="preloader-bar">
-            <div class="preloader-progress" id="preloaderProgress"></div>
+            <div class="preloader-fill" id="preloaderFill"></div>
         </div>
-        <div class="preloader-text">Loading beats...</div>
+        <div class="preloader-text">Loading Beats...</div>
     </div>
 
-    <!-- Background -->
-    <div class="bg-gradient"></div>
+    <!-- AMBIENT BACKGROUND -->
+    <div class="ambient-bg"></div>
+    <div class="noise-overlay"></div>
 
-    <!-- Page Content (fades in after load) -->
-    <div class="page-content" id="pageContent">
+    <!-- PAGE WRAP -->
+    <div class="page-wrap" id="pageWrap">
 
-        <!-- Header -->
+        <!-- ANNOUNCEMENT BAR -->
+        <div class="announcement-bar">
+            <span>🔥 New beats dropping weekly — <a href="#beats">Listen Now</a></span>
+        </div>
+
+        <!-- HEADER -->
         <header class="header" id="header">
             <div class="header-inner">
                 <a href="#" class="logo">
                     <div class="logo-icon">🎹</div>
                     <span class="logo-text">JoeyFlavour</span>
                 </a>
-                <nav class="nav" id="nav">
-                    <a href="#beats" class="nav-link">Beats</a>
+
+                <nav class="nav" id="desktopNav">
+                    <a href="#beats" class="nav-link active">Beats</a>
+                    <a href="#about" class="nav-link">About</a>
                     <a href="#contact" class="nav-link">Contact</a>
+                    <button class="nav-cta" onclick="scrollToSection('beats')">Browse All</button>
                 </nav>
-                <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+
+                <button class="mobile-toggle" id="mobileToggle" onclick="openMobileNav()">☰</button>
             </div>
         </header>
 
-        <!-- Hero -->
+        <!-- MOBILE NAV -->
+        <div class="mobile-nav" id="mobileNav">
+            <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+            <a href="#beats" onclick="closeMobileNav()">Beats</a>
+            <a href="#about" onclick="closeMobileNav()">About</a>
+            <a href="#contact" onclick="closeMobileNav()">Contact</a>
+        </div>
+
+        <!-- HERO -->
         <section class="hero">
-            <div class="hero-content reveal">
-                <div class="badge">
-                    <span class="badge-dot"></span>
-                    Open for Collaborations
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="dot"></span>
+                    Open for Collabs
                 </div>
-                <h1 class="hero-title">
-                    Let's Create<br>
-                    <span class="gradient-text">Something Crazy</span>
-                </h1>
-                <p class="hero-subtitle">
-                    Fresh beats ready for vocals. Rappers, singers & writers — let's make magic together.
-                </p>
-                <div class="btn-group">
-                    <a href="#beats" class="btn btn-primary">Browse Beats</a>
-                    <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+                <h1>Premium Beats<br>Ready for <span class="gradient-text">Your Voice</span></h1>
+                <p>High-quality instrumentals crafted for vocalists, rappers & artists. Find your next hit — every beat is waiting for the right voice.</p>
+                <div class="hero-buttons">
+                    <button class="btn-primary" onclick="scrollToSection('beats')">▶&nbsp; Browse Beats</button>
+                    <button class="btn-secondary" onclick="scrollToSection('contact')">Get in Touch</button>
                 </div>
             </div>
         </section>
 
-        <!-- Stats -->
-        <div class="stats reveal">
-            <div class="stat">
-                <div class="stat-value">3</div>
-                <div class="stat-label">Fresh Beats</div>
+        <!-- STATS -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number"><span class="accent">50+</span></div>
+                <div class="stat-label">Beats Available</div>
             </div>
-            <div class="stat">
-                <div class="stat-value">128-150</div>
-                <div class="stat-label">BPM Range</div>
+            <div class="stat-item">
+                <div class="stat-number"><span class="accent">12</span></div>
+                <div class="stat-label">Genres</div>
             </div>
-            <div class="stat">
-                <div class="stat-value">2026</div>
-                <div class="stat-label">New Heat</div>
+            <div class="stat-item">
+                <div class="stat-number"><span class="accent">100%</span></div>
+                <div class="stat-label">Original</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number"><span class="accent">∞</span></div>
+                <div class="stat-label">Creative Freedom</div>
             </div>
         </div>
 
-        <!-- Beats Section -->
-        <section class="section" id="beats">
-            <div class="section-header reveal">
-                <div class="section-icon">🎤</div>
-                <h2 class="section-title">Beats</h2>
-                <span class="section-count">3 Tracks</span>
+        <!-- SECTION HEADER + FILTERS -->
+        <div class="section-header" id="beats">
+            <h2 class="section-title">Beat Store</h2>
+            <p class="section-subtitle">Explore the catalog — filter by genre, vibe, or mood.</p>
+            <div class="filter-bar" id="filterBar">
+                <button class="filter-btn active" data-filter="all">All Beats</button>
+                <button class="filter-btn" data-filter="trap">Trap</button>
+                <button class="filter-btn" data-filter="drill">Drill</button>
+                <button class="filter-btn" data-filter="rnb">R&B</button>
+                <button class="filter-btn" data-filter="hiphop">Hip-Hop</button>
+                <button class="filter-btn" data-filter="afrobeats">Afrobeats</button>
+                <button class="filter-btn" data-filter="pop">Pop</button>
+            </div>
+        </div>
+
+        <!-- BEATS GRID -->
+        <div class="beats-grid" id="beatsGrid">
+
+            <!-- CARD 1 -->
+            <div class="beat-card" data-genre="trap">
+                <div class="card-artwork artwork-gradient-1">
+                    <span class="card-genre-tag">Trap</span>
+                    <div class="card-meta-tags">
+                        <span class="meta-tag">140 BPM</span>
+                        <span class="meta-tag">D Minor</span>
+                    </div>
+                    <div class="card-play-overlay">
+                        <button class="play-circle" onclick="playBeat(this, 'beat1')" data-beat="beat1">▶</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-title">Midnight Phantom</div>
+                    <div class="card-producer">Prod. <span>JoeyFlavour</span></div>
+                    <div class="card-waveform" id="waveform-beat1"></div>
+                    <div class="card-tags">
+                        <span class="card-tag">Dark</span>
+                        <span class="card-tag">Hard</span>
+                        <span class="card-tag">808</span>
+                    </div>
+                    <div class="card-price-row">
+                        <div class="card-price"><span class="free-label">FREE — Needs Vocals</span></div>
+                        <div class="card-status"><span class="dot"></span> Open</div>
+                    </div>
+                    <div class="card-buttons">
+                        <button class="btn-card" onclick="playBeat(this, 'beat1')">▶&nbsp; Play</button>
+                        <button class="btn-outline-card">↓&nbsp; Download</button>
+                    </div>
+                </div>
             </div>
 
-            <div class="grid">
-                
-                <!-- ECLIPSE -->
-                <div class="card" data-track="eclipse">
-                    <div class="card-image">
-                        <img src="./covers/ECLIPSE.png" alt="ECLIPSE" loading="lazy" onerror="this.style.display='none';">
-                        <span class="card-badge open">Open</span>
-                        <span class="card-bpm">140 BPM</span>
-                        <div class="card-overlay">
-                            <div class="play-btn-large" onclick="event.stopPropagation(); playGlobal('eclipse')">
-                                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                            </div>
-                        </div>
-                        <div class="waveform-container" id="waveform-eclipse-mini"></div>
+            <!-- CARD 2 -->
+            <div class="beat-card" data-genre="drill">
+                <div class="card-artwork artwork-gradient-2">
+                    <span class="card-genre-tag">Drill</span>
+                    <div class="card-meta-tags">
+                        <span class="meta-tag">145 BPM</span>
+                        <span class="meta-tag">G# Minor</span>
                     </div>
-                    <div class="card-content" onclick="openModal('eclipse')">
-                        <h3 class="card-title">ECLIPSE</h3>
-                        <p class="card-meta">Trap · D Minor · 140 BPM</p>
-                        <div class="tags">
-                            <span class="tag">Rapper</span>
-                            <span class="tag secondary">Dark</span>
-                        </div>
-                        <div class="player" onclick="event.stopPropagation()">
-                            <button class="play-btn" id="playBtn-eclipse" onclick="playTrack('eclipse')">
-                                <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                                <svg class="pause-icon" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-                            </button>
-                            <div class="player-info">
-                                <div class="player-progress" onclick="seekTrack(event, 'eclipse')">
-                                    <div class="player-progress-fill" id="progress-eclipse"></div>
-                                </div>
-                                <div class="player-time">
-                                    <span id="currentTime-eclipse">0:00</span>
-                                    <span id="duration-eclipse">--:--</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-play-overlay">
+                        <button class="play-circle" onclick="playBeat(this, 'beat2')" data-beat="beat2">▶</button>
                     </div>
                 </div>
-
-                <!-- ABYSS -->
-                <div class="card" data-track="abyss">
-                    <div class="card-image">
-                        <img src="./covers/ABYSS.png" alt="ABYSS" loading="lazy" onerror="this.style.display='none';">
-                        <span class="card-badge featured">Featured</span>
-                        <span class="card-bpm">128 BPM</span>
-                        <div class="card-overlay">
-                            <div class="play-btn-large" onclick="event.stopPropagation(); playGlobal('abyss')">
-                                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                            </div>
-                        </div>
-                        <div class="waveform-container" id="waveform-abyss-mini"></div>
+                <div class="card-body">
+                    <div class="card-title">Cold Streets</div>
+                    <div class="card-producer">Prod. <span>JoeyFlavour</span></div>
+                    <div class="card-waveform" id="waveform-beat2"></div>
+                    <div class="card-tags">
+                        <span class="card-tag">UK Drill</span>
+                        <span class="card-tag">Gritty</span>
                     </div>
-                    <div class="card-content" onclick="openModal('abyss')">
-                        <h3 class="card-title">ABYSS</h3>
-                        <p class="card-meta">Trap · G Minor · 128 BPM</p>
-                        <div class="tags">
-                            <span class="tag">Melodic</span>
-                            <span class="tag secondary">Atmospheric</span>
-                        </div>
-                        <div class="player" onclick="event.stopPropagation()">
-                            <button class="play-btn" id="playBtn-abyss" onclick="playTrack('abyss')">
-                                <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                                <svg class="pause-icon" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-                            </button>
-                            <div class="player-info">
-                                <div class="player-progress" onclick="seekTrack(event, 'abyss')">
-                                    <div class="player-progress-fill" id="progress-abyss"></div>
-                                </div>
-                                <div class="player-time">
-                                    <span id="currentTime-abyss">0:00</span>
-                                    <span id="duration-abyss">--:--</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-price-row">
+                        <div class="card-price"><span class="free-label">FREE — Needs Vocals</span></div>
+                        <div class="card-status"><span class="dot"></span> Open</div>
+                    </div>
+                    <div class="card-buttons">
+                        <button class="btn-card" onclick="playBeat(this, 'beat2')">▶&nbsp; Play</button>
+                        <button class="btn-outline-card">↓&nbsp; Download</button>
                     </div>
                 </div>
+            </div>
 
-                <!-- NIGHTFALL -->
-                <div class="card" data-track="nightfall">
-                    <div class="card-image">
-                        <img src="./covers/NIGHTFALL.png" alt="NIGHTFALL" loading="lazy" onerror="this.style.display='none';">
-                        <span class="card-badge urgent">Urgent</span>
-                        <span class="card-bpm">150 BPM</span>
-                        <div class="card-overlay">
-                            <div class="play-btn-large" onclick="event.stopPropagation(); playGlobal('nightfall')">
-                                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                            </div>
-                        </div>
-                        <div class="waveform-container" id="waveform-nightfall-mini"></div>
+            <!-- CARD 3 -->
+            <div class="beat-card" data-genre="rnb">
+                <div class="card-artwork artwork-gradient-3">
+                    <span class="card-genre-tag">R&B</span>
+                    <div class="card-meta-tags">
+                        <span class="meta-tag">90 BPM</span>
+                        <span class="meta-tag">F Major</span>
                     </div>
-                    <div class="card-content" onclick="openModal('nightfall')">
-                        <h3 class="card-title">NIGHTFALL</h3>
-                        <p class="card-meta">Trap · E Minor · 150 BPM</p>
-                        <div class="tags">
-                            <span class="tag">Aggressive</span>
-                            <span class="tag secondary">Hard</span>
-                        </div>
-                        <div class="player" onclick="event.stopPropagation()">
-                            <button class="play-btn" id="playBtn-nightfall" onclick="playTrack('nightfall')">
-                                <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                                <svg class="pause-icon" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-                            </button>
-                            <div class="player-info">
-                                <div class="player-progress" onclick="seekTrack(event, 'nightfall')">
-                                    <div class="player-progress-fill" id="progress-nightfall"></div>
-                                </div>
-                                <div class="player-time">
-                                    <span id="currentTime-nightfall">0:00</span>
-                                    <span id="duration-nightfall">--:--</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-play-overlay">
+                        <button class="play-circle" onclick="playBeat(this, 'beat3')" data-beat="beat3">▶</button>
                     </div>
                 </div>
+                <div class="card-body">
+                    <div class="card-title">Velvet Touch</div>
+                    <div class="card-producer">Prod. <span>JoeyFlavour</span></div>
+                    <div class="card-waveform" id="waveform-beat3"></div>
+                    <div class="card-tags">
+                        <span class="card-tag">Smooth</span>
+                        <span class="card-tag">Soul</span>
+                        <span class="card-tag">Vocals</span>
+                    </div>
+                    <div class="card-price-row">
+                        <div class="card-price"><span class="free-label">FREE — Needs Vocals</span></div>
+                        <div class="card-status"><span class="dot"></span> Open</div>
+                    </div>
+                    <div class="card-buttons">
+                        <button class="btn-card" onclick="playBeat(this, 'beat3')">▶&nbsp; Play</button>
+                        <button class="btn-outline-card">↓&nbsp; Download</button>
+                    </div>
+                </div>
+            </div>
 
+            <!-- CARD 4 -->
+            <div class="beat-card" data-genre="hiphop">
+                <div class="card-artwork artwork-gradient-4">
+                    <span class="card-genre-tag">Hip-Hop</span>
+                    <div class="card-meta-tags">
+                        <span class="meta-tag">95 BPM</span>
+                        <span class="meta-tag">C Minor</span>
+                    </div>
+                    <div class="card-play-overlay">
+                        <button class="play-circle" onclick="playBeat(this, 'beat4')" data-beat="beat4">▶</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-title">Sample Flip Sundays</div>
+                    <div class="card-producer">Prod. <span>JoeyFlavour</span></div>
+                    <div class="card-waveform" id="waveform-beat4"></div>
+                    <div class="card-tags">
+                        <span class="card-tag">Boom Bap</span>
+                        <span class="card-tag">Soulful</span>
+                    </div>
+                    <div class="card-price-row">
+                        <div class="card-price"><span class="free-label">FREE — Needs Vocals</span></div>
+                        <div class="card-status"><span class="dot"></span> Open</div>
+                    </div>
+                    <div class="card-buttons">
+                        <button class="btn-card" onclick="playBeat(this, 'beat4')">▶&nbsp; Play</button>
+                        <button class="btn-outline-card">↓&nbsp; Download</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 5 -->
+            <div class="beat-card" data-genre="trap">
+                <div class="card-artwork artwork-gradient-5">
+                    <span class="card-genre-tag">Trap</span>
+                    <div class="card-meta-tags">
+                        <span class="meta-tag">155 BPM</span>
+                        <span class="meta-tag">A Minor</span>
+                    </div>
+                    <div class="card-play-overlay">
+                        <button class="play-circle" onclick="playBeat(this, 'beat5')" data-beat="beat5">▶</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-title">Purple Reign</div>
+                    <div class="card-producer">Prod. <span>JoeyFlavour</span></div>
+                    <div class="card-waveform" id="waveform-beat5"></div>
+                    <div class="card-tags">
+                        <span class="card-tag">Melodic</span>
+                        <span class="card-tag">Wavy</span>
+                    </div>
+                    <div class="card-price-row">
+                        <div class="card-price"><span class="free-label">FREE — Needs Vocals</span></div>
+                        <div class="card-status"><span class="dot"></span> Open</div>
+                    </div>
+                    <div class="card-buttons">
+                        <button class="btn-card" onclick="playBeat(this, 'beat5')">▶&nbsp; Play</button>
+                        <button class="btn-outline-card">↓&nbsp; Download</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 6 -->
+            <div class="beat-card" data-genre="afrobeats">
+                <div class="card-artwork artwork-gradient-6">
+                    <span class="card-genre-tag">Afrobeats</span>
+                    <div class="card-meta-tags">
+                        <span class="meta-tag">110 BPM</span>
+                        <span class="meta-tag">Eb Major</span>
+                    </div>
+                    <div class="card-play-overlay">
+                        <button class="play-circle" onclick="playBeat(this, 'beat6')" data-beat="beat6">▶</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-title">Lagos Nights</div>
+                    <div class="card-producer">Prod. <span>JoeyFlavour</span></div>
+                    <div class="card-waveform" id="waveform-beat6"></div>
+                    <div class="card-tags">
+                        <span class="card-tag">Afro</span>
+                        <span class="card-tag">Bounce</span>
+                        <span class="card-tag">Summer</span>
+                    </div>
+                    <div class="card-price-row">
+                        <div class="card-price"><span class="free-label">FREE — Needs Vocals</span></div>
+                        <div class="card-status"><span class="dot"></span> Open</div>
+                    </div>
+                    <div class="card-buttons">
+                        <button class="btn-card" onclick="playBeat(this, 'beat6')">▶&nbsp; Play</button>
+                        <button class="btn-outline-card">↓&nbsp; Download</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- CTA SECTION -->
+        <section class="cta-section" id="contact">
+            <div class="cta-box">
+                <h2>Want to Collab? <span class="gradient-text">Let's Talk.</span></h2>
+                <p>If you're a vocalist, rapper, or singer looking for fire production — hit me up. Let's make something crazy.</p>
+                <div style="margin-bottom: 20px;">
+                    <a href="mailto:joeyflavour@email.com" class="btn-primary">✉&nbsp; Email Me</a>
+                </div>
+                <div class="cta-socials">
+                    <a href="#" class="social-btn" title="Instagram">📷</a>
+                    <a href="#" class="social-btn" title="YouTube">▶</a>
+                    <a href="#" class="social-btn" title="Twitter / X">𝕏</a>
+                    <a href="#" class="social-btn" title="SoundCloud">☁</a>
+                </div>
             </div>
         </section>
 
-        <!-- Contact -->
-        <section class="contact reveal" id="contact">
-            <div class="contact-card">
-                <h2 class="contact-title">Let's Work Together</h2>
-                <p class="contact-subtitle">Hear something you vibe with? Hit me up and let's make magic together.</p>
-                <div class="contact-links">
-                    <a href="https://instagram.com/joeyflavour" target="_blank" class="contact-link">
-                        <span class="icon">📸</span>
-                        <span>@joeyflavour</span>
-                        <span class="label">Instagram</span>
-                    </a>
-                    <a href="mailto:joeyflavourcollabs@gmail.com" class="contact-link">
-                        <span class="icon">✉️</span>
-                        <span>joeyflavourcollabs@gmail.com</span>
-                    </a>
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <p class="footer-text">© 2026 <a href="#">JoeyFlavour</a>. All rights reserved. All beats are original productions.</p>
+                <div class="footer-links">
+                    <a href="#beats" class="footer-link">Beats</a>
+                    <a href="#contact" class="footer-link">Contact</a>
+                    <a href="#" class="footer-link">Terms</a>
                 </div>
             </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="footer reveal">
-            © 2026 JoeyFlavour · All rights reserved
         </footer>
 
-    </div>
+    </div><!-- end page-wrap -->
 
-    <!-- Global Audio Player (Bottom Bar) -->
-    <div class="global-player" id="globalPlayer">
-        <div class="global-player-cover">
-            <img id="globalCover" src="" alt="">
-        </div>
-        <div class="global-player-info">
-            <div class="global-player-title" id="globalTitle">Track</div>
-            <div class="global-player-meta" id="globalMeta">Loading...</div>
-        </div>
-        <div class="global-player-controls">
-            <button class="play-btn" id="globalPlayBtn" onclick="toggleGlobalPlay()">
-                <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                <svg class="pause-icon" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-            </button>
-        </div>
-        <div class="global-player-waveform" id="globalWaveform"></div>
-        <div class="global-player-time" id="globalTime">0:00 / 0:00</div>
-        <button class="global-player-close" onclick="closeGlobalPlayer()">✕</button>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal-backdrop" id="modal" onclick="closeModal(event)">
-        <div class="modal" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="closeModalDirect()">✕</button>
-            <div class="modal-header">
-                <div class="modal-cover">
-                    <img id="modalCover" src="" alt="">
-                </div>
-                <div class="modal-info">
-                    <div class="modal-badge">
-                        <span class="badge-dot"></span>
-                        <span id="modalStatus">Open for Collab</span>
-                    </div>
-                    <h2 class="modal-title" id="modalTitle">Track</h2>
-                    <p class="modal-genre" id="modalGenre">Genre · Key · BPM</p>
-                    <div class="modal-meta">
-                        <div class="meta-box">
-                            <div class="meta-label">BPM</div>
-                            <div class="meta-value" id="modalBpm">128</div>
-                        </div>
-                        <div class="meta-box">
-                            <div class="meta-label">Key</div>
-                            <div class="meta-value" id="modalKey">A Minor</div>
-                        </div>
-                        <div class="meta-box">
-                            <div class="meta-label">Genre</div>
-                            <div class="meta-value" id="modalGenreTag">Trap</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-body">
-                <div class="modal-section">
-                    <h3 class="modal-section-title">Audio Preview</h3>
-                    <div class="modal-player">
-                        <div class="modal-player-waveform" id="modalWaveform"></div>
-                    </div>
-                </div>
-                <div class="modal-section">
-                    <h3 class="modal-section-title">Vocal Preferences</h3>
-                    <div class="prefs" id="modalPrefs"></div>
-                </div>
-                <div class="modal-section">
-                    <h3 class="modal-section-title">Lyrics Ideas / Direction</h3>
-                    <div class="text-box" id="modalLyrics"></div>
-                </div>
-                <div class="modal-section">
-                    <h3 class="modal-section-title">Production Notes</h3>
-                    <div class="text-box" id="modalNotes"></div>
-                </div>
-                <div class="modal-cta">
-                    <a href="mailto:joeyflavourcollabs@gmail.com" class="btn btn-primary">I Want to Collab</a>
-                </div>
+    <!-- BOTTOM PLAYER BAR -->
+    <div class="player-bar" id="playerBar">
+        <div class="player-track-info">
+            <div class="player-thumb artwork-gradient-1" id="playerThumb"></div>
+            <div>
+                <div class="player-track-name" id="playerTrackName">—</div>
+                <div class="player-track-artist">JoeyFlavour</div>
             </div>
         </div>
+        <div class="player-controls">
+            <button class="player-btn" onclick="prevBeat()">⏮</button>
+            <button class="player-btn-play" id="playerPlayBtn" onclick="togglePlayerPlay()">▶</button>
+            <button class="player-btn" onclick="nextBeat()">⏭</button>
+        </div>
+        <div class="player-waveform" id="playerWaveform"></div>
+        <div class="player-time" id="playerTime">0:00 / 0:00</div>
+        <div class="player-volume">
+            <span style="font-size: 0.8rem; color: var(--cm-text-dim);">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="80" id="volumeSlider" oninput="setVolume(this.value)">
+        </div>
     </div>
 
+    <!-- ============================================
+         JAVASCRIPT
+         ============================================ -->
     <script>
-        // ============================================
-        // TRACK DATA — EDIT YOUR BEAT INFO HERE!
-        // ============================================
-        const tracks = {
-            eclipse: {
-                title: "ECLIPSE",
-                genre: "Trap",
-                key: "D Minor",
-                bpm: "140",
-                status: "Open for Collab",
-                cover: "./covers/ECLIPSE.png",
-                audio: "./audio/ECLIPSE.mp3",
-                prefs: ["Rapper", "Dark Vocals", "Aggressive Flow", "Male or Female"],
-                lyrics: `[VIBE]
-Dark, moody atmosphere
-Late night city vibes
-Eclipse = blocking out the fake
+        // ---- PRELOADER ----
+        const preloader = document.getElementById('preloader');
+        const preloaderFill = document.getElementById('preloaderFill');
+        const pageWrap = document.getElementById('pageWrap');
 
-[VERSE DIRECTION]
-Start slow and mysterious
-Build up the intensity
-Talk about shadows, darkness, rising up
-
-[HOOK IDEAS]
-Something catchy about "eclipse"
-Repeatable, memorable phrase
-Think Travis Scott meets Metro Boomin energy
-
-[GENERAL]
-DM @joeyflavour on Instagram to discuss this track.`,
-                notes: `• Hard-hitting trap production
-• Dark atmospheric vibes
-• Perfect for aggressive rap vocals
-• 140 BPM, D Minor
-• Stems available
-• DM for collaboration details`
-            },
-            abyss: {
-                title: "ABYSS",
-                genre: "Trap",
-                key: "G Minor",
-                bpm: "128",
-                status: "Featured",
-                cover: "./covers/ABYSS.png",
-                audio: "./audio/ABYSS.mp3",
-                prefs: ["Melodic Rapper", "Singer", "Atmospheric Vocals", "Emotional"],
-                lyrics: `[VIBE]
-Deep emotional journey
-Falling into the unknown
-Abyss = going deep into feelings
-
-[VERSE DIRECTION]
-Melodic, vulnerable delivery
-Talk about depth, drowning in emotion
-Think The Weeknd meets Travis Scott
-
-[HOOK IDEAS]
-"Lost in the abyss" type energy
-Melodic and haunting
-Build up tension before the drop
-
-[GENERAL]
-DM @joeyflavour on Instagram to discuss this track.`,
-                notes: `• Melodic trap with atmospheric elements
-• Deep bass & ethereal pads
-• Great for emotional/melodic vocals
-• 128 BPM, G Minor
-• Stems available
-• DM for collaboration details`
-            },
-            nightfall: {
-                title: "NIGHTFALL",
-                genre: "Trap",
-                key: "E Minor",
-                bpm: "150",
-                status: "Urgent — Need ASAP",
-                cover: "./covers/NIGHTFALL.png",
-                audio: "./audio/NIGHTFALL.mp3",
-                prefs: ["Rapper", "Fast Flow", "Aggressive", "Hard-Hitting"],
-                lyrics: `[VIBE]
-High energy, fast-paced chaos
-Nighttime mayhem
-Nightfall = when things get real
-
-[VERSE DIRECTION]
-Fast aggressive flow
-Talk about taking over the night
-Hard-hitting bars, no time to breathe
-
-[HOOK IDEAS]
-Short, punchy, memorable
-"When the night falls" energy
-Mosh pit anthem vibes
-
-[URGENT]
-Need vocals ASAP for release!
-DM @joeyflavour on Instagram NOW!`,
-                notes: `• Fast-paced aggressive trap
-• Heavy 808s & hard-hitting drums
-• Need vocals ASAP for release
-• 150 BPM, E Minor
-• Stems ready to send
-• URGENT — DM ASAP if interested!`
+        let progress = 0;
+        const loadInterval = setInterval(() => {
+            progress += Math.random() * 15 + 5;
+            if (progress >= 100) {
+                progress = 100;
+                preloaderFill.style.width = '100%';
+                clearInterval(loadInterval);
+                setTimeout(() => {
+                    preloader.classList.add('hidden');
+                    pageWrap.classList.add('loaded');
+                    initScrollReveal();
+                }, 400);
+            } else {
+                preloaderFill.style.width = progress + '%';
             }
-        };
+        }, 200);
 
-        // ============================================
-        // AUDIO ENGINE
-        // ============================================
-        let currentTrack = null;
-        let globalWavesurfer = null;
-        let modalWavesurfer = null;
-        let audioElements = {};
-        let isPlaying = {};
-
-        // Initialize audio elements
-        Object.keys(tracks).forEach(id => {
-            const audio = new Audio();
-            audio.preload = 'metadata';
-            audio.src = tracks[id].audio;
-            audioElements[id] = audio;
-            isPlaying[id] = false;
-
-            // Update progress
-            audio.addEventListener('timeupdate', () => {
-                const progress = (audio.currentTime / audio.duration) * 100;
-                const progressEl = document.getElementById(`progress-${id}`);
-                const currentEl = document.getElementById(`currentTime-${id}`);
-                
-                if (progressEl) progressEl.style.width = progress + '%';
-                if (currentEl) currentEl.textContent = formatTime(audio.currentTime);
-
-                // Update global player if this is the current track
-                if (currentTrack === id && globalWavesurfer) {
-                    document.getElementById('globalTime').textContent = 
-                        formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
-                }
-            });
-
-            audio.addEventListener('loadedmetadata', () => {
-                const durationEl = document.getElementById(`duration-${id}`);
-                if (durationEl) durationEl.textContent = formatTime(audio.duration);
-            });
-
-            audio.addEventListener('ended', () => {
-                isPlaying[id] = false;
-                const btn = document.getElementById(`playBtn-${id}`);
-                if (btn) btn.classList.remove('playing');
-                
-                if (currentTrack === id) {
-                    document.getElementById('globalPlayBtn').classList.remove('playing');
-                }
-            });
-
-            audio.addEventListener('error', (e) => {
-                console.log(`Audio file not found for ${id}. Upload to ./audio/${id.toUpperCase()}.mp3`);
-                const durationEl = document.getElementById(`duration-${id}`);
-                if (durationEl) durationEl.textContent = 'No audio';
-            });
+        // ---- HEADER SCROLL EFFECT ----
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         });
 
-        function formatTime(seconds) {
-            if (isNaN(seconds) || seconds === Infinity) return '0:00';
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
-            return `${mins}:${secs}`;
-        }
-
-        // Play track in mini player
-        function playTrack(id) {
-            const audio = audioElements[id];
-            const btn = document.getElementById(`playBtn-${id}`);
-
-            // Pause all other tracks
-            Object.keys(audioElements).forEach(trackId => {
-                if (trackId !== id && isPlaying[trackId]) {
-                    audioElements[trackId].pause();
-                    isPlaying[trackId] = false;
-                    const otherBtn = document.getElementById(`playBtn-${trackId}`);
-                    if (otherBtn) otherBtn.classList.remove('playing');
-                }
-            });
-
-            if (isPlaying[id]) {
-                audio.pause();
-                isPlaying[id] = false;
-                btn.classList.remove('playing');
-            } else {
-                audio.play().catch(() => {
-                    alert("🎵 Audio preview not uploaded yet!\n\nUpload your MP3 to: ./audio/" + id.toUpperCase() + ".mp3\n\nThen refresh the page!");
-                });
-                isPlaying[id] = true;
-                btn.classList.add('playing');
-            }
-        }
-
-        // Seek in mini player
-        function seekTrack(event, id) {
-            const audio = audioElements[id];
-            const rect = event.target.getBoundingClientRect();
-            const percent = (event.clientX - rect.left) / rect.width;
-            audio.currentTime = percent * audio.duration;
-        }
-
-        // ============================================
-        // GLOBAL PLAYER
-        // ============================================
-        function playGlobal(id) {
-            currentTrack = id;
-            const track = tracks[id];
-            const audio = audioElements[id];
-
-            // Update global player UI
-            document.getElementById('globalCover').src = track.cover;
-            document.getElementById('globalTitle').textContent = track.title;
-            document.getElementById('globalMeta').textContent = `${track.genre} · ${track.bpm} BPM`;
-
-            // Show global player
-            document.getElementById('globalPlayer').classList.add('active');
-            document.body.classList.add('player-active');
-
-            // Initialize Wavesurfer for global player (if audio exists)
-            if (globalWavesurfer) {
-                globalWavesurfer.destroy();
-            }
-
-            // Try to create waveform
-            try {
-                globalWavesurfer = WaveSurfer.create({
-                    container: '#globalWaveform',
-                    waveColor: 'rgba(255, 0, 128, 0.4)',
-                    progressColor: '#ff0080',
-                    cursorColor: '#ffffff',
-                    barWidth: 2,
-                    barGap: 2,
-                    barRadius: 2,
-                    height: 40,
-                    responsive: true,
-                    backend: 'MediaElement',
-                    media: audio
-                });
-            } catch(e) {
-                console.log('Waveform creation failed:', e);
-            }
-
-            // Pause other tracks
-            Object.keys(audioElements).forEach(trackId => {
-                if (trackId !== id && isPlaying[trackId]) {
-                    audioElements[trackId].pause();
-                    isPlaying[trackId] = false;
-                    const btn = document.getElementById(`playBtn-${trackId}`);
-                    if (btn) btn.classList.remove('playing');
-                }
-            });
-
-            // Play
-            audio.play().catch((e) => {
-                alert("🎵 Audio file not found!\n\nUpload: ./audio/" + id.toUpperCase() + ".mp3\n\nThen refresh the page!");
-            });
-            isPlaying[id] = true;
-            document.getElementById('globalPlayBtn').classList.add('playing');
-            const cardBtn = document.getElementById(`playBtn-${id}`);
-            if (cardBtn) cardBtn.classList.add('playing');
-        }
-
-        function toggleGlobalPlay() {
-            if (!currentTrack) return;
-            
-            const audio = audioElements[currentTrack];
-            const btn = document.getElementById('globalPlayBtn');
-            const cardBtn = document.getElementById(`playBtn-${currentTrack}`);
-
-            if (isPlaying[currentTrack]) {
-                audio.pause();
-                isPlaying[currentTrack] = false;
-                btn.classList.remove('playing');
-                if (cardBtn) cardBtn.classList.remove('playing');
-            } else {
-                audio.play();
-                isPlaying[currentTrack] = true;
-                btn.classList.add('playing');
-                if (cardBtn) cardBtn.classList.add('playing');
-            }
-        }
-
-        function closeGlobalPlayer() {
-            if (currentTrack) {
-                audioElements[currentTrack].pause();
-                isPlaying[currentTrack] = false;
-                const btn = document.getElementById(`playBtn-${currentTrack}`);
-                if (btn) btn.classList.remove('playing');
-            }
-            
-            document.getElementById('globalPlayer').classList.remove('active');
-            document.body.classList.remove('player-active');
-            
-            if (globalWavesurfer) {
-                globalWavesurfer.destroy();
-                globalWavesurfer = null;
-            }
-            
-            currentTrack = null;
-        }
-
-        // ============================================
-        // MODAL
-        // ============================================
-        function openModal(id) {
-            const track = tracks[id];
-            
-            document.getElementById('modalCover').src = track.cover;
-            document.getElementById('modalTitle').textContent = track.title;
-            document.getElementById('modalStatus').textContent = track.status;
-            document.getElementById('modalGenre').textContent = `${track.genre} · ${track.key} · ${track.bpm} BPM`;
-            document.getElementById('modalBpm').textContent = track.bpm;
-            document.getElementById('modalKey').textContent = track.key;
-            document.getElementById('modalGenreTag').textContent = track.genre;
-            document.getElementById('modalLyrics').textContent = track.lyrics;
-            document.getElementById('modalNotes').textContent = track.notes;
-            document.getElementById('modalPrefs').innerHTML = track.prefs.map(p => 
-                `<span class="pref-tag">${p}</span>`
-            ).join('');
-
-            // Modal Wavesurfer
-            if (modalWavesurfer) {
-                modalWavesurfer.destroy();
-            }
-
-            try {
-                modalWavesurfer = WaveSurfer.create({
-                    container: '#modalWaveform',
-                    waveColor: 'rgba(255, 0, 128, 0.3)',
-                    progressColor: '#ff0080',
-                    cursorColor: '#ffffff',
-                    barWidth: 3,
-                    barGap: 2,
-                    barRadius: 2,
-                    height: 80,
-                    responsive: true,
-                    url: track.audio
-                });
-
-                modalWavesurfer.on('ready', () => {
-                    // Auto-play on modal open (optional)
-                    // modalWavesurfer.play();
-                });
-
-                modalWavesurfer.on('error', () => {
-                    document.getElementById('modalWaveform').innerHTML = 
-                        '<div style="text-align:center;padding:30px;color:#666;font-size:0.9rem;">🎵 Audio preview will appear here once uploaded<br><small style="margin-top:10px;display:block;color:#444;">Upload to: ./audio/' + id.toUpperCase() + '.mp3</small></div>';
-                });
-            } catch(e) {
-                document.getElementById('modalWaveform').innerHTML = 
-                    '<div style="text-align:center;padding:30px;color:#666;">Audio preview loading...</div>';
-            }
-
-            document.getElementById('modal').classList.add('active');
+        // ---- MOBILE NAV ----
+        function openMobileNav() {
+            document.getElementById('mobileNav').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
-
-        function closeModal(e) {
-            if (e.target === e.currentTarget) closeModalDirect();
-        }
-
-        function closeModalDirect() {
-            if (modalWavesurfer) {
-                modalWavesurfer.pause();
-            }
-            document.getElementById('modal').classList.remove('active');
+        function closeMobileNav() {
+            document.getElementById('mobileNav').classList.remove('open');
             document.body.style.overflow = '';
         }
 
-        // ============================================
-        // MENU
-        // ============================================
-        function toggleMenu() {
-            document.getElementById('nav').classList.toggle('open');
+        // ---- SCROLL TO SECTION ----
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // ============================================
-        // PRELOADER & ANIMATIONS
-        // ============================================
-        let loadProgress = 0;
-        const progressEl = document.getElementById('preloaderProgress');
-
-        function updateProgress() {
-            loadProgress += Math.random() * 15;
-            if (loadProgress > 100) loadProgress = 100;
-            progressEl.style.width = loadProgress + '%';
-            
-            if (loadProgress < 100) {
-                setTimeout(updateProgress, 100);
-            }
-        }
-
-        updateProgress();
-
-        window.addEventListener('load', () => {
-            // Complete the progress bar
-            progressEl.style.width = '100%';
-            
-            setTimeout(() => {
-                // Hide preloader
-                document.getElementById('preloader').classList.add('hidden');
-                
-                // Show page content
-                document.getElementById('pageContent').classList.add('loaded');
-                
-                // Show header
-                document.getElementById('header').classList.add('visible');
-                
-                // Initialize scroll reveal
-                initScrollReveal();
-            }, 500);
-        });
-
-        // ============================================
-        // SCROLL REVEAL
-        // ============================================
+        // ---- SCROLL REVEAL ----
         function initScrollReveal() {
+            const cards = document.querySelectorAll('.beat-card');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
                     }
                 });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-            // Observe reveal elements
-            document.querySelectorAll('.reveal').forEach(el => {
-                observer.observe(el);
-            });
-
-            // Observe cards with stagger
-            document.querySelectorAll('.card').forEach(el => {
-                observer.observe(el);
-            });
+            cards.forEach(card => observer.observe(card));
         }
 
-        // ============================================
-        // SMOOTH SCROLL
-        // ============================================
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    document.getElementById('nav').classList.remove('open');
-                }
+        // ---- FILTER BUTTONS ----
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const beatCards = document.querySelectorAll('.beat-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+
+                beatCards.forEach((card, i) => {
+                    const genre = card.dataset.genre;
+                    if (filter === 'all' || genre === filter) {
+                        card.style.display = '';
+                        // Re-trigger animation
+                        card.classList.remove('visible');
+                        setTimeout(() => card.classList.add('visible'), 50 + i * 80);
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
             });
         });
 
-        // Escape key closes modal
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') closeModalDirect();
+        // ---- AUDIO PLAYER SYSTEM ----
+        // Replace these URLs with your actual beat file URLs
+        const beats = {
+            beat1: { name: 'Midnight Phantom', url: '', gradient: 'artwork-gradient-1' },
+            beat2: { name: 'Cold Streets', url: '', gradient: 'artwork-gradient-2' },
+            beat3: { name: 'Velvet Touch', url: '', gradient: 'artwork-gradient-3' },
+            beat4: { name: 'Sample Flip Sundays', url: '', gradient: 'artwork-gradient-4' },
+            beat5: { name: 'Purple Reign', url: '', gradient: 'artwork-gradient-5' },
+            beat6: { name: 'Lagos Nights', url: '', gradient: 'artwork-gradient-6' },
+        };
+
+        const beatKeys = Object.keys(beats);
+        let currentBeatIndex = -1;
+        let playerWavesurfer = null;
+        let isPlaying = false;
+
+        const playerBar = document.getElementById('playerBar');
+        const playerTrackName = document.getElementById('playerTrackName');
+        const playerPlayBtn = document.getElementById('playerPlayBtn');
+        const playerTime = document.getElementById('playerTime');
+        const playerThumb = document.getElementById('playerThumb');
+        const volumeSlider = document.getElementById('volumeSlider');
+
+        function initPlayerWavesurfer() {
+            if (playerWavesurfer) return;
+            playerWavesurfer = WaveSurfer.create({
+                container: '#playerWaveform',
+                waveColor: '#333',
+                progressColor: '#ff0050',
+                cursorColor: '#e91e8c',
+                barWidth: 2,
+                barGap: 1,
+                barRadius: 2,
+                height: 40,
+                responsive: true,
+                normalize: true,
+            });
+
+            playerWavesurfer.on('audioprocess', updateTime);
+            playerWavesurfer.on('seeking', updateTime);
+            playerWavesurfer.on('finish', () => {
+                isPlaying = false;
+                playerPlayBtn.textContent = '▶';
+                nextBeat();
+            });
+        }
+
+        function updateTime() {
+            if (!playerWavesurfer) return;
+            const cur = playerWavesurfer.getCurrentTime();
+            const dur = playerWavesurfer.getDuration();
+            playerTime.textContent = formatTime(cur) + ' / ' + formatTime(dur);
+        }
+
+        function formatTime(s) {
+            if (isNaN(s)) return '0:00';
+            const m = Math.floor(s / 60);
+            const sec = Math.floor(s % 60);
+            return m + ':' + (sec < 10 ? '0' : '') + sec;
+        }
+
+        function playBeat(el, beatId) {
+            const idx = beatKeys.indexOf(beatId);
+            if (idx === -1) return;
+
+            const beat = beats[beatId];
+            if (!beat.url) {
+                // Demo: show player bar even without audio
+                playerBar.classList.add('active');
+                playerTrackName.textContent = beat.name;
+                playerThumb.className = 'player-thumb ' + beat.gradient;
+                currentBeatIndex = idx;
+                alert('🎵 Add your audio file URL to the "beats" object in the JS to enable playback for "' + beat.name + '"');
+                return;
+            }
+
+            initPlayerWavesurfer();
+
+            currentBeatIndex = idx;
+            playerBar.classList.add('active');
+            playerTrackName.textContent = beat.name;
+            playerThumb.className = 'player-thumb ' + beat.gradient;
+
+            playerWavesurfer.load(beat.url);
+            playerWavesurfer.once('ready', () => {
+                playerWavesurfer.setVolume(volumeSlider.value / 100);
+                playerWavesurfer.play();
+                isPlaying = true;
+                playerPlayBtn.textContent = '⏸';
+            });
+        }
+
+        function togglePlayerPlay() {
+            if (!playerWavesurfer) return;
+            playerWavesurfer.playPause();
+            isPlaying = !isPlaying;
+            playerPlayBtn.textContent = isPlaying ? '⏸' : '▶';
+        }
+
+        function nextBeat() {
+            if (beatKeys.length === 0) return;
+            currentBeatIndex = (currentBeatIndex + 1) % beatKeys.length;
+            playBeat(null, beatKeys[currentBeatIndex]);
+        }
+
+        function prevBeat() {
+            if (beatKeys.length === 0) return;
+            currentBeatIndex = (currentBeatIndex - 1 + beatKeys.length) % beatKeys.length;
+            playBeat(null, beatKeys[currentBeatIndex]);
+        }
+
+        function setVolume(val) {
+            if (playerWavesurfer) playerWavesurfer.setVolume(val / 100);
+        }
+
+        // ---- KEYBOARD SHORTCUTS ----
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && playerWavesurfer) {
+                e.preventDefault();
+                togglePlayerPlay();
+            }
+            if (e.code === 'ArrowRight') nextBeat();
+            if (e.code === 'ArrowLeft') prevBeat();
         });
     </script>
 
