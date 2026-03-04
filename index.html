@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JoeyFlavour — Beats</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: #161616;
+            --bg-card-hover: #1e1e1e;
+            --accent: #8b5cf6;
+            --accent-glow: rgba(139, 92, 246, 0.3);
+            --accent-secondary: #06b6d4;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --border: #222222;
+            --border-hover: #333333;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .font-display {
+            font-family: 'Monument Extended', 'Bebas Neue', 'Impact', sans-serif;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) var(--bg-primary);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 20% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 20%, rgba(6, 182, 212, 0.05) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 80%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+            animation: bgShift 20s ease-in-out infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(2%, -2%) rotate(1deg); }
+            66% { transform: translate(-1%, 1%) rotate(-0.5deg); }
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+            transition: var(--transition);
+        }
+
+        .header.scrolled {
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .logo-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.1em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-primary);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 1px;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .hero {
+            position: relative;
+            z-index: 2;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 140px 2rem 60px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 100px;
+            padding: 8px 20px;
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .hero-badge .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease 0.1s both;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 50%, var(--accent) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 5s linear infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto 2.5rem;
+            font-weight: 300;
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.6s ease 0.3s both;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-hover);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stats-bar {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            padding: 0 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 4px;
+        }
+
+        .section {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            letter-spacing: 0.08em;
+        }
+
+        .section-count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--bg-card);
+            padding: 6px 14px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+                        0 0 40px var(--accent-glow);
+        }
+
+        .product-card:hover .card-image img {
+            transform: scale(1.05);
+        }
+
+        .product-card:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .card-image {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            overflow: hidden;
+            background: var(--bg-secondary);
+        }
+
+        .card-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .play-btn-overlay {
+            width: 56px;
+            height: 56px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px var(--accent-glow);
+            transition: var(--transition);
+        }
+
+        .play-btn-overlay:hover {
+            transform: scale(1.1);
+        }
+
+        .play-btn-overlay svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+            margin-left: 2px;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            z-index: 5;
+        }
+
+        .status-badge.open {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-badge.urgent {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-badge.featured {
+            background: rgba(139, 92, 246, 0.2);
+            color: #a78bfa;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .bpm-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            z-index: 5;
+        }
+
+        .waveform-mini {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 1.5px;
+            padding: 0 12px 8px;
+            z-index: 4;
+        }
+
+        .waveform-bar {
+            width: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+            opacity: 0.6;
+            transition: height 0.3s ease;
+        }
+
+        .product-card:hover .waveform-bar {
+            animation: waveAnim 0.8s ease-in-out infinite alternate;
+        }
+
+        @keyframes waveAnim {
+            from { height: var(--h); }
+            to { height: calc(var(--h) * 1.5); }
+        }
+
+        .card-content {
+            padding: 16px;
+        }
+
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .tag {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+        }
+
+        .tag.cyan {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent-secondary);
+            border-color: rgba(6, 182, 212, 0.15);
+        }
+
+        .audio-player-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        .play-btn-mini {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            background: var(--accent);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .play-btn-mini:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 10px var(--accent-glow);
+        }
+
+        .play-btn-mini svg {
+            width: 12px;
+            height: 12px;
+            fill: white;
+            margin-left: 1px;
+        }
+
+        .progress-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .progress-bar-track {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .time-display {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            max-width: 900px;
+            width: 100%;
+            margin: 2rem auto;
+            overflow: hidden;
+            animation: slideUp 0.4s ease;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-album-art {
+            width: 200px;
+            height: 200px;
+            min-width: 200px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--bg-card);
+        }
+
+        .modal-album-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-info {
+            flex: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .modal-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .meta-item {
+            background: var(--bg-card);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .meta-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 4px;
+        }
+
+        .meta-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .detail-section {
+            margin-bottom: 2rem;
+        }
+
+        .detail-section-title {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .lyrics-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            font-family: 'Inter', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+        }
+
+        .vocal-prefs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .vocal-pref-tag {
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .contact-section {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 4rem 2rem 6rem;
+        }
+
+        .contact-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 3rem;
+        }
+
+        .contact-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.08em;
+        }
+
+        .contact-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 24px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .contact-link:hover {
+            border-color: var(--accent);
+            background: rgba(139, 92, 246, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .contact-link .icon {
+            font-size: 1.2rem;
+        }
+
+        .footer {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 1200px) {
+            .product-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 10, 0.95);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 2rem;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .modal-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .modal-meta-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats-bar {
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 2rem 1rem;
+            }
+
+            .card-content {
+                padding: 12px;
+            }
+
+            .card-title {
+                font-size: 0.85rem;
+            }
+
+            .modal-album-art {
+                width: 160px;
+                height: 160px;
+                min-width: 160px;
+            }
+
+            .modal-meta-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .contact-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animation"></div>
+    <div class="grain-overlay"></div>
+
+    <header class="header" id="header">
+        <div class="header-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon">🎹</div>
+                <span class="logo-text font-display">JoeyFlavour</span>
+            </a>
+
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#beats" class="active">Beats</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="pulse-dot"></span>
+                Open for Collaborations
+            </div>
+            <h1 class="font-display">
+                Let's Create<br>
+                <span class="gradient-text">Something Crazy</span>
+            </h1>
+            <p class="hero-subtitle">
+                Browse my latest beats. Listen, vibe, and let's work together. Rappers, singers & writers welcome.
+            </p>
+            <div class="hero-actions">
+                <a href="#beats" class="btn btn-primary">
+                    🔥 Browse Beats
+                </a>
+                <a href="#contact" class="btn btn-secondary">
+                    💬 Get in Touch
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-number font-display">3</div>
+            <div class="stat-label">Fresh Beats</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number font-display">140</div>
+            <div class="stat-label">BPM Range</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number font-display">2025</div>
+            <div class="stat-label">Heat Season</div>
+        </div>
+    </div>
+
+    <section class="section" id="beats">
+        <div class="section-header">
+            <div class="section-title-group">
+                <div class="section-icon">🎤</div>
+                <h2 class="section-title font-display">Beats</h2>
+                <span class="section-count">3 Tracks</span>
+            </div>
+        </div>
+
+        <div class="product-grid">
+
+            <!-- ECLIPSE -->
+            <div class="product-card" onclick="openModal('eclipse')">
+                <div class="card-image">
+                    <img src="./covers/ECLIPSE.png" alt="ECLIPSE">
+                    
+                    <span class="status-badge open">Open</span>
+                    <span class="bpm-badge">140 BPM</span>
+                    <div class="play-overlay">
+                        <div class="play-btn-overlay">
+                            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                        </div>
+                    </div>
+                    <div class="waveform-mini">
+                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
+                        <div class="waveform-bar" style="--h: 20px; height: 20px;"></div>
+                        <div class="waveform-bar" style="--h: 14px; height: 14px;"></div>
+                        <div class="waveform-bar" style="--h: 8px; height: 8px;"></div>
+                        <div class="waveform-bar" style="--h: 22px; height: 22px;"></div>
+                        <div class="waveform-bar" style="--h: 16px; height: 16px;"></div>
+                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
+                        <div class="waveform-bar" style="--h: 24px; height: 24px;"></div>
+                        <div class="waveform-bar" style="--h: 18px; height: 18px;"></div>
+                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
+                        <div class="waveform-bar" style="--h: 20px; height: 20px;"></div>
+                        <div class="waveform-bar" style="--h: 14px; height: 14px;"></div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">ECLIPSE</div>
+                    <div class="card-meta">Trap · D Minor · 140 BPM</div>
+                    <div class="card-tags">
+                        <span class="tag">Rapper</span>
+                        <span class="tag cyan">Dark</span>
+                    </div>
+                    <div class="audio-player-mini" onclick="event.stopPropagation()">
+                        <button class="play-btn-mini" onclick="playTrack('eclipse', this)">
+                            <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                        </button>
+                        <div class="progress-container">
+                            <div class="progress-bar-track">
+                                <div class="progress-bar-fill" id="progress-eclipse"></div>
+                            </div>
+                            <div class="time-display" id="time-eclipse">Preview Soon</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABYSS -->
+            <div class="product-card" onclick="openModal('abyss')">
+                <div class="card-image">
+                    <img src="./covers/ABYSS.png" alt="ABYSS">
+                    
+                    <span class="status-badge featured">Featured</span>
+                    <span class="bpm-badge">128 BPM</span>
+                    <div class="play-overlay">
+                        <div class="play-btn-overlay">
+                            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                        </div>
+                    </div>
+                    <div class="waveform-mini">
+                        <div class="waveform-bar" style="--h: 18px; height: 18px;"></div>
+                        <div class="waveform-bar" style="--h: 8px; height: 8px;"></div>
+                        <div class="waveform-bar" style="--h: 24px; height: 24px;"></div>
+                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
+                        <div class="waveform-bar" style="--h: 20px; height: 20px;"></div>
+                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
+                        <div class="waveform-bar" style="--h: 16px; height: 16px;"></div>
+                        <div class="waveform-bar" style="--h: 26px; height: 26px;"></div>
+                        <div class="waveform-bar" style="--h: 14px; height: 14px;"></div>
+                        <div class="waveform-bar" style="--h: 22px; height: 22px;"></div>
+                        <div class="waveform-bar" style="--h: 8px; height: 8px;"></div>
+                        <div class="waveform-bar" style="--h: 18px; height: 18px;"></div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">ABYSS</div>
+                    <div class="card-meta">Trap · G Minor · 128 BPM</div>
+                    <div class="card-tags">
+                        <span class="tag">Melodic</span>
+                        <span class="tag cyan">Atmospheric</span>
+                    </div>
+                    <div class="audio-player-mini" onclick="event.stopPropagation()">
+                        <button class="play-btn-mini" onclick="playTrack('abyss', this)">
+                            <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                        </button>
+                        <div class="progress-container">
+                            <div class="progress-bar-track">
+                                <div class="progress-bar-fill" id="progress-abyss"></div>
+                            </div>
+                            <div class="time-display" id="time-abyss">Preview Soon</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NIGHTFALL -->
+            <div class="product-card" onclick="openModal('nightfall')">
+                <div class="card-image">
+                    <img src="./covers/NIGHTFALL.png" alt="NIGHTFALL">
+                    
+                    <span class="status-badge urgent">Urgent</span>
+                    <span class="bpm-badge">150 BPM</span>
+                    <div class="play-overlay">
+                        <div class="play-btn-overlay">
+                            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                        </div>
+                    </div>
+                    <div class="waveform-mini">
+                        <div class="waveform-bar" style="--h: 22px; height: 22px;"></div>
+                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
+                        <div class="waveform-bar" style="--h: 18px; height: 18px;"></div>
+                        <div class="waveform-bar" style="--h: 26px; height: 26px;"></div>
+                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
+                        <div class="waveform-bar" style="--h: 20px; height: 20px;"></div>
+                        <div class="waveform-bar" style="--h: 8px; height: 8px;"></div>
+                        <div class="waveform-bar" style="--h: 24px; height: 24px;"></div>
+                        <div class="waveform-bar" style="--h: 14px; height: 14px;"></div>
+                        <div class="waveform-bar" style="--h: 16px; height: 16px;"></div>
+                        <div class="waveform-bar" style="--h: 22px; height: 22px;"></div>
+                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">NIGHTFALL</div>
+                    <div class="card-meta">Trap · E Minor · 150 BPM</div>
+                    <div class="card-tags">
+                        <span class="tag">Aggressive</span>
+                        <span class="tag cyan">Hard-Hitting</span>
+                    </div>
+                    <div class="audio-player-mini" onclick="event.stopPropagation()">
+                        <button class="play-btn-mini" onclick="playTrack('nightfall', this)">
+                            <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                        </button>
+                        <div class="progress-container">
+                            <div class="progress-bar-track">
+                                <div class="progress-bar-fill" id="progress-nightfall"></div>
+                            </div>
+                            <div class="time-display" id="time-nightfall">Preview Soon</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+        <div class="contact-card">
+            <h2 class="contact-title font-display">Let's Work Together</h2>
+            <p class="contact-subtitle">
+                Hear something you vibe with? Hit me up. Let's make magic. 🔥
+            </p>
+            <div class="contact-links">
+                <a href="https://instagram.com/joeyflavour" target="_blank" class="contact-link">
+                    <span class="icon">📸</span>
+                    <span>@joeyflavour</span>
+                    <span style="color: var(--text-muted); font-size: 0.8rem;">— Instagram</span>
+                </a>
+                <a href="mailto:joeyflavourcollabs@gmail.com" class="contact-link">
+                    <span class="icon">✉️</span>
+                    <span>joeyflavourcollabs@gmail.com</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2025 JoeyFlavour · All rights reserved · Built with 🔥</p>
+    </footer>
+
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModalDirect()">✕</button>
+
+            <div class="modal-header">
+                <div class="modal-album-art">
+                    <img id="modalImage" src="" alt="">
+                </div>
+                <div class="modal-info">
+                    <div class="hero-badge" style="margin-bottom: 1rem;">
+                        <span class="pulse-dot"></span>
+                        <span id="modalStatus">Open for Collab</span>
+                    </div>
+                    <h2 class="modal-title font-display" id="modalTitle">Track Title</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;" id="modalGenre">Genre · Key · BPM</p>
+
+                    <div class="modal-meta-grid">
+                        <div class="meta-item">
+                            <div class="meta-label">BPM</div>
+                            <div class="meta-value" id="modalBpm">128</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Key</div>
+                            <div class="meta-value" id="modalKey">A Minor</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Genre</div>
+                            <div class="meta-value" id="modalGenreTag">Trap</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div class="detail-section">
+                    <h3 class="detail-section-title font-display">Vocal Preferences</h3>
+                    <div class="vocal-prefs" id="modalVocalPrefs"></div>
+                </div>
+
+                <div class="detail-section">
+                    <h3 class="detail-section-title font-display">Lyrics Ideas / Direction</h3>
+                    <div class="lyrics-box" id="modalLyrics"></div>
+                </div>
+
+                <div class="detail-section">
+                    <h3 class="detail-section-title font-display">Production Notes</h3>
+                    <div class="lyrics-box" id="modalNotes" style="font-size: 0.85rem;"></div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="mailto:joeyflavourcollabs@gmail.com" class="btn btn-primary">
+                        ✉️ I Want to Collab on This
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const trackData = {
+            eclipse: {
+                title: "ECLIPSE",
+                genre: "Trap",
+                key: "D Minor",
+                bpm: "140",
+                status: "Open for Collab",
+                image: "./covers/ECLIPSE.png",
+                audio: "",
+                vocalPrefs: ["Rapper", "Dark Vocals", "Aggressive Flow", "Male or Female"],
+                lyrics: `[Coming Soon]
+Will add lyrics ideas & direction here later!
+
+Hit me up on IG @joeyflavour to discuss this track.`,
+                notes: `• Hard-hitting trap production
+• Dark atmospheric vibes
+• Perfect for aggressive rap vocals
+• Audio preview coming soon
+• DM for stems & collaboration details`
+            },
+
+            abyss: {
+                title: "ABYSS",
+                genre: "Trap",
+                key: "G Minor",
+                bpm: "128",
+                status: "Featured",
+                image: "./covers/ABYSS.png",
+                audio: "",
+                vocalPrefs: ["Melodic Rapper", "Singer", "Atmospheric Vocals", "Emotional"],
+                lyrics: `[Coming Soon]
+Will add lyrics ideas & direction here later!
+
+Hit me up on IG @joeyflavour to discuss this track.`,
+                notes: `• Melodic trap with atmospheric elements
+• Deep bass & ethereal pads
+• Great for emotional/melodic vocals
+• Audio preview coming soon
+• DM for stems & collaboration details`
+            },
+
+            nightfall: {
+                title: "NIGHTFALL",
+                genre: "Trap",
+                key: "E Minor",
+                bpm: "150",
+                status: "Urgent — Need ASAP",
+                image: "./covers/NIGHTFALL.png",
+                audio: "",
+                vocalPrefs: ["Rapper", "Fast Flow", "Aggressive", "Hard-Hitting"],
+                lyrics: `[Coming Soon]
+Will add lyrics ideas & direction here later!
+
+Hit me up on IG @joeyflavour to discuss this track.`,
+                notes: `• Fast-paced aggressive trap
+• Heavy 808s & hard-hitting drums
+• Need vocals ASAP for release
+• Audio preview coming soon
+• DM ASAP if interested!`
+            }
+        };
+
+        function playTrack(trackId, btnElement) {
+            const track = trackData[trackId];
+            if (!track.audio || track.audio === "") {
+                alert("🎵 Audio preview coming soon!\n\nDM @joeyflavour on IG to hear this track!");
+                return;
+            }
+        }
+
+        function openModal(trackId) {
+            const track = trackData[trackId];
+            if (!track) return;
+
+            const overlay = document.getElementById('modalOverlay');
+            overlay.dataset.currentTrack = trackId;
+
+            document.getElementById('modalImage').src = track.image;
+            document.getElementById('modalTitle').textContent = track.title;
+            document.getElementById('modalStatus').textContent = track.status;
+            document.getElementById('modalGenre').textContent = `${track.genre} · ${track.key} · ${track.bpm} BPM`;
+            document.getElementById('modalBpm').textContent = track.bpm;
+            document.getElementById('modalKey').textContent = track.key;
+            document.getElementById('modalGenreTag').textContent = track.genre;
+            document.getElementById('modalLyrics').textContent = track.lyrics;
+            document.getElementById('modalNotes').textContent = track.notes;
+
+            const prefsContainer = document.getElementById('modalVocalPrefs');
+            prefsContainer.innerHTML = track.vocalPrefs.map(pref =>
+                `<span class="vocal-pref-tag">${pref}</span>`
+            ).join('');
+
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(event) {
+            if (event.target === event.currentTarget) {
+                closeModalDirect();
+            }
+        }
+
+        function closeModalDirect() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        function toggleMobileMenu() {
+            document.getElementById('navLinks').classList.toggle('open');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModalDirect();
+        });
+    </script>
+
+</body>
+</html>
