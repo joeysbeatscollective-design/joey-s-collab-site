@@ -6,35 +6,58 @@
     <title>JoeyFlavour — Beats</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        /* ============================================
+           CYMATICS-INSPIRED DARK THEME
+           ============================================ */
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #111111;
-            --bg-card: #161616;
-            --bg-card-hover: #1e1e1e;
-            --accent: #8b5cf6;
-            --accent-glow: rgba(139, 92, 246, 0.3);
-            --accent-secondary: #06b6d4;
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-card: #0f0f0f;
+            --bg-card-hover: #141414;
+            --bg-elevated: #1a1a1a;
+            
+            /* Accent Colors - Subtle Purple/Magenta */
+            --accent: #a855f7;
+            --accent-soft: #9333ea;
+            --accent-glow: rgba(168, 85, 247, 0.4);
+            --accent-glow-soft: rgba(168, 85, 247, 0.15);
+            
+            /* Secondary accent for gradient shifts */
+            --accent-secondary: #ec4899;
+            --accent-tertiary: #8b5cf6;
+            
+            /* Text */
             --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-            --text-muted: #666666;
-            --border: #222222;
-            --border-hover: #333333;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --radius: 12px;
-            --radius-lg: 20px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --text-secondary: #888888;
+            --text-muted: #555555;
+            
+            /* Borders */
+            --border: #1a1a1a;
+            --border-hover: #2a2a2a;
+            --border-subtle: #151515;
+            
+            /* Status Colors */
+            --success: #22c55e;
+            --warning: #eab308;
+            --urgent: #ef4444;
+            
+            /* Radius - Cymatics uses subtle rounding */
+            --radius-sm: 6px;
+            --radius: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 20px;
+            --radius-full: 100px;
+            
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .font-display {
-            font-family: 'Monument Extended', 'Bebas Neue', 'Impact', sans-serif;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
+        /* ============================================
+           RESET & BASE
+           ============================================ */
         *, *::before, *::after {
             margin: 0;
             padding: 0;
@@ -44,22 +67,27 @@
         html {
             scroll-behavior: smooth;
             scrollbar-width: thin;
-            scrollbar-color: var(--accent) var(--bg-primary);
+            scrollbar-color: #333 #000;
         }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-primary); }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
 
-        .bg-animation {
+        /* ============================================
+           SUBTLE BACKGROUND GRADIENT (No Blue!)
+           ============================================ */
+        .bg-gradient {
             position: fixed;
             top: 0;
             left: 0;
@@ -67,122 +95,78 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
-            overflow: hidden;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(168, 85, 247, 0.08), transparent),
+                radial-gradient(ellipse 60% 40% at 100% 50%, rgba(236, 72, 153, 0.03), transparent);
         }
 
-        .bg-animation::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 20% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 20%, rgba(6, 182, 212, 0.05) 0%, transparent 50%),
-                        radial-gradient(ellipse at 50% 80%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
-            animation: bgShift 20s ease-in-out infinite;
-        }
-
-        @keyframes bgShift {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(2%, -2%) rotate(1deg); }
-            66% { transform: translate(-1%, 1%) rotate(-0.5deg); }
-        }
-
-        .grain-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-        }
-
+        /* ============================================
+           HEADER
+           ============================================ */
         .header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
-            padding: 0 2rem;
-            transition: var(--transition);
-        }
-
-        .header.scrolled {
-            background: rgba(10, 10, 10, 0.85);
+            padding: 0 24px;
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-subtle);
         }
 
         .header-inner {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 80px;
+            height: 70px;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             text-decoration: none;
         }
 
         .logo-icon {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-            border-radius: 10px;
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         .logo-text {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             color: var(--text-primary);
-            letter-spacing: 0.1em;
+            letter-spacing: -0.02em;
         }
 
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 2rem;
+            gap: 32px;
             list-style: none;
         }
 
         .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.875rem;
             font-weight: 500;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
             transition: var(--transition);
-            position: relative;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        .nav-links a:hover {
             color: var(--text-primary);
-        }
-
-        .nav-links a.active::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--accent);
-            border-radius: 1px;
         }
 
         .mobile-menu-btn {
@@ -190,148 +174,203 @@
             background: none;
             border: none;
             color: var(--text-primary);
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             cursor: pointer;
             padding: 8px;
         }
 
+        /* ============================================
+           HERO SECTION
+           ============================================ */
         .hero {
             position: relative;
             z-index: 2;
-            min-height: 60vh;
+            min-height: 70vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 140px 2rem 60px;
+            padding: 140px 24px 80px;
         }
 
         .hero-content {
-            max-width: 800px;
+            max-width: 700px;
         }
 
+        /* ============================================
+           CYMATICS-STYLE ANIMATED BADGE
+           ============================================ */
         .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 100px;
-            padding: 8px 20px;
-            font-size: 0.8rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+            gap: 10px;
+            padding: 10px 20px;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
             font-weight: 600;
-            margin-bottom: 2rem;
-            animation: fadeInUp 0.6s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 28px;
+            position: relative;
+            background: linear-gradient(135deg, 
+                rgba(168, 85, 247, 0.15), 
+                rgba(236, 72, 153, 0.15));
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #e9d5ff;
+            animation: badgeGlow 3s ease-in-out infinite;
+            overflow: hidden;
         }
 
-        .hero-badge .pulse-dot {
+        .hero-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent);
+            animation: badgeShine 3s ease-in-out infinite;
+        }
+
+        @keyframes badgeGlow {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(168, 85, 247, 0.2),
+                            0 0 40px rgba(168, 85, 247, 0.1);
+                border-color: rgba(168, 85, 247, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 25px rgba(236, 72, 153, 0.25),
+                            0 0 50px rgba(236, 72, 153, 0.15);
+                border-color: rgba(236, 72, 153, 0.4);
+            }
+        }
+
+        @keyframes badgeShine {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+
+        .pulse-dot {
             width: 8px;
             height: 8px;
             background: var(--success);
             border-radius: 50%;
-            animation: pulse 2s infinite;
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 10px var(--success);
         }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.5); }
+            50% { opacity: 0.6; transform: scale(1.3); }
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 7vw, 5rem);
-            line-height: 1.05;
-            margin-bottom: 1.5rem;
-            animation: fadeInUp 0.6s ease 0.1s both;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
         }
 
-        .hero h1 .gradient-text {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 50%, var(--accent) 100%);
+        .gradient-text {
+            background: linear-gradient(135deg, 
+                var(--accent) 0%, 
+                var(--accent-secondary) 50%, 
+                var(--accent) 100%);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: gradientShift 5s linear infinite;
+            animation: gradientShift 4s ease infinite;
         }
 
         @keyframes gradientShift {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 200% center; }
         }
 
         .hero-subtitle {
             font-size: 1.1rem;
             color: var(--text-secondary);
-            max-width: 500px;
-            margin: 0 auto 2.5rem;
-            font-weight: 300;
-            animation: fadeInUp 0.6s ease 0.2s both;
+            max-width: 480px;
+            margin: 0 auto 36px;
+            font-weight: 400;
+            line-height: 1.7;
         }
 
+        /* ============================================
+           CYMATICS-STYLE CLEAN BUTTONS
+           ============================================ */
         .hero-actions {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
+            gap: 14px;
             flex-wrap: wrap;
-            animation: fadeInUp 0.6s ease 0.3s both;
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             padding: 14px 28px;
-            border-radius: 100px;
-            font-size: 0.85rem;
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
             font-weight: 600;
             text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: -0.01em;
             transition: var(--transition);
             cursor: pointer;
             border: none;
             font-family: inherit;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-primary {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--accent-soft));
             color: white;
-            box-shadow: 0 4px 20px var(--accent-glow);
+            box-shadow: 0 4px 20px var(--accent-glow),
+                        0 0 0 1px rgba(168, 85, 247, 0.3);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px var(--accent-glow);
+            box-shadow: 0 8px 30px var(--accent-glow),
+                        0 0 0 1px rgba(168, 85, 247, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
         }
 
         .btn-secondary {
             background: transparent;
             color: var(--text-primary);
-            border: 1px solid var(--border-hover);
+            box-shadow: inset 0 0 0 1px var(--border-hover);
         }
 
         .btn-secondary:hover {
-            border-color: var(--accent);
-            background: rgba(139, 92, 246, 0.05);
+            background: var(--bg-elevated);
+            box-shadow: inset 0 0 0 1px var(--text-muted);
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        /* ============================================
+           STATS BAR
+           ============================================ */
         .stats-bar {
             position: relative;
             z-index: 2;
-            max-width: 800px;
-            margin: 0 auto 4rem;
+            max-width: 600px;
+            margin: 0 auto 60px;
             display: flex;
             justify-content: center;
-            gap: 3rem;
-            padding: 0 2rem;
+            gap: 48px;
+            padding: 0 24px;
         }
 
         .stat-item {
@@ -339,72 +378,79 @@
         }
 
         .stat-number {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--accent);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
         }
 
         .stat-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.1em;
             margin-top: 4px;
         }
 
+        /* ============================================
+           SECTION STYLES
+           ============================================ */
         .section {
             position: relative;
             z-index: 2;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 4rem 2rem;
+            padding: 60px 24px;
         }
 
         .section-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-            gap: 1rem;
+            margin-bottom: 36px;
         }
 
         .section-title-group {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
         }
 
         .section-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 12px;
+            width: 42px;
+            height: 42px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
         }
 
         .section-title {
-            font-size: clamp(1.5rem, 3vw, 2rem);
-            letter-spacing: 0.08em;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
         }
 
         .section-count {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
-            background: var(--bg-card);
-            padding: 6px 14px;
-            border-radius: 100px;
+            background: var(--bg-secondary);
+            padding: 6px 12px;
+            border-radius: var(--radius-full);
             border: 1px solid var(--border);
+            margin-left: 12px;
         }
 
+        /* ============================================
+           PRODUCT GRID — CLEAN CYMATICS STYLE
+           ============================================ */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
 
         .product-card {
@@ -415,16 +461,12 @@
             transition: var(--transition);
             cursor: pointer;
             position: relative;
-            text-decoration: none;
-            color: inherit;
-            display: block;
         }
 
         .product-card:hover {
-            transform: translateY(-4px);
             border-color: var(--border-hover);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
-                        0 0 40px var(--accent-glow);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
         .product-card:hover .card-image img {
@@ -435,31 +477,38 @@
             opacity: 1;
         }
 
+        /* Card Image */
         .card-image {
             position: relative;
             width: 100%;
-            padding-top: 100%;
+            aspect-ratio: 1;
             overflow: hidden;
             background: var(--bg-secondary);
         }
 
         .card-image img {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s ease;
         }
 
-        .play-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
+        /* Fallback for missing images */
+        .card-image-placeholder {
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-elevated));
+        }
+
+        /* Play Overlay */
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -475,7 +524,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 20px var(--accent-glow);
+            box-shadow: 0 4px 24px var(--accent-glow);
             transition: var(--transition);
         }
 
@@ -487,66 +536,70 @@
             width: 20px;
             height: 20px;
             fill: white;
-            margin-left: 2px;
+            margin-left: 3px;
         }
 
+        /* Status Badge - Clean & Minimal */
         .status-badge {
             position: absolute;
-            top: 12px;
-            left: 12px;
-            padding: 4px 10px;
-            border-radius: 6px;
+            top: 14px;
+            left: 14px;
+            padding: 5px 10px;
+            border-radius: var(--radius-full);
             font-size: 0.65rem;
-            font-weight: 700;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.05em;
             z-index: 5;
+            backdrop-filter: blur(10px);
         }
 
         .status-badge.open {
-            background: rgba(16, 185, 129, 0.2);
-            color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            background: rgba(34, 197, 94, 0.2);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.3);
         }
 
         .status-badge.urgent {
-            background: rgba(245, 158, 11, 0.2);
-            color: #fbbf24;
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         .status-badge.featured {
-            background: rgba(139, 92, 246, 0.2);
-            color: #a78bfa;
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            background: rgba(168, 85, 247, 0.2);
+            color: #d8b4fe;
+            border: 1px solid rgba(168, 85, 247, 0.3);
         }
 
+        /* BPM Badge */
         .bpm-badge {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            padding: 4px 10px;
-            border-radius: 6px;
+            top: 14px;
+            right: 14px;
+            padding: 5px 10px;
+            border-radius: var(--radius-full);
             font-size: 0.65rem;
-            font-weight: 700;
-            background: rgba(0, 0, 0, 0.6);
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(10px);
             color: var(--text-primary);
             z-index: 5;
         }
 
+        /* Waveform Mini */
         .waveform-mini {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 40px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            height: 50px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            gap: 1.5px;
-            padding: 0 12px 8px;
+            gap: 2px;
+            padding: 0 16px 12px;
             z-index: 4;
         }
 
@@ -554,71 +607,67 @@
             width: 3px;
             background: var(--accent);
             border-radius: 2px;
-            opacity: 0.6;
-            transition: height 0.3s ease;
+            opacity: 0.5;
         }
 
         .product-card:hover .waveform-bar {
-            animation: waveAnim 0.8s ease-in-out infinite alternate;
+            animation: waveAnim 0.6s ease-in-out infinite alternate;
         }
 
         @keyframes waveAnim {
-            from { height: var(--h); }
-            to { height: calc(var(--h) * 1.5); }
+            to { height: calc(var(--h) * 1.4); opacity: 0.8; }
         }
 
+        /* Card Content */
         .card-content {
-            padding: 16px;
+            padding: 18px;
         }
 
         .card-title {
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            margin-bottom: 6px;
+            letter-spacing: -0.01em;
         }
 
         .card-meta {
             font-size: 0.75rem;
             color: var(--text-muted);
-            margin-bottom: 10px;
+            margin-bottom: 14px;
         }
 
+        /* Tags - Sleek & Subtle Pills */
         .card-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
         .tag {
-            padding: 3px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
             font-size: 0.65rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            background: rgba(139, 92, 246, 0.1);
-            color: var(--accent);
-            border: 1px solid rgba(139, 92, 246, 0.15);
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            background: rgba(168, 85, 247, 0.1);
+            color: #c4b5fd;
+            border: none;
         }
 
-        .tag.cyan {
-            background: rgba(6, 182, 212, 0.1);
-            color: var(--accent-secondary);
-            border-color: rgba(6, 182, 212, 0.15);
+        .tag.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
         }
 
+        /* Mini Audio Player */
         .audio-player-mini {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px 10px;
+            gap: 12px;
+            padding: 10px 12px;
             background: var(--bg-secondary);
-            border-radius: 8px;
-            margin-top: 8px;
+            border-radius: var(--radius);
         }
 
         .play-btn-mini {
@@ -636,22 +685,19 @@
         }
 
         .play-btn-mini:hover {
-            transform: scale(1.1);
-            box-shadow: 0 2px 10px var(--accent-glow);
+            transform: scale(1.08);
+            box-shadow: 0 4px 16px var(--accent-glow);
         }
 
         .play-btn-mini svg {
             width: 12px;
             height: 12px;
             fill: white;
-            margin-left: 1px;
+            margin-left: 2px;
         }
 
         .progress-container {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
         }
 
         .progress-bar-track {
@@ -668,34 +714,33 @@
             background: var(--accent);
             border-radius: 2px;
             width: 0%;
-            transition: width 0.1s linear;
         }
 
         .time-display {
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             color: var(--text-muted);
-            font-variant-numeric: tabular-nums;
+            margin-top: 6px;
         }
 
+        /* ============================================
+           MODAL — CLEAN POPUP
+           ============================================ */
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(10px);
             z-index: 2000;
             overflow-y: auto;
-            padding: 2rem;
+            padding: 24px;
         }
 
         .modal-overlay.active {
             display: flex;
             align-items: flex-start;
             justify-content: center;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.2s ease;
         }
 
         @keyframes fadeIn {
@@ -705,32 +750,57 @@
 
         .modal-content {
             background: var(--bg-secondary);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-xl);
             border: 1px solid var(--border);
-            max-width: 900px;
+            max-width: 800px;
             width: 100%;
-            margin: 2rem auto;
+            margin: 40px auto;
             overflow: hidden;
-            animation: slideUp 0.4s ease;
+            animation: slideUp 0.3s ease;
             position: relative;
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
         }
 
         .modal-header {
             display: flex;
-            gap: 2rem;
-            padding: 2rem;
+            gap: 28px;
+            padding: 28px;
             border-bottom: 1px solid var(--border);
         }
 
         .modal-album-art {
-            width: 200px;
-            height: 200px;
-            min-width: 200px;
+            width: 180px;
+            height: 180px;
+            min-width: 180px;
             border-radius: var(--radius);
             overflow: hidden;
             background: var(--bg-card);
@@ -744,49 +814,53 @@
 
         .modal-info {
             flex: 1;
+            padding-top: 8px;
         }
 
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 40px;
-            height: 40px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 50%;
-            color: var(--text-primary);
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
+        .modal-badge {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            z-index: 10;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(34, 197, 94, 0.15);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.25);
+            margin-bottom: 16px;
         }
 
-        .modal-close:hover {
-            background: var(--accent);
-            border-color: var(--accent);
+        .modal-badge .pulse-dot {
+            width: 6px;
+            height: 6px;
         }
 
         .modal-title {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.05em;
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .modal-genre {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
         }
 
         .modal-meta-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin: 1.5rem 0;
+            gap: 12px;
         }
 
         .meta-item {
             background: var(--bg-card);
-            padding: 12px;
-            border-radius: 10px;
+            padding: 14px;
+            border-radius: var(--radius);
             border: 1px solid var(--border);
         }
 
@@ -794,31 +868,35 @@
             font-size: 0.65rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.08em;
             margin-bottom: 4px;
         }
 
         .meta-value {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 600;
             color: var(--accent);
         }
 
         .modal-body {
-            padding: 2rem;
+            padding: 28px;
         }
 
         .detail-section {
-            margin-bottom: 2rem;
+            margin-bottom: 28px;
+        }
+
+        .detail-section:last-of-type {
+            margin-bottom: 0;
         }
 
         .detail-section-title {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
+            letter-spacing: 0.08em;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
             border-bottom: 1px solid var(--border);
         }
 
@@ -826,8 +904,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 1.5rem;
-            font-family: 'Inter', monospace;
+            padding: 20px;
             font-size: 0.9rem;
             line-height: 1.8;
             color: var(--text-secondary);
@@ -837,51 +914,63 @@
         .vocal-prefs {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
 
         .vocal-pref-tag {
             padding: 8px 16px;
-            border-radius: 100px;
+            border-radius: var(--radius-full);
             font-size: 0.8rem;
             font-weight: 500;
-            background: rgba(139, 92, 246, 0.1);
-            color: var(--accent);
-            border: 1px solid rgba(139, 92, 246, 0.2);
+            background: rgba(168, 85, 247, 0.1);
+            color: #d8b4fe;
+            border: 1px solid rgba(168, 85, 247, 0.2);
         }
 
+        .modal-cta {
+            text-align: center;
+            margin-top: 32px;
+            padding-top: 28px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ============================================
+           CONTACT SECTION
+           ============================================ */
         .contact-section {
             position: relative;
             z-index: 2;
             text-align: center;
-            padding: 4rem 2rem 6rem;
+            padding: 80px 24px;
         }
 
         .contact-card {
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 3rem;
+            border-radius: var(--radius-xl);
+            padding: 40px;
         }
 
         .contact-title {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            letter-spacing: 0.08em;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
         }
 
         .contact-subtitle {
             color: var(--text-secondary);
             font-size: 0.95rem;
-            margin-bottom: 2rem;
+            margin-bottom: 28px;
+            line-height: 1.6;
         }
 
         .contact-links {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .contact-link {
@@ -889,7 +978,7 @@
             align-items: center;
             justify-content: center;
             gap: 12px;
-            padding: 16px 24px;
+            padding: 14px 20px;
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: var(--radius);
@@ -902,30 +991,35 @@
 
         .contact-link:hover {
             border-color: var(--accent);
-            background: rgba(139, 92, 246, 0.05);
-            transform: translateY(-2px);
+            background: var(--accent-glow-soft);
         }
 
         .contact-link .icon {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
 
+        .contact-link-label {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 400;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
         .footer {
             position: relative;
             z-index: 2;
             text-align: center;
-            padding: 2rem;
+            padding: 24px;
             border-top: 1px solid var(--border);
             color: var(--text-muted);
             font-size: 0.8rem;
         }
 
-        @media (max-width: 1200px) {
-            .product-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
         @media (max-width: 900px) {
             .product-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -934,13 +1028,14 @@
             .nav-links {
                 display: none;
                 position: fixed;
-                top: 80px;
+                top: 70px;
                 left: 0;
                 right: 0;
-                background: rgba(10, 10, 10, 0.95);
+                background: rgba(0, 0, 0, 0.95);
                 backdrop-filter: blur(20px);
                 flex-direction: column;
-                padding: 2rem;
+                padding: 24px;
+                gap: 20px;
                 border-bottom: 1px solid var(--border);
             }
 
@@ -959,40 +1054,44 @@
             }
 
             .modal-meta-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
 
             .stats-bar {
-                gap: 1.5rem;
+                gap: 32px;
             }
         }
 
         @media (max-width: 600px) {
             .product-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
+                gap: 14px;
             }
 
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.25rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
             }
 
             .section {
-                padding: 2rem 1rem;
+                padding: 40px 16px;
             }
 
             .card-content {
-                padding: 12px;
+                padding: 14px;
             }
 
             .card-title {
-                font-size: 0.85rem;
+                font-size: 0.9rem;
             }
 
             .modal-album-art {
-                width: 160px;
-                height: 160px;
-                min-width: 160px;
+                width: 140px;
+                height: 140px;
+                min-width: 140px;
             }
 
             .modal-meta-grid {
@@ -1000,26 +1099,34 @@
             }
 
             .contact-card {
-                padding: 2rem 1.5rem;
+                padding: 28px 20px;
+            }
+
+            .stats-bar {
+                gap: 24px;
+            }
+
+            .stat-number {
+                font-size: 1.25rem;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-animation"></div>
-    <div class="grain-overlay"></div>
+    <div class="bg-gradient"></div>
 
-    <header class="header" id="header">
+    <!-- Header -->
+    <header class="header">
         <div class="header-inner">
             <a href="#" class="logo">
                 <div class="logo-icon">🎹</div>
-                <span class="logo-text font-display">JoeyFlavour</span>
+                <span class="logo-text">JoeyFlavour</span>
             </a>
 
             <nav>
                 <ul class="nav-links" id="navLinks">
-                    <li><a href="#beats" class="active">Beats</a></li>
+                    <li><a href="#beats">Beats</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
@@ -1028,50 +1135,53 @@
         </div>
     </header>
 
+    <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
             <div class="hero-badge">
                 <span class="pulse-dot"></span>
                 Open for Collaborations
             </div>
-            <h1 class="font-display">
+            <h1>
                 Let's Create<br>
                 <span class="gradient-text">Something Crazy</span>
             </h1>
             <p class="hero-subtitle">
-                Browse my latest beats. Listen, vibe, and let's work together. Rappers, singers & writers welcome.
+                Fresh beats ready for vocals. Rappers, singers & writers — let's make magic together.
             </p>
             <div class="hero-actions">
                 <a href="#beats" class="btn btn-primary">
                     🔥 Browse Beats
                 </a>
                 <a href="#contact" class="btn btn-secondary">
-                    💬 Get in Touch
+                    Get in Touch
                 </a>
             </div>
         </div>
     </section>
 
+    <!-- Stats -->
     <div class="stats-bar">
         <div class="stat-item">
-            <div class="stat-number font-display">3</div>
+            <div class="stat-number">3</div>
             <div class="stat-label">Fresh Beats</div>
         </div>
         <div class="stat-item">
-            <div class="stat-number font-display">140</div>
+            <div class="stat-number">128-150</div>
             <div class="stat-label">BPM Range</div>
         </div>
         <div class="stat-item">
-            <div class="stat-number font-display">2025</div>
-            <div class="stat-label">Heat Season</div>
+            <div class="stat-number">2026</div>
+            <div class="stat-label">New Heat</div>
         </div>
     </div>
 
+    <!-- Beats Section -->
     <section class="section" id="beats">
         <div class="section-header">
             <div class="section-title-group">
                 <div class="section-icon">🎤</div>
-                <h2 class="section-title font-display">Beats</h2>
+                <h2 class="section-title">Beats</h2>
                 <span class="section-count">3 Tracks</span>
             </div>
         </div>
@@ -1081,28 +1191,31 @@
             <!-- ECLIPSE -->
             <div class="product-card" onclick="openModal('eclipse')">
                 <div class="card-image">
-                    <img src="./covers/ECLIPSE.png" alt="ECLIPSE">
+                    <img src="./covers/ECLIPSE.png" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                         alt="ECLIPSE">
+                    <div class="card-image-placeholder" style="display: none;">🌑</div>
                     
                     <span class="status-badge open">Open</span>
                     <span class="bpm-badge">140 BPM</span>
+                    
                     <div class="play-overlay">
                         <div class="play-btn-overlay">
                             <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                         </div>
                     </div>
+                    
                     <div class="waveform-mini">
-                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
-                        <div class="waveform-bar" style="--h: 20px; height: 20px;"></div>
-                        <div class="waveform-bar" style="--h: 14px; height: 14px;"></div>
                         <div class="waveform-bar" style="--h: 8px; height: 8px;"></div>
+                        <div class="waveform-bar" style="--h: 18px; height: 18px;"></div>
+                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
                         <div class="waveform-bar" style="--h: 22px; height: 22px;"></div>
                         <div class="waveform-bar" style="--h: 16px; height: 16px;"></div>
-                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
-                        <div class="waveform-bar" style="--h: 24px; height: 24px;"></div>
-                        <div class="waveform-bar" style="--h: 18px; height: 18px;"></div>
                         <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
                         <div class="waveform-bar" style="--h: 20px; height: 20px;"></div>
                         <div class="waveform-bar" style="--h: 14px; height: 14px;"></div>
+                        <div class="waveform-bar" style="--h: 24px; height: 24px;"></div>
+                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
                     </div>
                 </div>
                 <div class="card-content">
@@ -1110,17 +1223,17 @@
                     <div class="card-meta">Trap · D Minor · 140 BPM</div>
                     <div class="card-tags">
                         <span class="tag">Rapper</span>
-                        <span class="tag cyan">Dark</span>
+                        <span class="tag secondary">Dark</span>
                     </div>
                     <div class="audio-player-mini" onclick="event.stopPropagation()">
-                        <button class="play-btn-mini" onclick="playTrack('eclipse', this)">
-                            <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                        <button class="play-btn-mini" onclick="playTrack('eclipse')">
+                            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                         </button>
                         <div class="progress-container">
                             <div class="progress-bar-track">
-                                <div class="progress-bar-fill" id="progress-eclipse"></div>
+                                <div class="progress-bar-fill"></div>
                             </div>
-                            <div class="time-display" id="time-eclipse">Preview Soon</div>
+                            <div class="time-display">Preview Soon</div>
                         </div>
                     </div>
                 </div>
@@ -1129,28 +1242,31 @@
             <!-- ABYSS -->
             <div class="product-card" onclick="openModal('abyss')">
                 <div class="card-image">
-                    <img src="./covers/ABYSS.png" alt="ABYSS">
+                    <img src="./covers/ABYSS.png" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                         alt="ABYSS">
+                    <div class="card-image-placeholder" style="display: none;">🌊</div>
                     
                     <span class="status-badge featured">Featured</span>
                     <span class="bpm-badge">128 BPM</span>
+                    
                     <div class="play-overlay">
                         <div class="play-btn-overlay">
                             <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                         </div>
                     </div>
+                    
                     <div class="waveform-mini">
-                        <div class="waveform-bar" style="--h: 18px; height: 18px;"></div>
-                        <div class="waveform-bar" style="--h: 8px; height: 8px;"></div>
-                        <div class="waveform-bar" style="--h: 24px; height: 24px;"></div>
-                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
-                        <div class="waveform-bar" style="--h: 20px; height: 20px;"></div>
-                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
-                        <div class="waveform-bar" style="--h: 16px; height: 16px;"></div>
-                        <div class="waveform-bar" style="--h: 26px; height: 26px;"></div>
                         <div class="waveform-bar" style="--h: 14px; height: 14px;"></div>
-                        <div class="waveform-bar" style="--h: 22px; height: 22px;"></div>
                         <div class="waveform-bar" style="--h: 8px; height: 8px;"></div>
+                        <div class="waveform-bar" style="--h: 20px; height: 20px;"></div>
+                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
+                        <div class="waveform-bar" style="--h: 24px; height: 24px;"></div>
+                        <div class="waveform-bar" style="--h: 16px; height: 16px;"></div>
+                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
+                        <div class="waveform-bar" style="--h: 22px; height: 22px;"></div>
                         <div class="waveform-bar" style="--h: 18px; height: 18px;"></div>
+                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
                     </div>
                 </div>
                 <div class="card-content">
@@ -1158,17 +1274,17 @@
                     <div class="card-meta">Trap · G Minor · 128 BPM</div>
                     <div class="card-tags">
                         <span class="tag">Melodic</span>
-                        <span class="tag cyan">Atmospheric</span>
+                        <span class="tag secondary">Atmospheric</span>
                     </div>
                     <div class="audio-player-mini" onclick="event.stopPropagation()">
-                        <button class="play-btn-mini" onclick="playTrack('abyss', this)">
-                            <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                        <button class="play-btn-mini" onclick="playTrack('abyss')">
+                            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                         </button>
                         <div class="progress-container">
                             <div class="progress-bar-track">
-                                <div class="progress-bar-fill" id="progress-abyss"></div>
+                                <div class="progress-bar-fill"></div>
                             </div>
-                            <div class="time-display" id="time-abyss">Preview Soon</div>
+                            <div class="time-display">Preview Soon</div>
                         </div>
                     </div>
                 </div>
@@ -1177,28 +1293,31 @@
             <!-- NIGHTFALL -->
             <div class="product-card" onclick="openModal('nightfall')">
                 <div class="card-image">
-                    <img src="./covers/NIGHTFALL.png" alt="NIGHTFALL">
+                    <img src="./covers/NIGHTFALL.png" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                         alt="NIGHTFALL">
+                    <div class="card-image-placeholder" style="display: none;">🌙</div>
                     
                     <span class="status-badge urgent">Urgent</span>
                     <span class="bpm-badge">150 BPM</span>
+                    
                     <div class="play-overlay">
                         <div class="play-btn-overlay">
                             <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                         </div>
                     </div>
+                    
                     <div class="waveform-mini">
-                        <div class="waveform-bar" style="--h: 22px; height: 22px;"></div>
-                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
-                        <div class="waveform-bar" style="--h: 18px; height: 18px;"></div>
-                        <div class="waveform-bar" style="--h: 26px; height: 26px;"></div>
-                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
                         <div class="waveform-bar" style="--h: 20px; height: 20px;"></div>
-                        <div class="waveform-bar" style="--h: 8px; height: 8px;"></div>
+                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
                         <div class="waveform-bar" style="--h: 24px; height: 24px;"></div>
                         <div class="waveform-bar" style="--h: 14px; height: 14px;"></div>
-                        <div class="waveform-bar" style="--h: 16px; height: 16px;"></div>
+                        <div class="waveform-bar" style="--h: 18px; height: 18px;"></div>
+                        <div class="waveform-bar" style="--h: 8px; height: 8px;"></div>
                         <div class="waveform-bar" style="--h: 22px; height: 22px;"></div>
-                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
+                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
+                        <div class="waveform-bar" style="--h: 26px; height: 26px;"></div>
+                        <div class="waveform-bar" style="--h: 16px; height: 16px;"></div>
                     </div>
                 </div>
                 <div class="card-content">
@@ -1206,17 +1325,17 @@
                     <div class="card-meta">Trap · E Minor · 150 BPM</div>
                     <div class="card-tags">
                         <span class="tag">Aggressive</span>
-                        <span class="tag cyan">Hard-Hitting</span>
+                        <span class="tag secondary">Hard</span>
                     </div>
                     <div class="audio-player-mini" onclick="event.stopPropagation()">
-                        <button class="play-btn-mini" onclick="playTrack('nightfall', this)">
-                            <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                        <button class="play-btn-mini" onclick="playTrack('nightfall')">
+                            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                         </button>
                         <div class="progress-container">
                             <div class="progress-bar-track">
-                                <div class="progress-bar-fill" id="progress-nightfall"></div>
+                                <div class="progress-bar-fill"></div>
                             </div>
-                            <div class="time-display" id="time-nightfall">Preview Soon</div>
+                            <div class="time-display">Preview Soon</div>
                         </div>
                     </div>
                 </div>
@@ -1225,17 +1344,18 @@
         </div>
     </section>
 
+    <!-- Contact -->
     <section class="contact-section" id="contact">
         <div class="contact-card">
-            <h2 class="contact-title font-display">Let's Work Together</h2>
+            <h2 class="contact-title">Let's Work Together</h2>
             <p class="contact-subtitle">
-                Hear something you vibe with? Hit me up. Let's make magic. 🔥
+                Hear something you vibe with? Hit me up and let's make magic. 🔥
             </p>
             <div class="contact-links">
                 <a href="https://instagram.com/joeyflavour" target="_blank" class="contact-link">
                     <span class="icon">📸</span>
                     <span>@joeyflavour</span>
-                    <span style="color: var(--text-muted); font-size: 0.8rem;">— Instagram</span>
+                    <span class="contact-link-label">Instagram</span>
                 </a>
                 <a href="mailto:joeyflavourcollabs@gmail.com" class="contact-link">
                     <span class="icon">✉️</span>
@@ -1245,10 +1365,12 @@
         </div>
     </section>
 
+    <!-- Footer -->
     <footer class="footer">
-        <p>© 2025 JoeyFlavour · All rights reserved · Built with 🔥</p>
+        <p>© 2026 JoeyFlavour · All rights reserved</p>
     </footer>
 
+    <!-- Modal -->
     <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeModalDirect()">✕</button>
@@ -1258,12 +1380,12 @@
                     <img id="modalImage" src="" alt="">
                 </div>
                 <div class="modal-info">
-                    <div class="hero-badge" style="margin-bottom: 1rem;">
+                    <div class="modal-badge">
                         <span class="pulse-dot"></span>
                         <span id="modalStatus">Open for Collab</span>
                     </div>
-                    <h2 class="modal-title font-display" id="modalTitle">Track Title</h2>
-                    <p style="color: var(--text-secondary); margin-bottom: 1rem;" id="modalGenre">Genre · Key · BPM</p>
+                    <h2 class="modal-title" id="modalTitle">Track Title</h2>
+                    <p class="modal-genre" id="modalGenre">Genre · Key · BPM</p>
 
                     <div class="modal-meta-grid">
                         <div class="meta-item">
@@ -1284,23 +1406,23 @@
 
             <div class="modal-body">
                 <div class="detail-section">
-                    <h3 class="detail-section-title font-display">Vocal Preferences</h3>
+                    <h3 class="detail-section-title">Vocal Preferences</h3>
                     <div class="vocal-prefs" id="modalVocalPrefs"></div>
                 </div>
 
                 <div class="detail-section">
-                    <h3 class="detail-section-title font-display">Lyrics Ideas / Direction</h3>
+                    <h3 class="detail-section-title">Lyrics Ideas / Direction</h3>
                     <div class="lyrics-box" id="modalLyrics"></div>
                 </div>
 
                 <div class="detail-section">
-                    <h3 class="detail-section-title font-display">Production Notes</h3>
-                    <div class="lyrics-box" id="modalNotes" style="font-size: 0.85rem;"></div>
+                    <h3 class="detail-section-title">Production Notes</h3>
+                    <div class="lyrics-box" id="modalNotes"></div>
                 </div>
 
-                <div style="text-align: center; margin-top: 2rem;">
+                <div class="modal-cta">
                     <a href="mailto:joeyflavourcollabs@gmail.com" class="btn btn-primary">
-                        ✉️ I Want to Collab on This
+                        ✉️ I Want to Collab
                     </a>
                 </div>
             </div>
@@ -1316,12 +1438,11 @@
                 bpm: "140",
                 status: "Open for Collab",
                 image: "./covers/ECLIPSE.png",
-                audio: "",
                 vocalPrefs: ["Rapper", "Dark Vocals", "Aggressive Flow", "Male or Female"],
                 lyrics: `[Coming Soon]
-Will add lyrics ideas & direction here later!
+Lyrics ideas & direction will be added here.
 
-Hit me up on IG @joeyflavour to discuss this track.`,
+DM @joeyflavour on Instagram to discuss this track.`,
                 notes: `• Hard-hitting trap production
 • Dark atmospheric vibes
 • Perfect for aggressive rap vocals
@@ -1336,12 +1457,11 @@ Hit me up on IG @joeyflavour to discuss this track.`,
                 bpm: "128",
                 status: "Featured",
                 image: "./covers/ABYSS.png",
-                audio: "",
                 vocalPrefs: ["Melodic Rapper", "Singer", "Atmospheric Vocals", "Emotional"],
                 lyrics: `[Coming Soon]
-Will add lyrics ideas & direction here later!
+Lyrics ideas & direction will be added here.
 
-Hit me up on IG @joeyflavour to discuss this track.`,
+DM @joeyflavour on Instagram to discuss this track.`,
                 notes: `• Melodic trap with atmospheric elements
 • Deep bass & ethereal pads
 • Great for emotional/melodic vocals
@@ -1356,12 +1476,11 @@ Hit me up on IG @joeyflavour to discuss this track.`,
                 bpm: "150",
                 status: "Urgent — Need ASAP",
                 image: "./covers/NIGHTFALL.png",
-                audio: "",
                 vocalPrefs: ["Rapper", "Fast Flow", "Aggressive", "Hard-Hitting"],
                 lyrics: `[Coming Soon]
-Will add lyrics ideas & direction here later!
+Lyrics ideas & direction will be added here.
 
-Hit me up on IG @joeyflavour to discuss this track.`,
+DM @joeyflavour on Instagram to discuss this track.`,
                 notes: `• Fast-paced aggressive trap
 • Heavy 808s & hard-hitting drums
 • Need vocals ASAP for release
@@ -1370,20 +1489,13 @@ Hit me up on IG @joeyflavour to discuss this track.`,
             }
         };
 
-        function playTrack(trackId, btnElement) {
-            const track = trackData[trackId];
-            if (!track.audio || track.audio === "") {
-                alert("🎵 Audio preview coming soon!\n\nDM @joeyflavour on IG to hear this track!");
-                return;
-            }
+        function playTrack(trackId) {
+            alert("🎵 Audio preview coming soon!\n\nDM @joeyflavour on IG to hear this track!");
         }
 
         function openModal(trackId) {
             const track = trackData[trackId];
             if (!track) return;
-
-            const overlay = document.getElementById('modalOverlay');
-            overlay.dataset.currentTrack = trackId;
 
             document.getElementById('modalImage').src = track.image;
             document.getElementById('modalTitle').textContent = track.title;
@@ -1395,12 +1507,11 @@ Hit me up on IG @joeyflavour to discuss this track.`,
             document.getElementById('modalLyrics').textContent = track.lyrics;
             document.getElementById('modalNotes').textContent = track.notes;
 
-            const prefsContainer = document.getElementById('modalVocalPrefs');
-            prefsContainer.innerHTML = track.vocalPrefs.map(pref =>
-                `<span class="vocal-pref-tag">${pref}</span>`
-            ).join('');
+            document.getElementById('modalVocalPrefs').innerHTML = track.vocalPrefs
+                .map(pref => `<span class="vocal-pref-tag">${pref}</span>`)
+                .join('');
 
-            overlay.classList.add('active');
+            document.getElementById('modalOverlay').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
@@ -1414,15 +1525,6 @@ Hit me up on IG @joeyflavour to discuss this track.`,
             document.getElementById('modalOverlay').classList.remove('active');
             document.body.style.overflow = '';
         }
-
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
 
         function toggleMobileMenu() {
             document.getElementById('navLinks').classList.toggle('open');
