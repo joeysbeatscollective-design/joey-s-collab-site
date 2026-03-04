@@ -5,65 +5,211 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JoeyFlavour — Beats</title>
 
+    <!-- Preload critical resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Wavesurfer.js for real waveforms -->
+    <script src="https://unpkg.com/wavesurfer.js@7"></script>
 
     <style>
         /* ============================================
            CYMATICS-EXACT DESIGN SYSTEM
            ============================================ */
         :root {
-            /* Pure Dark Backgrounds */
-            --bg-primary: #000000;
-            --bg-secondary: #050505;
-            --bg-card: #0a0a0a;
-            --bg-card-hover: #0e0e0e;
-            --bg-elevated: #111111;
+            /* Colors */
+            --black: #000000;
+            --black-soft: #0a0a0a;
+            --black-card: #0d0d0d;
+            --black-elevated: #121212;
+            --black-border: #1a1a1a;
             
-            /* Cymatics Color Palette */
+            --white: #ffffff;
+            --gray-100: #e5e5e5;
+            --gray-200: #cccccc;
+            --gray-300: #a3a3a3;
+            --gray-400: #737373;
+            --gray-500: #525252;
+            --gray-600: #404040;
+            --gray-700: #2e2e2e;
+            --gray-800: #1f1f1f;
+            
             --pink: #ff0080;
-            --purple: #a855f7;
+            --pink-light: #ff4da6;
+            --purple: #9333ea;
+            --purple-light: #a855f7;
             --cyan: #00d4ff;
-            --blue: #3b82f6;
+            --green: #00ff88;
+            --red: #ef4444;
             
-            /* Glows */
-            --glow-pink: rgba(255, 0, 128, 0.35);
-            --glow-purple: rgba(168, 85, 247, 0.35);
-            --glow-cyan: rgba(0, 212, 255, 0.35);
+            /* Spacing (8px grid) */
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 20px;
+            --space-6: 24px;
+            --space-8: 32px;
+            --space-10: 40px;
+            --space-12: 48px;
+            --space-16: 64px;
+            --space-20: 80px;
+            --space-24: 96px;
             
-            /* Text */
-            --text-primary: #ffffff;
-            --text-secondary: #888888;
-            --text-muted: #555555;
-            
-            /* Borders */
-            --border: rgba(255, 255, 255, 0.06);
-            --border-hover: rgba(255, 255, 255, 0.12);
-            
-            /* Status */
-            --success: #00ff88;
-            --warning: #ffcc00;
-            --urgent: #ff4444;
+            /* Typography */
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             
             /* Radius */
-            --radius-sm: 8px;
-            --radius: 12px;
-            --radius-lg: 14px;
-            --radius-xl: 20px;
-            --radius-full: 50px;
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-2xl: 20px;
+            --radius-full: 9999px;
             
-            /* Cymatics Grid Gap */
-            --grid-gap: 20px;
+            /* Shadows */
+            --shadow-glow-pink: 
+                0 0 20px rgba(255, 0, 128, 0.3),
+                0 0 40px rgba(255, 0, 128, 0.2);
             
             /* Transitions */
-            --transition-fast: all 0.15s ease;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --duration-fast: 150ms;
+            --duration-normal: 300ms;
+            --duration-slow: 500ms;
         }
 
         /* ============================================
-           RESET & BASE
+           PRELOADER
+           ============================================ */
+        .preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--black);
+            transition: opacity 0.6s var(--ease-out-expo), visibility 0.6s;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .preloader-logo {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            border-radius: var(--radius-lg);
+            font-size: 1.5rem;
+            margin-bottom: var(--space-6);
+            animation: pulse-logo 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-logo {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 0 0 rgba(255, 0, 128, 0.4);
+            }
+            50% { 
+                transform: scale(1.05); 
+                box-shadow: 0 0 30px 10px rgba(255, 0, 128, 0.2);
+            }
+        }
+
+        .preloader-bar {
+            width: 200px;
+            height: 3px;
+            background: var(--gray-800);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .preloader-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--pink), var(--purple), var(--cyan));
+            background-size: 200% 100%;
+            border-radius: var(--radius-full);
+            animation: loading-bar 1.5s ease-in-out infinite;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @keyframes loading-bar {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .preloader-text {
+            margin-top: var(--space-4);
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* ============================================
+           PAGE TRANSITION
+           ============================================ */
+        .page-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 
+                opacity 0.8s var(--ease-out-expo),
+                transform 0.8s var(--ease-out-expo);
+        }
+
+        .page-content.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           SCROLL REVEAL ANIMATIONS
+           ============================================ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: 
+                opacity 0.8s var(--ease-out-expo),
+                transform 0.8s var(--ease-out-expo);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered card animations */
+        .card {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: 
+                opacity 0.6s var(--ease-out-expo),
+                transform 0.6s var(--ease-out-expo);
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:nth-child(1) { transition-delay: 0ms; }
+        .card:nth-child(2) { transition-delay: 100ms; }
+        .card:nth-child(3) { transition-delay: 200ms; }
+        .card:nth-child(4) { transition-delay: 300ms; }
+
+        /* ============================================
+           BASE STYLES
            ============================================ */
         *, *::before, *::after {
             margin: 0;
@@ -74,44 +220,45 @@
         html {
             scroll-behavior: smooth;
             scrollbar-width: thin;
-            scrollbar-color: #222 #000;
+            scrollbar-color: var(--gray-700) var(--black);
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            font-family: var(--font-sans);
+            background: var(--black);
+            color: var(--white);
             line-height: 1.5;
-            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            overflow-x: hidden;
         }
 
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #333; }
+        ::-webkit-scrollbar-track { background: var(--black); }
+        ::-webkit-scrollbar-thumb { background: var(--gray-700); border-radius: 4px; }
 
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
+        ::selection {
+            background: var(--pink);
+            color: var(--white);
         }
 
+        a { color: inherit; text-decoration: none; }
+        button { font-family: inherit; cursor: pointer; border: none; background: none; }
+        img { max-width: 100%; display: block; }
+
         /* ============================================
-           SUBTLE GRADIENT BACKGROUND
+           BACKGROUND
            ============================================ */
         .bg-gradient {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
+            inset: 0;
+            z-index: -1;
             pointer-events: none;
             background: 
-                radial-gradient(ellipse 80% 60% at 50% -30%, rgba(255, 0, 128, 0.05), transparent 70%),
-                radial-gradient(ellipse 60% 50% at 100% 20%, rgba(168, 85, 247, 0.03), transparent 60%);
+                radial-gradient(ellipse 100% 80% at 50% -40%, rgba(255, 0, 128, 0.07), transparent 60%),
+                radial-gradient(ellipse 80% 60% at 100% 0%, rgba(147, 51, 234, 0.04), transparent 50%),
+                radial-gradient(ellipse 60% 60% at 0% 100%, rgba(0, 212, 255, 0.03), transparent 50%);
         }
 
         /* ============================================
@@ -122,1028 +269,993 @@
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000;
-            padding: 0 40px;
+            z-index: 100;
+            height: 72px;
             background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transform: translateY(-100%);
+            transition: transform 0.6s var(--ease-out-expo);
+        }
+
+        .header.visible {
+            transform: translateY(0);
         }
 
         .header-inner {
             max-width: 1400px;
+            height: 100%;
             margin: 0 auto;
+            padding: 0 var(--space-10);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 72px;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            text-decoration: none;
+            gap: var(--space-3);
+            transition: opacity var(--duration-fast) var(--ease-out-expo);
         }
 
+        .logo:hover { opacity: 0.8; }
+
         .logo-icon {
-            width: 38px;
-            height: 38px;
-            background: linear-gradient(135deg, var(--pink), var(--purple));
-            border-radius: var(--radius-sm);
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1rem;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
         }
 
         .logo-text {
             font-size: 1.1rem;
             font-weight: 700;
-            color: var(--text-primary);
             letter-spacing: -0.02em;
         }
 
-        .nav-links {
+        .nav {
             display: flex;
             align-items: center;
-            gap: 40px;
-            list-style: none;
+            gap: var(--space-10);
         }
 
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
+        .nav-link {
             font-size: 0.9rem;
             font-weight: 500;
-            transition: var(--transition-fast);
-            letter-spacing: -0.01em;
+            color: var(--gray-400);
+            transition: color var(--duration-fast) var(--ease-out-expo);
         }
 
-        .nav-links a:hover {
-            color: var(--text-primary);
-        }
+        .nav-link:hover { color: var(--white); }
 
         .mobile-menu-btn {
             display: none;
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 8px;
+            padding: var(--space-2);
+            font-size: 1.25rem;
+            color: var(--white);
         }
 
         /* ============================================
            HERO
            ============================================ */
         .hero {
-            position: relative;
-            z-index: 2;
-            min-height: 75vh;
+            min-height: 85vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 140px var(--space-10) var(--space-20);
             text-align: center;
-            padding: 160px 40px 100px;
         }
 
         .hero-content {
-            max-width: 750px;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* ============================================
-           ANIMATED COLOR-SHIFTING BADGE
-           ============================================ */
-        .hero-badge {
+        /* Badge with color-shifting glow */
+        .badge {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            padding: 12px 24px;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-6);
+            margin-bottom: var(--space-8);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: var(--radius-full);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 32px;
-            position: relative;
-            cursor: default;
-            
-            background: rgba(255, 255, 255, 0.03);
-            color: #ffffff;
-            
-            /* Animated color-shifting border */
-            border: 1.5px solid transparent;
-            background-clip: padding-box;
-            
-            animation: badgeColorShift 4s ease-in-out infinite;
+            letter-spacing: 0.12em;
+            color: var(--gray-200);
+            animation: badge-glow 4s ease-in-out infinite;
         }
 
-        @keyframes badgeColorShift {
-            0%, 100% { 
-                border-color: var(--pink);
-                box-shadow: 
-                    0 0 20px rgba(255, 0, 128, 0.2),
-                    0 0 40px rgba(255, 0, 128, 0.1),
-                    inset 0 0 20px rgba(255, 0, 128, 0.05);
+        @keyframes badge-glow {
+            0%, 100% {
+                border-color: rgba(255, 0, 128, 0.4);
+                box-shadow: 0 0 20px rgba(255, 0, 128, 0.15), inset 0 0 20px rgba(255, 0, 128, 0.03);
             }
-            33% { 
-                border-color: var(--purple);
-                box-shadow: 
-                    0 0 20px rgba(168, 85, 247, 0.2),
-                    0 0 40px rgba(168, 85, 247, 0.1),
-                    inset 0 0 20px rgba(168, 85, 247, 0.05);
+            33% {
+                border-color: rgba(147, 51, 234, 0.4);
+                box-shadow: 0 0 20px rgba(147, 51, 234, 0.15), inset 0 0 20px rgba(147, 51, 234, 0.03);
             }
-            66% { 
-                border-color: var(--cyan);
-                box-shadow: 
-                    0 0 20px rgba(0, 212, 255, 0.2),
-                    0 0 40px rgba(0, 212, 255, 0.1),
-                    inset 0 0 20px rgba(0, 212, 255, 0.05);
+            66% {
+                border-color: rgba(0, 212, 255, 0.4);
+                box-shadow: 0 0 20px rgba(0, 212, 255, 0.15), inset 0 0 20px rgba(0, 212, 255, 0.03);
             }
         }
 
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--success);
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--green);
             border-radius: 50%;
-            animation: pulseDot 2s ease-in-out infinite;
-            box-shadow: 0 0 12px var(--success);
+            box-shadow: 0 0 10px var(--green);
+            animation: pulse-dot 2s ease-in-out infinite;
         }
 
-        @keyframes pulseDot {
+        @keyframes pulse-dot {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.3); }
+            50% { opacity: 0.5; transform: scale(1.5); }
         }
 
-        .hero h1 {
-            font-size: clamp(3rem, 7vw, 4.5rem);
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
             font-weight: 800;
-            letter-spacing: -0.04em;
-            margin-bottom: 24px;
             line-height: 1.05;
+            letter-spacing: -0.04em;
+            margin-bottom: var(--space-6);
         }
 
-        /* Animated gradient text */
         .gradient-text {
-            background: linear-gradient(
-                135deg, 
-                var(--pink) 0%, 
-                var(--purple) 25%,
-                var(--cyan) 50%,
-                var(--purple) 75%,
-                var(--pink) 100%
-            );
-            background-size: 300% auto;
+            background: linear-gradient(135deg, var(--pink), var(--purple-light), var(--cyan), var(--pink));
+            background-size: 300% 100%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: gradientFlow 5s ease infinite;
+            animation: gradient-flow 6s ease infinite;
         }
 
-        @keyframes gradientFlow {
-            0% { background-position: 0% center; }
-            50% { background-position: 100% center; }
-            100% { background-position: 0% center; }
+        @keyframes gradient-flow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .hero-subtitle {
-            font-size: 1.15rem;
-            color: var(--text-secondary);
-            max-width: 520px;
-            margin: 0 auto 44px;
-            font-weight: 400;
+            max-width: 500px;
+            font-size: 1.1rem;
+            color: var(--gray-400);
             line-height: 1.7;
-            letter-spacing: -0.01em;
+            margin-bottom: var(--space-10);
         }
 
-        /* ============================================
-           CYMATICS BUTTONS
-           ============================================ */
-        .hero-actions {
+        .btn-group {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
+            gap: var(--space-4);
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            padding: 16px 38px;
-            border-radius: var(--radius-full);
+            gap: var(--space-2);
+            padding: var(--space-4) var(--space-8);
             font-size: 0.9rem;
             font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            text-decoration: none;
             letter-spacing: -0.01em;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
+            border-radius: var(--radius-full);
+            transition: 
+                transform var(--duration-normal) var(--ease-out-expo),
+                box-shadow var(--duration-normal) var(--ease-out-expo);
         }
 
         .btn-primary {
             background: var(--pink);
-            color: white;
-            box-shadow: 
-                0 0 25px var(--glow-pink),
-                0 4px 20px rgba(255, 0, 128, 0.3);
+            color: var(--white);
+            box-shadow: 0 0 0 1px rgba(255, 0, 128, 0.5), 0 4px 20px rgba(255, 0, 128, 0.3);
         }
 
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 
-                0 0 40px var(--glow-pink),
-                0 10px 35px rgba(255, 0, 128, 0.4);
-        }
-
-        .btn-primary:active {
-            transform: translateY(-1px);
+            box-shadow: 0 0 0 1px rgba(255, 0, 128, 0.6), 0 8px 30px rgba(255, 0, 128, 0.4);
         }
 
         .btn-secondary {
             background: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--border-hover);
+            color: var(--white);
+            box-shadow: inset 0 0 0 1px var(--gray-700);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.03);
+            box-shadow: inset 0 0 0 1px var(--gray-500);
             transform: translateY(-2px);
         }
 
         /* ============================================
-           STATS BAR
+           STATS
            ============================================ */
-        .stats-bar {
-            position: relative;
-            z-index: 2;
-            max-width: 700px;
-            margin: 0 auto 90px;
+        .stats {
             display: flex;
             justify-content: center;
-            gap: 70px;
-            padding: 0 40px;
+            gap: var(--space-16);
+            padding: var(--space-6) var(--space-10);
+            margin-bottom: var(--space-20);
         }
 
-        .stat-item {
-            text-align: center;
-        }
+        .stat { text-align: center; }
 
-        .stat-number {
-            font-size: 1.8rem;
+        .stat-value {
+            font-size: 1.75rem;
             font-weight: 700;
-            color: var(--text-primary);
             letter-spacing: -0.03em;
         }
 
         .stat-label {
             font-size: 0.7rem;
-            color: var(--text-muted);
+            font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.12em;
-            margin-top: 6px;
-            font-weight: 500;
+            color: var(--gray-500);
+            margin-top: var(--space-2);
         }
 
         /* ============================================
            SECTION
            ============================================ */
         .section {
-            position: relative;
-            z-index: 2;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 80px 40px;
+            padding: var(--space-20) var(--space-10);
         }
 
         .section-header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 48px;
-        }
-
-        .section-title-group {
-            display: flex;
-            align-items: center;
-            gap: 16px;
+            gap: var(--space-4);
+            margin-bottom: var(--space-12);
         }
 
         .section-icon {
             width: 48px;
             height: 48px;
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            background: var(--black-elevated);
+            border: 1px solid var(--black-border);
+            border-radius: var(--radius-lg);
+            font-size: 1.2rem;
         }
 
         .section-title {
-            font-size: 1.8rem;
+            font-size: 1.75rem;
             font-weight: 700;
             letter-spacing: -0.03em;
         }
 
         .section-count {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            background: var(--bg-card);
-            padding: 8px 16px;
-            border-radius: var(--radius-full);
-            border: 1px solid var(--border);
+            margin-left: var(--space-3);
+            padding: var(--space-2) var(--space-4);
+            font-size: 0.7rem;
             font-weight: 500;
-            letter-spacing: 0.02em;
+            color: var(--gray-500);
+            background: var(--black-card);
+            border: 1px solid var(--black-border);
+            border-radius: var(--radius-full);
         }
 
         /* ============================================
-           CYMATICS-EXACT GRID: 4 columns, 20px gap
+           GRID
            ============================================ */
-        .product-grid {
+        .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: var(--grid-gap);
+            gap: var(--space-5);
         }
 
         /* ============================================
-           PRODUCT CARD WITH COLOR-SHIFTING GLOW
+           CARD
            ============================================ */
-        .product-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
+        .card {
+            position: relative;
+            background: var(--black-card);
+            border: 1px solid transparent;
+            border-radius: var(--radius-xl);
             overflow: hidden;
             cursor: pointer;
-            position: relative;
-            transition: var(--transition);
+            transition: 
+                transform var(--duration-slow) var(--ease-out-expo),
+                border-color var(--duration-slow) var(--ease-out-expo),
+                box-shadow var(--duration-slow) var(--ease-out-expo);
         }
 
-        /* Hover state with animated color glow */
-        .product-card:hover {
-            transform: translateY(-8px);
-            border-color: transparent;
-            animation: cardGlowShift 3s ease-in-out infinite;
+        .card:hover {
+            transform: translateY(-8px) scale(1.01);
+            animation: card-glow 3s ease-in-out infinite;
         }
 
-        @keyframes cardGlowShift {
-            0%, 100% { 
+        @keyframes card-glow {
+            0%, 100% {
                 border-color: var(--pink);
-                box-shadow: 
-                    0 25px 50px rgba(0, 0, 0, 0.5),
-                    0 0 30px rgba(255, 0, 128, 0.15),
-                    0 0 60px rgba(255, 0, 128, 0.08);
+                box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 40px rgba(255,0,128,0.1);
             }
-            33% { 
+            33% {
                 border-color: var(--purple);
-                box-shadow: 
-                    0 25px 50px rgba(0, 0, 0, 0.5),
-                    0 0 30px rgba(168, 85, 247, 0.15),
-                    0 0 60px rgba(168, 85, 247, 0.08);
+                box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 40px rgba(147,51,234,0.1);
             }
-            66% { 
+            66% {
                 border-color: var(--cyan);
-                box-shadow: 
-                    0 25px 50px rgba(0, 0, 0, 0.5),
-                    0 0 30px rgba(0, 212, 255, 0.15),
-                    0 0 60px rgba(0, 212, 255, 0.08);
+                box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 40px rgba(0,212,255,0.1);
             }
         }
 
-        .product-card:hover .card-image img {
-            transform: scale(1.08);
-        }
-
-        .product-card:hover .play-overlay {
-            opacity: 1;
-        }
-
-        .product-card:hover .waveform-bar {
-            animation: waveAnim 0.4s ease-in-out infinite alternate;
-        }
-
-        /* Card Image */
         .card-image {
             position: relative;
-            width: 100%;
             aspect-ratio: 1;
             overflow: hidden;
-            background: linear-gradient(135deg, #080808, #121212);
+            background: linear-gradient(135deg, var(--black-soft), var(--black-elevated));
         }
 
         .card-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.6s var(--ease-out-expo);
         }
 
-        .card-image-placeholder {
+        .card:hover .card-image img {
+            transform: scale(1.08);
+        }
+
+        .card-badge {
             position: absolute;
-            inset: 0;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            background: linear-gradient(135deg, #0a0a0a, #151515);
+            top: var(--space-4);
+            left: var(--space-4);
+            padding: 6px 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: var(--radius-full);
+            backdrop-filter: blur(12px);
+            z-index: 10;
+        }
+
+        .card-badge.open {
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--green);
+            border: 1px solid rgba(0, 255, 136, 0.25);
+        }
+
+        .card-badge.featured {
+            background: rgba(255, 0, 128, 0.15);
+            color: var(--pink-light);
+            border: 1px solid rgba(255, 0, 128, 0.25);
+        }
+
+        .card-badge.urgent {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+        }
+
+        .card-bpm {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            padding: 6px 12px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--white);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius-full);
+            z-index: 10;
         }
 
         /* Play Overlay */
-        .play-overlay {
+        .card-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.55);
             display: flex;
             align-items: center;
             justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
             opacity: 0;
-            transition: var(--transition);
+            transition: opacity var(--duration-normal) var(--ease-out-expo);
         }
 
-        .play-btn-overlay {
-            width: 68px;
-            height: 68px;
+        .card:hover .card-overlay {
+            opacity: 1;
+        }
+
+        .play-btn-large {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: var(--pink);
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 35px var(--glow-pink);
-            transition: var(--transition);
+            box-shadow: var(--shadow-glow-pink);
+            transition: transform var(--duration-normal) var(--ease-spring);
         }
 
-        .play-btn-overlay:hover {
-            transform: scale(1.12);
-            box-shadow: 0 0 50px var(--glow-pink);
+        .play-btn-large:hover {
+            transform: scale(1.1);
         }
 
-        .play-btn-overlay svg {
+        .play-btn-large svg {
             width: 24px;
             height: 24px;
-            fill: white;
+            fill: var(--white);
             margin-left: 4px;
         }
 
-        /* Status Badge */
-        .status-badge {
-            position: absolute;
-            top: 14px;
-            left: 14px;
-            padding: 6px 14px;
-            border-radius: var(--radius-full);
-            font-size: 0.65rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            z-index: 5;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-
-        .status-badge.open {
-            background: rgba(0, 255, 136, 0.12);
-            color: #66ffbb;
-            border: 1px solid rgba(0, 255, 136, 0.2);
-        }
-
-        .status-badge.featured {
-            background: rgba(255, 0, 128, 0.12);
-            color: #ff80bf;
-            border: 1px solid rgba(255, 0, 128, 0.2);
-        }
-
-        .status-badge.urgent {
-            background: rgba(255, 68, 68, 0.12);
-            color: #ff9999;
-            border: 1px solid rgba(255, 68, 68, 0.2);
-        }
-
-        /* BPM Badge */
-        .bpm-badge {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            padding: 6px 14px;
-            border-radius: var(--radius-full);
-            font-size: 0.65rem;
-            font-weight: 600;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            color: var(--text-primary);
-            z-index: 5;
-            letter-spacing: 0.02em;
-        }
-
-        /* ============================================
-           CYMATICS-STYLE WAVEFORM BARS
-           ============================================ */
-        .waveform-mini {
+        /* Waveform Container */
+        .waveform-container {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
             height: 60px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.92));
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 3px;
-            padding: 0 24px 16px;
-            z-index: 4;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            padding: 0 var(--space-4);
+            z-index: 5;
         }
 
-        .waveform-bar {
-            width: 3px;
-            border-radius: 2px;
-            opacity: 0.5;
-            /* Gradient color on bars */
-            background: linear-gradient(to top, var(--pink), var(--purple));
-        }
-
-        @keyframes waveAnim {
-            0% { 
-                height: var(--h); 
-                opacity: 0.5;
-            }
-            100% { 
-                height: calc(var(--h) * 1.6); 
-                opacity: 0.9;
-                background: linear-gradient(to top, var(--purple), var(--cyan));
-            }
+        .waveform-container > div {
+            height: 40px !important;
+            margin-top: 12px;
         }
 
         /* Card Content */
         .card-content {
-            padding: 20px;
+            padding: var(--space-5);
         }
 
         .card-title {
             font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 6px;
             letter-spacing: -0.02em;
+            margin-bottom: var(--space-1);
         }
 
         .card-meta {
             font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-            letter-spacing: -0.01em;
+            color: var(--gray-500);
+            margin-bottom: var(--space-4);
         }
 
-        /* Tags */
-        .card-tags {
+        .tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 18px;
+            gap: var(--space-2);
+            margin-bottom: var(--space-4);
         }
 
         .tag {
-            padding: 5px 14px;
-            border-radius: var(--radius-full);
-            font-size: 0.7rem;
+            padding: 5px 12px;
+            font-size: 11px;
             font-weight: 500;
-            letter-spacing: 0.01em;
-            background: rgba(255, 0, 128, 0.06);
-            color: #ff99cc;
-            border: none;
-            transition: var(--transition-fast);
+            color: var(--pink-light);
+            background: rgba(255, 0, 128, 0.08);
+            border-radius: var(--radius-full);
         }
 
         .tag.secondary {
+            color: var(--gray-400);
             background: rgba(255, 255, 255, 0.04);
-            color: var(--text-secondary);
-        }
-
-        /* Mini Audio Player */
-        .audio-player-mini {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-        }
-
-        .play-btn-mini {
-            width: 38px;
-            height: 38px;
-            min-width: 38px;
-            background: var(--pink);
-            border: none;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 0 18px rgba(255, 0, 128, 0.25);
-        }
-
-        .play-btn-mini:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 28px rgba(255, 0, 128, 0.4);
-        }
-
-        .play-btn-mini svg {
-            width: 14px;
-            height: 14px;
-            fill: white;
-            margin-left: 2px;
-        }
-
-        .progress-container {
-            flex: 1;
-        }
-
-        .progress-bar-track {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 2px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--pink), var(--purple));
-            border-radius: 2px;
-            width: 0%;
-        }
-
-        .time-display {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            margin-top: 8px;
-            letter-spacing: 0.02em;
         }
 
         /* ============================================
-           MODAL
+           AUDIO PLAYER (Real Working Player)
            ============================================ */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            z-index: 2000;
-            overflow-y: auto;
-            padding: 40px;
-        }
-
-        .modal-overlay.active {
+        .player {
             display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            animation: fadeIn 0.25s ease;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            background: var(--black-soft);
+            border: 1px solid var(--black-border);
+            border-radius: var(--radius-lg);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-xl);
-            border: 1px solid var(--border);
-            max-width: 850px;
-            width: 100%;
-            margin: 50px auto;
-            overflow: hidden;
-            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px) scale(0.97); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 42px;
-            height: 42px;
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            border-radius: 50%;
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            cursor: pointer;
+        .play-btn {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition);
-            z-index: 10;
-        }
-
-        .modal-close:hover {
             background: var(--pink);
-            color: white;
-            border-color: var(--pink);
-            transform: rotate(90deg);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 0, 128, 0.3);
+            transition: 
+                transform var(--duration-fast) var(--ease-spring),
+                box-shadow var(--duration-fast) var(--ease-out-expo);
         }
 
-        .modal-header {
-            display: flex;
-            gap: 36px;
-            padding: 36px;
-            border-bottom: 1px solid var(--border);
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 0, 128, 0.4);
         }
 
-        .modal-album-art {
-            width: 220px;
-            height: 220px;
-            min-width: 220px;
-            border-radius: var(--radius);
+        .play-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--white);
+        }
+
+        .play-btn .play-icon { margin-left: 2px; }
+        .play-btn .pause-icon { display: none; }
+        .play-btn.playing .play-icon { display: none; }
+        .play-btn.playing .pause-icon { display: block; }
+
+        .player-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .player-progress {
+            height: 4px;
+            background: var(--gray-800);
+            border-radius: var(--radius-full);
             overflow: hidden;
-            background: var(--bg-card);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            margin-bottom: 6px;
         }
 
-        .modal-album-art img {
+        .player-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--pink), var(--purple));
+            border-radius: var(--radius-full);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .player-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            color: var(--gray-600);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ============================================
+           GLOBAL AUDIO PLAYER (Bottom Bar)
+           ============================================ */
+        .global-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-top: 1px solid var(--black-border);
+            padding: var(--space-4) var(--space-8);
+            display: none;
+            align-items: center;
+            gap: var(--space-6);
+            transform: translateY(100%);
+            transition: transform 0.4s var(--ease-out-expo);
+        }
+
+        .global-player.active {
+            display: flex;
+            transform: translateY(0);
+        }
+
+        .global-player-cover {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .global-player-cover img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .modal-info {
-            flex: 1;
-            padding-top: 10px;
+        .global-player-info {
+            flex-shrink: 0;
+            min-width: 120px;
         }
 
-        /* Modal badge with color shift */
+        .global-player-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .global-player-meta {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        .global-player-controls {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+
+        .global-player-waveform {
+            flex: 1;
+            height: 40px;
+            min-width: 200px;
+        }
+
+        .global-player-time {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            font-variant-numeric: tabular-nums;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .global-player-close {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-500);
+            font-size: 1rem;
+            border-radius: 50%;
+            transition: color var(--duration-fast), background var(--duration-fast);
+        }
+
+        .global-player-close:hover {
+            color: var(--white);
+            background: var(--gray-800);
+        }
+
+        /* ============================================
+           MODAL
+           ============================================ */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            padding: var(--space-10);
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            overflow-y: auto;
+            opacity: 0;
+            transition: opacity var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .modal-backdrop.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 850px;
+            margin: var(--space-12) auto;
+            background: var(--black-soft);
+            border: 1px solid var(--black-border);
+            border-radius: var(--radius-2xl);
+            overflow: hidden;
+            transform: translateY(30px) scale(0.97);
+            opacity: 0;
+            transition: 
+                transform var(--duration-slow) var(--ease-out-expo),
+                opacity var(--duration-slow) var(--ease-out-expo);
+        }
+
+        .modal-backdrop.active .modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: var(--space-5);
+            right: var(--space-5);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--black-elevated);
+            border: 1px solid var(--black-border);
+            border-radius: 50%;
+            color: var(--gray-400);
+            font-size: 1.1rem;
+            z-index: 10;
+            transition: all var(--duration-normal) var(--ease-spring);
+        }
+
+        .modal-close:hover {
+            background: var(--pink);
+            color: var(--white);
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            position: relative;
+            display: flex;
+            gap: var(--space-8);
+            padding: var(--space-8);
+            border-bottom: 1px solid var(--black-border);
+        }
+
+        .modal-cover {
+            width: 200px;
+            height: 200px;
+            min-width: 200px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-info { flex: 1; padding-top: var(--space-2); }
+
         .modal-badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 18px;
-            border-radius: var(--radius-full);
-            font-size: 0.7rem;
+            gap: var(--space-2);
+            padding: 6px 14px;
+            margin-bottom: var(--space-4);
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            margin-bottom: 20px;
-            animation: badgeColorShift 4s ease-in-out infinite;
-        }
-
-        .modal-badge .pulse-dot {
-            width: 6px;
-            height: 6px;
+            border-radius: var(--radius-full);
+            animation: badge-glow 4s ease-in-out infinite;
         }
 
         .modal-title {
-            font-size: 2.25rem;
+            font-size: 2rem;
             font-weight: 700;
             letter-spacing: -0.03em;
-            margin-bottom: 10px;
+            margin-bottom: var(--space-2);
         }
 
         .modal-genre {
-            color: var(--text-secondary);
             font-size: 1rem;
-            margin-bottom: 28px;
-            letter-spacing: -0.01em;
+            color: var(--gray-400);
+            margin-bottom: var(--space-6);
         }
 
-        .modal-meta-grid {
+        .modal-meta {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
+            gap: var(--space-3);
         }
 
-        .meta-item {
-            background: var(--bg-card);
-            padding: 18px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
+        .meta-box {
+            padding: var(--space-4);
+            background: var(--black-card);
+            border: 1px solid var(--black-border);
+            border-radius: var(--radius-lg);
         }
 
         .meta-label {
             font-size: 0.65rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 6px;
             font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--gray-600);
+            margin-bottom: 4px;
         }
 
         .meta-value {
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 600;
             color: var(--pink);
-            letter-spacing: -0.01em;
         }
 
-        .modal-body {
-            padding: 36px;
-        }
+        .modal-body { padding: var(--space-8); }
 
-        .detail-section {
-            margin-bottom: 36px;
-        }
+        .modal-section { margin-bottom: var(--space-8); }
+        .modal-section:last-child { margin-bottom: 0; }
 
-        .detail-section:last-of-type {
-            margin-bottom: 0;
-        }
-
-        .detail-section-title {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 18px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid var(--border);
+        .modal-section-title {
+            font-size: 0.7rem;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--gray-500);
+            padding-bottom: var(--space-4);
+            margin-bottom: var(--space-4);
+            border-bottom: 1px solid var(--black-border);
         }
 
-        .lyrics-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 28px;
-            font-size: 0.95rem;
-            line-height: 1.9;
-            color: var(--text-secondary);
-            white-space: pre-wrap;
-            letter-spacing: -0.01em;
-        }
-
-        .vocal-prefs {
+        .prefs {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: var(--space-3);
         }
 
-        .vocal-pref-tag {
-            padding: 12px 24px;
-            border-radius: var(--radius-full);
+        .pref-tag {
+            padding: var(--space-3) var(--space-5);
             font-size: 0.85rem;
             font-weight: 500;
+            color: var(--pink-light);
             background: rgba(255, 0, 128, 0.06);
-            color: #ffb3d9;
-            border: 1px solid rgba(255, 0, 128, 0.12);
-            transition: var(--transition-fast);
+            border: 1px solid rgba(255, 0, 128, 0.1);
+            border-radius: var(--radius-full);
+            transition: all var(--duration-fast);
         }
 
-        .vocal-pref-tag:hover {
+        .pref-tag:hover {
             background: rgba(255, 0, 128, 0.12);
-            border-color: rgba(255, 0, 128, 0.25);
+            border-color: rgba(255, 0, 128, 0.2);
+        }
+
+        .text-box {
+            padding: var(--space-6);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--gray-300);
+            background: var(--black-card);
+            border: 1px solid var(--black-border);
+            border-radius: var(--radius-lg);
+            white-space: pre-wrap;
+        }
+
+        .modal-player {
+            margin-top: var(--space-6);
+            padding: var(--space-4);
+            background: var(--black-card);
+            border: 1px solid var(--black-border);
+            border-radius: var(--radius-lg);
+        }
+
+        .modal-player-waveform {
+            height: 80px;
+            margin-bottom: var(--space-4);
         }
 
         .modal-cta {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 36px;
-            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+            padding-top: var(--space-8);
+            margin-top: var(--space-8);
+            border-top: 1px solid var(--black-border);
         }
 
         /* ============================================
            CONTACT
            ============================================ */
-        .contact-section {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            padding: 120px 40px;
+        .contact {
+            display: flex;
+            justify-content: center;
+            padding: var(--space-24) var(--space-10);
         }
 
         .contact-card {
-            max-width: 540px;
-            margin: 0 auto;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            padding: 56px 48px;
+            max-width: 520px;
+            padding: var(--space-12) var(--space-10);
+            text-align: center;
+            background: var(--black-card);
+            border: 1px solid var(--black-border);
+            border-radius: var(--radius-2xl);
         }
 
         .contact-title {
-            font-size: 1.9rem;
+            font-size: 1.75rem;
             font-weight: 700;
-            margin-bottom: 16px;
             letter-spacing: -0.03em;
+            margin-bottom: var(--space-3);
         }
 
         .contact-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.05rem;
-            margin-bottom: 36px;
+            font-size: 1rem;
+            color: var(--gray-400);
             line-height: 1.7;
-            letter-spacing: -0.01em;
+            margin-bottom: var(--space-8);
         }
 
         .contact-links {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: var(--space-3);
         }
 
         .contact-link {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 14px;
-            padding: 18px 28px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            color: var(--text-primary);
-            text-decoration: none;
-            font-size: 0.95rem;
+            gap: var(--space-3);
+            padding: var(--space-4) var(--space-6);
+            font-size: 0.9rem;
             font-weight: 500;
-            transition: var(--transition);
-            letter-spacing: -0.01em;
+            color: var(--white);
+            background: var(--black-soft);
+            border: 1px solid var(--black-border);
+            border-radius: var(--radius-lg);
+            transition: all var(--duration-normal) var(--ease-out-expo);
         }
 
         .contact-link:hover {
-            border-color: var(--pink);
-            background: rgba(255, 0, 128, 0.06);
             transform: translateY(-3px);
+            border-color: var(--pink);
             box-shadow: 0 10px 30px rgba(255, 0, 128, 0.1);
         }
 
-        .contact-link .icon {
-            font-size: 1.3rem;
-        }
-
-        .contact-link-label {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            font-weight: 400;
+        .contact-link .icon { font-size: 1.1rem; }
+        .contact-link .label {
             margin-left: auto;
+            color: var(--gray-600);
+            font-weight: 400;
         }
 
         /* ============================================
            FOOTER
            ============================================ */
         .footer {
-            position: relative;
-            z-index: 2;
+            padding: var(--space-8) var(--space-10);
             text-align: center;
-            padding: 32px 40px;
-            border-top: 1px solid var(--border);
-            color: var(--text-muted);
             font-size: 0.8rem;
-            letter-spacing: -0.01em;
+            color: var(--gray-600);
+            border-top: 1px solid var(--black-border);
+        }
+
+        /* Extra padding for global player */
+        body.player-active .footer {
+            padding-bottom: 100px;
         }
 
         /* ============================================
            RESPONSIVE
            ============================================ */
         @media (max-width: 1200px) {
-            .product-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
+            .grid { grid-template-columns: repeat(3, 1fr); }
         }
 
         @media (max-width: 900px) {
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .grid { grid-template-columns: repeat(2, 1fr); }
+            
+            .header-inner, .section, .stats, .contact, .footer {
+                padding-left: var(--space-6);
+                padding-right: var(--space-6);
             }
 
-            .header { padding: 0 24px; }
-            .hero { padding: 140px 24px 80px; }
-            .section { padding: 60px 24px; }
-            
-            .nav-links {
+            .nav {
                 display: none;
                 position: fixed;
                 top: 72px;
                 left: 0;
                 right: 0;
-                background: rgba(0, 0, 0, 0.97);
-                backdrop-filter: blur(24px);
                 flex-direction: column;
-                padding: 32px;
-                gap: 28px;
-                border-bottom: 1px solid var(--border);
+                gap: var(--space-4);
+                padding: var(--space-8);
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(24px);
+                border-bottom: 1px solid var(--black-border);
             }
 
-            .nav-links.open {
-                display: flex;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
+            .nav.open { display: flex; }
+            .mobile-menu-btn { display: block; }
 
             .modal-header {
                 flex-direction: column;
@@ -1151,468 +1263,651 @@
                 text-align: center;
             }
 
-            .stats-bar {
-                gap: 40px;
+            .stats { gap: var(--space-10); }
+
+            .global-player {
+                flex-wrap: wrap;
+                padding: var(--space-3) var(--space-4);
+            }
+
+            .global-player-waveform { 
+                order: 10; 
+                width: 100%; 
+                min-width: 100%;
+                margin-top: var(--space-2);
             }
         }
 
         @media (max-width: 600px) {
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 14px;
-            }
-
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1rem;
-            }
-
-            .btn {
-                padding: 14px 30px;
-                font-size: 0.85rem;
-            }
-
-            .card-content {
-                padding: 16px;
-            }
-
-            .card-title {
-                font-size: 0.95rem;
-            }
-
-            .modal-content {
-                margin: 24px auto;
-            }
-
-            .modal-album-art {
+            .grid { gap: var(--space-4); }
+            .hero-title { font-size: 2.2rem; }
+            .hero-subtitle { font-size: 1rem; }
+            .btn { padding: var(--space-3) var(--space-6); }
+            .card-content { padding: var(--space-4); }
+            
+            .modal-cover {
                 width: 160px;
                 height: 160px;
                 min-width: 160px;
             }
 
-            .modal-title {
-                font-size: 1.6rem;
-            }
-
-            .modal-meta-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .contact-card {
-                padding: 40px 28px;
-            }
-
-            .stats-bar {
-                gap: 28px;
-            }
-
-            .stat-number {
-                font-size: 1.5rem;
-            }
+            .modal-meta { grid-template-columns: 1fr 1fr; }
+            .stats { gap: var(--space-8); }
+            .stat-value { font-size: 1.4rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-gradient"></div>
-
-    <!-- Header -->
-    <header class="header">
-        <div class="header-inner">
-            <a href="#" class="logo">
-                <div class="logo-icon">🎹</div>
-                <span class="logo-text">JoeyFlavour</span>
-            </a>
-
-            <nav>
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="#beats">Beats</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
-
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-logo">🎹</div>
+        <div class="preloader-bar">
+            <div class="preloader-progress" id="preloaderProgress"></div>
         </div>
-    </header>
-
-    <!-- Hero -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-badge">
-                <span class="pulse-dot"></span>
-                Open for Collaborations
-            </div>
-            <h1>
-                Let's Create<br>
-                <span class="gradient-text">Something Crazy</span>
-            </h1>
-            <p class="hero-subtitle">
-                Fresh beats ready for vocals. Rappers, singers & writers — let's make magic together.
-            </p>
-            <div class="hero-actions">
-                <a href="#beats" class="btn btn-primary">
-                    Browse Beats
-                </a>
-                <a href="#contact" class="btn btn-secondary">
-                    Get in Touch
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats -->
-    <div class="stats-bar">
-        <div class="stat-item">
-            <div class="stat-number">3</div>
-            <div class="stat-label">Fresh Beats</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number">128-150</div>
-            <div class="stat-label">BPM Range</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number">2026</div>
-            <div class="stat-label">New Heat</div>
-        </div>
+        <div class="preloader-text">Loading beats...</div>
     </div>
 
-    <!-- Beats Section -->
-    <section class="section" id="beats">
-        <div class="section-header">
-            <div class="section-title-group">
+    <!-- Background -->
+    <div class="bg-gradient"></div>
+
+    <!-- Page Content (fades in after load) -->
+    <div class="page-content" id="pageContent">
+
+        <!-- Header -->
+        <header class="header" id="header">
+            <div class="header-inner">
+                <a href="#" class="logo">
+                    <div class="logo-icon">🎹</div>
+                    <span class="logo-text">JoeyFlavour</span>
+                </a>
+                <nav class="nav" id="nav">
+                    <a href="#beats" class="nav-link">Beats</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </nav>
+                <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+            </div>
+        </header>
+
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-content reveal">
+                <div class="badge">
+                    <span class="badge-dot"></span>
+                    Open for Collaborations
+                </div>
+                <h1 class="hero-title">
+                    Let's Create<br>
+                    <span class="gradient-text">Something Crazy</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Fresh beats ready for vocals. Rappers, singers & writers — let's make magic together.
+                </p>
+                <div class="btn-group">
+                    <a href="#beats" class="btn btn-primary">Browse Beats</a>
+                    <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats -->
+        <div class="stats reveal">
+            <div class="stat">
+                <div class="stat-value">3</div>
+                <div class="stat-label">Fresh Beats</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">128-150</div>
+                <div class="stat-label">BPM Range</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">2026</div>
+                <div class="stat-label">New Heat</div>
+            </div>
+        </div>
+
+        <!-- Beats Section -->
+        <section class="section" id="beats">
+            <div class="section-header reveal">
                 <div class="section-icon">🎤</div>
                 <h2 class="section-title">Beats</h2>
                 <span class="section-count">3 Tracks</span>
             </div>
-        </div>
 
-        <div class="product-grid">
-
-            <!-- ECLIPSE -->
-            <div class="product-card" onclick="openModal('eclipse')">
-                <div class="card-image">
-                    <img src="./covers/ECLIPSE.png" 
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                         alt="ECLIPSE">
-                    <div class="card-image-placeholder">🌑</div>
-                    
-                    <span class="status-badge open">Open</span>
-                    <span class="bpm-badge">140 BPM</span>
-                    
-                    <div class="play-overlay">
-                        <div class="play-btn-overlay">
-                            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                        </div>
-                    </div>
-                    
-                    <div class="waveform-mini">
-                        <div class="waveform-bar" style="--h: 6px; height: 6px;"></div>
-                        <div class="waveform-bar" style="--h: 14px; height: 14px;"></div>
-                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
-                        <div class="waveform-bar" style="--h: 20px; height: 20px;"></div>
-                        <div class="waveform-bar" style="--h: 16px; height: 16px;"></div>
-                        <div class="waveform-bar" style="--h: 8px; height: 8px;"></div>
-                        <div class="waveform-bar" style="--h: 22px; height: 22px;"></div>
-                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
-                        <div class="waveform-bar" style="--h: 18px; height: 18px;"></div>
-                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
-                        <div class="waveform-bar" style="--h: 24px; height: 24px;"></div>
-                        <div class="waveform-bar" style="--h: 14px; height: 14px;"></div>
-                        <div class="waveform-bar" style="--h: 8px; height: 8px;"></div>
-                        <div class="waveform-bar" style="--h: 16px; height: 16px;"></div>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">ECLIPSE</div>
-                    <div class="card-meta">Trap · D Minor · 140 BPM</div>
-                    <div class="card-tags">
-                        <span class="tag">Rapper</span>
-                        <span class="tag secondary">Dark</span>
-                    </div>
-                    <div class="audio-player-mini" onclick="event.stopPropagation()">
-                        <button class="play-btn-mini" onclick="playTrack('eclipse')">
-                            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                        </button>
-                        <div class="progress-container">
-                            <div class="progress-bar-track">
-                                <div class="progress-bar-fill"></div>
+            <div class="grid">
+                
+                <!-- ECLIPSE -->
+                <div class="card" data-track="eclipse">
+                    <div class="card-image">
+                        <img src="./covers/ECLIPSE.png" alt="ECLIPSE" loading="lazy" onerror="this.style.display='none';">
+                        <span class="card-badge open">Open</span>
+                        <span class="card-bpm">140 BPM</span>
+                        <div class="card-overlay">
+                            <div class="play-btn-large" onclick="event.stopPropagation(); playGlobal('eclipse')">
+                                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                             </div>
-                            <div class="time-display">Preview Soon</div>
                         </div>
+                        <div class="waveform-container" id="waveform-eclipse-mini"></div>
                     </div>
-                </div>
-            </div>
-
-            <!-- ABYSS -->
-            <div class="product-card" onclick="openModal('abyss')">
-                <div class="card-image">
-                    <img src="./covers/ABYSS.png" 
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                         alt="ABYSS">
-                    <div class="card-image-placeholder">🌊</div>
-                    
-                    <span class="status-badge featured">Featured</span>
-                    <span class="bpm-badge">128 BPM</span>
-                    
-                    <div class="play-overlay">
-                        <div class="play-btn-overlay">
-                            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                    <div class="card-content" onclick="openModal('eclipse')">
+                        <h3 class="card-title">ECLIPSE</h3>
+                        <p class="card-meta">Trap · D Minor · 140 BPM</p>
+                        <div class="tags">
+                            <span class="tag">Rapper</span>
+                            <span class="tag secondary">Dark</span>
                         </div>
-                    </div>
-                    
-                    <div class="waveform-mini">
-                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
-                        <div class="waveform-bar" style="--h: 6px; height: 6px;"></div>
-                        <div class="waveform-bar" style="--h: 18px; height: 18px;"></div>
-                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
-                        <div class="waveform-bar" style="--h: 24px; height: 24px;"></div>
-                        <div class="waveform-bar" style="--h: 14px; height: 14px;"></div>
-                        <div class="waveform-bar" style="--h: 8px; height: 8px;"></div>
-                        <div class="waveform-bar" style="--h: 20px; height: 20px;"></div>
-                        <div class="waveform-bar" style="--h: 16px; height: 16px;"></div>
-                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
-                        <div class="waveform-bar" style="--h: 22px; height: 22px;"></div>
-                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
-                        <div class="waveform-bar" style="--h: 6px; height: 6px;"></div>
-                        <div class="waveform-bar" style="--h: 14px; height: 14px;"></div>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">ABYSS</div>
-                    <div class="card-meta">Trap · G Minor · 128 BPM</div>
-                    <div class="card-tags">
-                        <span class="tag">Melodic</span>
-                        <span class="tag secondary">Atmospheric</span>
-                    </div>
-                    <div class="audio-player-mini" onclick="event.stopPropagation()">
-                        <button class="play-btn-mini" onclick="playTrack('abyss')">
-                            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                        </button>
-                        <div class="progress-container">
-                            <div class="progress-bar-track">
-                                <div class="progress-bar-fill"></div>
+                        <div class="player" onclick="event.stopPropagation()">
+                            <button class="play-btn" id="playBtn-eclipse" onclick="playTrack('eclipse')">
+                                <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                                <svg class="pause-icon" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                            </button>
+                            <div class="player-info">
+                                <div class="player-progress" onclick="seekTrack(event, 'eclipse')">
+                                    <div class="player-progress-fill" id="progress-eclipse"></div>
+                                </div>
+                                <div class="player-time">
+                                    <span id="currentTime-eclipse">0:00</span>
+                                    <span id="duration-eclipse">--:--</span>
+                                </div>
                             </div>
-                            <div class="time-display">Preview Soon</div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- NIGHTFALL -->
-            <div class="product-card" onclick="openModal('nightfall')">
-                <div class="card-image">
-                    <img src="./covers/NIGHTFALL.png" 
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                         alt="NIGHTFALL">
-                    <div class="card-image-placeholder">🌙</div>
-                    
-                    <span class="status-badge urgent">Urgent</span>
-                    <span class="bpm-badge">150 BPM</span>
-                    
-                    <div class="play-overlay">
-                        <div class="play-btn-overlay">
-                            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                        </div>
-                    </div>
-                    
-                    <div class="waveform-mini">
-                        <div class="waveform-bar" style="--h: 18px; height: 18px;"></div>
-                        <div class="waveform-bar" style="--h: 8px; height: 8px;"></div>
-                        <div class="waveform-bar" style="--h: 24px; height: 24px;"></div>
-                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
-                        <div class="waveform-bar" style="--h: 16px; height: 16px;"></div>
-                        <div class="waveform-bar" style="--h: 6px; height: 6px;"></div>
-                        <div class="waveform-bar" style="--h: 22px; height: 22px;"></div>
-                        <div class="waveform-bar" style="--h: 10px; height: 10px;"></div>
-                        <div class="waveform-bar" style="--h: 20px; height: 20px;"></div>
-                        <div class="waveform-bar" style="--h: 14px; height: 14px;"></div>
-                        <div class="waveform-bar" style="--h: 8px; height: 8px;"></div>
-                        <div class="waveform-bar" style="--h: 26px; height: 26px;"></div>
-                        <div class="waveform-bar" style="--h: 12px; height: 12px;"></div>
-                        <div class="waveform-bar" style="--h: 18px; height: 18px;"></div>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">NIGHTFALL</div>
-                    <div class="card-meta">Trap · E Minor · 150 BPM</div>
-                    <div class="card-tags">
-                        <span class="tag">Aggressive</span>
-                        <span class="tag secondary">Hard</span>
-                    </div>
-                    <div class="audio-player-mini" onclick="event.stopPropagation()">
-                        <button class="play-btn-mini" onclick="playTrack('nightfall')">
-                            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                        </button>
-                        <div class="progress-container">
-                            <div class="progress-bar-track">
-                                <div class="progress-bar-fill"></div>
+                <!-- ABYSS -->
+                <div class="card" data-track="abyss">
+                    <div class="card-image">
+                        <img src="./covers/ABYSS.png" alt="ABYSS" loading="lazy" onerror="this.style.display='none';">
+                        <span class="card-badge featured">Featured</span>
+                        <span class="card-bpm">128 BPM</span>
+                        <div class="card-overlay">
+                            <div class="play-btn-large" onclick="event.stopPropagation(); playGlobal('abyss')">
+                                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                             </div>
-                            <div class="time-display">Preview Soon</div>
+                        </div>
+                        <div class="waveform-container" id="waveform-abyss-mini"></div>
+                    </div>
+                    <div class="card-content" onclick="openModal('abyss')">
+                        <h3 class="card-title">ABYSS</h3>
+                        <p class="card-meta">Trap · G Minor · 128 BPM</p>
+                        <div class="tags">
+                            <span class="tag">Melodic</span>
+                            <span class="tag secondary">Atmospheric</span>
+                        </div>
+                        <div class="player" onclick="event.stopPropagation()">
+                            <button class="play-btn" id="playBtn-abyss" onclick="playTrack('abyss')">
+                                <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                                <svg class="pause-icon" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                            </button>
+                            <div class="player-info">
+                                <div class="player-progress" onclick="seekTrack(event, 'abyss')">
+                                    <div class="player-progress-fill" id="progress-abyss"></div>
+                                </div>
+                                <div class="player-time">
+                                    <span id="currentTime-abyss">0:00</span>
+                                    <span id="duration-abyss">--:--</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- NIGHTFALL -->
+                <div class="card" data-track="nightfall">
+                    <div class="card-image">
+                        <img src="./covers/NIGHTFALL.png" alt="NIGHTFALL" loading="lazy" onerror="this.style.display='none';">
+                        <span class="card-badge urgent">Urgent</span>
+                        <span class="card-bpm">150 BPM</span>
+                        <div class="card-overlay">
+                            <div class="play-btn-large" onclick="event.stopPropagation(); playGlobal('nightfall')">
+                                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                            </div>
+                        </div>
+                        <div class="waveform-container" id="waveform-nightfall-mini"></div>
+                    </div>
+                    <div class="card-content" onclick="openModal('nightfall')">
+                        <h3 class="card-title">NIGHTFALL</h3>
+                        <p class="card-meta">Trap · E Minor · 150 BPM</p>
+                        <div class="tags">
+                            <span class="tag">Aggressive</span>
+                            <span class="tag secondary">Hard</span>
+                        </div>
+                        <div class="player" onclick="event.stopPropagation()">
+                            <button class="play-btn" id="playBtn-nightfall" onclick="playTrack('nightfall')">
+                                <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                                <svg class="pause-icon" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                            </button>
+                            <div class="player-info">
+                                <div class="player-progress" onclick="seekTrack(event, 'nightfall')">
+                                    <div class="player-progress-fill" id="progress-nightfall"></div>
+                                </div>
+                                <div class="player-time">
+                                    <span id="currentTime-nightfall">0:00</span>
+                                    <span id="duration-nightfall">--:--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+        </section>
 
-        </div>
-    </section>
-
-    <!-- Contact -->
-    <section class="contact-section" id="contact">
-        <div class="contact-card">
-            <h2 class="contact-title">Let's Work Together</h2>
-            <p class="contact-subtitle">
-                Hear something you vibe with? Hit me up and let's make magic together.
-            </p>
-            <div class="contact-links">
-                <a href="https://instagram.com/joeyflavour" target="_blank" class="contact-link">
-                    <span class="icon">📸</span>
-                    <span>@joeyflavour</span>
-                    <span class="contact-link-label">Instagram</span>
-                </a>
-                <a href="mailto:joeyflavourcollabs@gmail.com" class="contact-link">
-                    <span class="icon">✉️</span>
-                    <span>joeyflavourcollabs@gmail.com</span>
-                </a>
+        <!-- Contact -->
+        <section class="contact reveal" id="contact">
+            <div class="contact-card">
+                <h2 class="contact-title">Let's Work Together</h2>
+                <p class="contact-subtitle">Hear something you vibe with? Hit me up and let's make magic together.</p>
+                <div class="contact-links">
+                    <a href="https://instagram.com/joeyflavour" target="_blank" class="contact-link">
+                        <span class="icon">📸</span>
+                        <span>@joeyflavour</span>
+                        <span class="label">Instagram</span>
+                    </a>
+                    <a href="mailto:joeyflavourcollabs@gmail.com" class="contact-link">
+                        <span class="icon">✉️</span>
+                        <span>joeyflavourcollabs@gmail.com</span>
+                    </a>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>© 2026 JoeyFlavour · All rights reserved</p>
-    </footer>
+        <!-- Footer -->
+        <footer class="footer reveal">
+            © 2026 JoeyFlavour · All rights reserved
+        </footer>
+
+    </div>
+
+    <!-- Global Audio Player (Bottom Bar) -->
+    <div class="global-player" id="globalPlayer">
+        <div class="global-player-cover">
+            <img id="globalCover" src="" alt="">
+        </div>
+        <div class="global-player-info">
+            <div class="global-player-title" id="globalTitle">Track</div>
+            <div class="global-player-meta" id="globalMeta">Loading...</div>
+        </div>
+        <div class="global-player-controls">
+            <button class="play-btn" id="globalPlayBtn" onclick="toggleGlobalPlay()">
+                <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="pause-icon" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            </button>
+        </div>
+        <div class="global-player-waveform" id="globalWaveform"></div>
+        <div class="global-player-time" id="globalTime">0:00 / 0:00</div>
+        <button class="global-player-close" onclick="closeGlobalPlayer()">✕</button>
+    </div>
 
     <!-- Modal -->
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-backdrop" id="modal" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeModalDirect()">✕</button>
-
             <div class="modal-header">
-                <div class="modal-album-art">
-                    <img id="modalImage" src="" alt="">
+                <div class="modal-cover">
+                    <img id="modalCover" src="" alt="">
                 </div>
                 <div class="modal-info">
                     <div class="modal-badge">
-                        <span class="pulse-dot"></span>
+                        <span class="badge-dot"></span>
                         <span id="modalStatus">Open for Collab</span>
                     </div>
-                    <h2 class="modal-title" id="modalTitle">Track Title</h2>
+                    <h2 class="modal-title" id="modalTitle">Track</h2>
                     <p class="modal-genre" id="modalGenre">Genre · Key · BPM</p>
-
-                    <div class="modal-meta-grid">
-                        <div class="meta-item">
+                    <div class="modal-meta">
+                        <div class="meta-box">
                             <div class="meta-label">BPM</div>
                             <div class="meta-value" id="modalBpm">128</div>
                         </div>
-                        <div class="meta-item">
+                        <div class="meta-box">
                             <div class="meta-label">Key</div>
                             <div class="meta-value" id="modalKey">A Minor</div>
                         </div>
-                        <div class="meta-item">
+                        <div class="meta-box">
                             <div class="meta-label">Genre</div>
                             <div class="meta-value" id="modalGenreTag">Trap</div>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div class="modal-body">
-                <div class="detail-section">
-                    <h3 class="detail-section-title">Vocal Preferences</h3>
-                    <div class="vocal-prefs" id="modalVocalPrefs"></div>
+                <div class="modal-section">
+                    <h3 class="modal-section-title">Audio Preview</h3>
+                    <div class="modal-player">
+                        <div class="modal-player-waveform" id="modalWaveform"></div>
+                    </div>
                 </div>
-
-                <div class="detail-section">
-                    <h3 class="detail-section-title">Lyrics Ideas / Direction</h3>
-                    <div class="lyrics-box" id="modalLyrics"></div>
+                <div class="modal-section">
+                    <h3 class="modal-section-title">Vocal Preferences</h3>
+                    <div class="prefs" id="modalPrefs"></div>
                 </div>
-
-                <div class="detail-section">
-                    <h3 class="detail-section-title">Production Notes</h3>
-                    <div class="lyrics-box" id="modalNotes"></div>
+                <div class="modal-section">
+                    <h3 class="modal-section-title">Lyrics Ideas / Direction</h3>
+                    <div class="text-box" id="modalLyrics"></div>
                 </div>
-
+                <div class="modal-section">
+                    <h3 class="modal-section-title">Production Notes</h3>
+                    <div class="text-box" id="modalNotes"></div>
+                </div>
                 <div class="modal-cta">
-                    <a href="mailto:joeyflavourcollabs@gmail.com" class="btn btn-primary">
-                        I Want to Collab
-                    </a>
+                    <a href="mailto:joeyflavourcollabs@gmail.com" class="btn btn-primary">I Want to Collab</a>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const trackData = {
+        // ============================================
+        // TRACK DATA — EDIT YOUR BEAT INFO HERE!
+        // ============================================
+        const tracks = {
             eclipse: {
                 title: "ECLIPSE",
                 genre: "Trap",
                 key: "D Minor",
                 bpm: "140",
                 status: "Open for Collab",
-                image: "./covers/ECLIPSE.png",
-                vocalPrefs: ["Rapper", "Dark Vocals", "Aggressive Flow", "Male or Female"],
-                lyrics: `[Coming Soon]
-Lyrics ideas & direction will be added here.
+                cover: "./covers/ECLIPSE.png",
+                audio: "./audio/ECLIPSE.mp3",
+                prefs: ["Rapper", "Dark Vocals", "Aggressive Flow", "Male or Female"],
+                lyrics: `[VIBE]
+Dark, moody atmosphere
+Late night city vibes
+Eclipse = blocking out the fake
 
+[VERSE DIRECTION]
+Start slow and mysterious
+Build up the intensity
+Talk about shadows, darkness, rising up
+
+[HOOK IDEAS]
+Something catchy about "eclipse"
+Repeatable, memorable phrase
+Think Travis Scott meets Metro Boomin energy
+
+[GENERAL]
 DM @joeyflavour on Instagram to discuss this track.`,
                 notes: `• Hard-hitting trap production
 • Dark atmospheric vibes
 • Perfect for aggressive rap vocals
-• Audio preview coming soon
-• DM for stems & collaboration details`
+• 140 BPM, D Minor
+• Stems available
+• DM for collaboration details`
             },
-
             abyss: {
                 title: "ABYSS",
                 genre: "Trap",
                 key: "G Minor",
                 bpm: "128",
                 status: "Featured",
-                image: "./covers/ABYSS.png",
-                vocalPrefs: ["Melodic Rapper", "Singer", "Atmospheric Vocals", "Emotional"],
-                lyrics: `[Coming Soon]
-Lyrics ideas & direction will be added here.
+                cover: "./covers/ABYSS.png",
+                audio: "./audio/ABYSS.mp3",
+                prefs: ["Melodic Rapper", "Singer", "Atmospheric Vocals", "Emotional"],
+                lyrics: `[VIBE]
+Deep emotional journey
+Falling into the unknown
+Abyss = going deep into feelings
 
+[VERSE DIRECTION]
+Melodic, vulnerable delivery
+Talk about depth, drowning in emotion
+Think The Weeknd meets Travis Scott
+
+[HOOK IDEAS]
+"Lost in the abyss" type energy
+Melodic and haunting
+Build up tension before the drop
+
+[GENERAL]
 DM @joeyflavour on Instagram to discuss this track.`,
                 notes: `• Melodic trap with atmospheric elements
 • Deep bass & ethereal pads
 • Great for emotional/melodic vocals
-• Audio preview coming soon
-• DM for stems & collaboration details`
+• 128 BPM, G Minor
+• Stems available
+• DM for collaboration details`
             },
-
             nightfall: {
                 title: "NIGHTFALL",
                 genre: "Trap",
                 key: "E Minor",
                 bpm: "150",
                 status: "Urgent — Need ASAP",
-                image: "./covers/NIGHTFALL.png",
-                vocalPrefs: ["Rapper", "Fast Flow", "Aggressive", "Hard-Hitting"],
-                lyrics: `[Coming Soon]
-Lyrics ideas & direction will be added here.
+                cover: "./covers/NIGHTFALL.png",
+                audio: "./audio/NIGHTFALL.mp3",
+                prefs: ["Rapper", "Fast Flow", "Aggressive", "Hard-Hitting"],
+                lyrics: `[VIBE]
+High energy, fast-paced chaos
+Nighttime mayhem
+Nightfall = when things get real
 
-DM @joeyflavour on Instagram to discuss this track.`,
+[VERSE DIRECTION]
+Fast aggressive flow
+Talk about taking over the night
+Hard-hitting bars, no time to breathe
+
+[HOOK IDEAS]
+Short, punchy, memorable
+"When the night falls" energy
+Mosh pit anthem vibes
+
+[URGENT]
+Need vocals ASAP for release!
+DM @joeyflavour on Instagram NOW!`,
                 notes: `• Fast-paced aggressive trap
 • Heavy 808s & hard-hitting drums
 • Need vocals ASAP for release
-• Audio preview coming soon
-• DM ASAP if interested!`
+• 150 BPM, E Minor
+• Stems ready to send
+• URGENT — DM ASAP if interested!`
             }
         };
 
-        function playTrack(trackId) {
-            alert("🎵 Audio preview coming soon!\n\nDM @joeyflavour on IG to hear this track!");
+        // ============================================
+        // AUDIO ENGINE
+        // ============================================
+        let currentTrack = null;
+        let globalWavesurfer = null;
+        let modalWavesurfer = null;
+        let audioElements = {};
+        let isPlaying = {};
+
+        // Initialize audio elements
+        Object.keys(tracks).forEach(id => {
+            const audio = new Audio();
+            audio.preload = 'metadata';
+            audio.src = tracks[id].audio;
+            audioElements[id] = audio;
+            isPlaying[id] = false;
+
+            // Update progress
+            audio.addEventListener('timeupdate', () => {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                const progressEl = document.getElementById(`progress-${id}`);
+                const currentEl = document.getElementById(`currentTime-${id}`);
+                
+                if (progressEl) progressEl.style.width = progress + '%';
+                if (currentEl) currentEl.textContent = formatTime(audio.currentTime);
+
+                // Update global player if this is the current track
+                if (currentTrack === id && globalWavesurfer) {
+                    document.getElementById('globalTime').textContent = 
+                        formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+                }
+            });
+
+            audio.addEventListener('loadedmetadata', () => {
+                const durationEl = document.getElementById(`duration-${id}`);
+                if (durationEl) durationEl.textContent = formatTime(audio.duration);
+            });
+
+            audio.addEventListener('ended', () => {
+                isPlaying[id] = false;
+                const btn = document.getElementById(`playBtn-${id}`);
+                if (btn) btn.classList.remove('playing');
+                
+                if (currentTrack === id) {
+                    document.getElementById('globalPlayBtn').classList.remove('playing');
+                }
+            });
+
+            audio.addEventListener('error', (e) => {
+                console.log(`Audio file not found for ${id}. Upload to ./audio/${id.toUpperCase()}.mp3`);
+                const durationEl = document.getElementById(`duration-${id}`);
+                if (durationEl) durationEl.textContent = 'No audio';
+            });
+        });
+
+        function formatTime(seconds) {
+            if (isNaN(seconds) || seconds === Infinity) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+            return `${mins}:${secs}`;
         }
 
-        function openModal(trackId) {
-            const track = trackData[trackId];
-            if (!track) return;
+        // Play track in mini player
+        function playTrack(id) {
+            const audio = audioElements[id];
+            const btn = document.getElementById(`playBtn-${id}`);
 
-            document.getElementById('modalImage').src = track.image;
+            // Pause all other tracks
+            Object.keys(audioElements).forEach(trackId => {
+                if (trackId !== id && isPlaying[trackId]) {
+                    audioElements[trackId].pause();
+                    isPlaying[trackId] = false;
+                    const otherBtn = document.getElementById(`playBtn-${trackId}`);
+                    if (otherBtn) otherBtn.classList.remove('playing');
+                }
+            });
+
+            if (isPlaying[id]) {
+                audio.pause();
+                isPlaying[id] = false;
+                btn.classList.remove('playing');
+            } else {
+                audio.play().catch(() => {
+                    alert("🎵 Audio preview not uploaded yet!\n\nUpload your MP3 to: ./audio/" + id.toUpperCase() + ".mp3\n\nThen refresh the page!");
+                });
+                isPlaying[id] = true;
+                btn.classList.add('playing');
+            }
+        }
+
+        // Seek in mini player
+        function seekTrack(event, id) {
+            const audio = audioElements[id];
+            const rect = event.target.getBoundingClientRect();
+            const percent = (event.clientX - rect.left) / rect.width;
+            audio.currentTime = percent * audio.duration;
+        }
+
+        // ============================================
+        // GLOBAL PLAYER
+        // ============================================
+        function playGlobal(id) {
+            currentTrack = id;
+            const track = tracks[id];
+            const audio = audioElements[id];
+
+            // Update global player UI
+            document.getElementById('globalCover').src = track.cover;
+            document.getElementById('globalTitle').textContent = track.title;
+            document.getElementById('globalMeta').textContent = `${track.genre} · ${track.bpm} BPM`;
+
+            // Show global player
+            document.getElementById('globalPlayer').classList.add('active');
+            document.body.classList.add('player-active');
+
+            // Initialize Wavesurfer for global player (if audio exists)
+            if (globalWavesurfer) {
+                globalWavesurfer.destroy();
+            }
+
+            // Try to create waveform
+            try {
+                globalWavesurfer = WaveSurfer.create({
+                    container: '#globalWaveform',
+                    waveColor: 'rgba(255, 0, 128, 0.4)',
+                    progressColor: '#ff0080',
+                    cursorColor: '#ffffff',
+                    barWidth: 2,
+                    barGap: 2,
+                    barRadius: 2,
+                    height: 40,
+                    responsive: true,
+                    backend: 'MediaElement',
+                    media: audio
+                });
+            } catch(e) {
+                console.log('Waveform creation failed:', e);
+            }
+
+            // Pause other tracks
+            Object.keys(audioElements).forEach(trackId => {
+                if (trackId !== id && isPlaying[trackId]) {
+                    audioElements[trackId].pause();
+                    isPlaying[trackId] = false;
+                    const btn = document.getElementById(`playBtn-${trackId}`);
+                    if (btn) btn.classList.remove('playing');
+                }
+            });
+
+            // Play
+            audio.play().catch((e) => {
+                alert("🎵 Audio file not found!\n\nUpload: ./audio/" + id.toUpperCase() + ".mp3\n\nThen refresh the page!");
+            });
+            isPlaying[id] = true;
+            document.getElementById('globalPlayBtn').classList.add('playing');
+            const cardBtn = document.getElementById(`playBtn-${id}`);
+            if (cardBtn) cardBtn.classList.add('playing');
+        }
+
+        function toggleGlobalPlay() {
+            if (!currentTrack) return;
+            
+            const audio = audioElements[currentTrack];
+            const btn = document.getElementById('globalPlayBtn');
+            const cardBtn = document.getElementById(`playBtn-${currentTrack}`);
+
+            if (isPlaying[currentTrack]) {
+                audio.pause();
+                isPlaying[currentTrack] = false;
+                btn.classList.remove('playing');
+                if (cardBtn) cardBtn.classList.remove('playing');
+            } else {
+                audio.play();
+                isPlaying[currentTrack] = true;
+                btn.classList.add('playing');
+                if (cardBtn) cardBtn.classList.add('playing');
+            }
+        }
+
+        function closeGlobalPlayer() {
+            if (currentTrack) {
+                audioElements[currentTrack].pause();
+                isPlaying[currentTrack] = false;
+                const btn = document.getElementById(`playBtn-${currentTrack}`);
+                if (btn) btn.classList.remove('playing');
+            }
+            
+            document.getElementById('globalPlayer').classList.remove('active');
+            document.body.classList.remove('player-active');
+            
+            if (globalWavesurfer) {
+                globalWavesurfer.destroy();
+                globalWavesurfer = null;
+            }
+            
+            currentTrack = null;
+        }
+
+        // ============================================
+        // MODAL
+        // ============================================
+        function openModal(id) {
+            const track = tracks[id];
+            
+            document.getElementById('modalCover').src = track.cover;
             document.getElementById('modalTitle').textContent = track.title;
             document.getElementById('modalStatus').textContent = track.status;
             document.getElementById('modalGenre').textContent = `${track.genre} · ${track.key} · ${track.bpm} BPM`;
@@ -1621,31 +1916,145 @@ DM @joeyflavour on Instagram to discuss this track.`,
             document.getElementById('modalGenreTag').textContent = track.genre;
             document.getElementById('modalLyrics').textContent = track.lyrics;
             document.getElementById('modalNotes').textContent = track.notes;
+            document.getElementById('modalPrefs').innerHTML = track.prefs.map(p => 
+                `<span class="pref-tag">${p}</span>`
+            ).join('');
 
-            document.getElementById('modalVocalPrefs').innerHTML = track.vocalPrefs
-                .map(pref => `<span class="vocal-pref-tag">${pref}</span>`)
-                .join('');
+            // Modal Wavesurfer
+            if (modalWavesurfer) {
+                modalWavesurfer.destroy();
+            }
 
-            document.getElementById('modalOverlay').classList.add('active');
+            try {
+                modalWavesurfer = WaveSurfer.create({
+                    container: '#modalWaveform',
+                    waveColor: 'rgba(255, 0, 128, 0.3)',
+                    progressColor: '#ff0080',
+                    cursorColor: '#ffffff',
+                    barWidth: 3,
+                    barGap: 2,
+                    barRadius: 2,
+                    height: 80,
+                    responsive: true,
+                    url: track.audio
+                });
+
+                modalWavesurfer.on('ready', () => {
+                    // Auto-play on modal open (optional)
+                    // modalWavesurfer.play();
+                });
+
+                modalWavesurfer.on('error', () => {
+                    document.getElementById('modalWaveform').innerHTML = 
+                        '<div style="text-align:center;padding:30px;color:#666;font-size:0.9rem;">🎵 Audio preview will appear here once uploaded<br><small style="margin-top:10px;display:block;color:#444;">Upload to: ./audio/' + id.toUpperCase() + '.mp3</small></div>';
+                });
+            } catch(e) {
+                document.getElementById('modalWaveform').innerHTML = 
+                    '<div style="text-align:center;padding:30px;color:#666;">Audio preview loading...</div>';
+            }
+
+            document.getElementById('modal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
-        function closeModal(event) {
-            if (event.target === event.currentTarget) {
-                closeModalDirect();
-            }
+        function closeModal(e) {
+            if (e.target === e.currentTarget) closeModalDirect();
         }
 
         function closeModalDirect() {
-            document.getElementById('modalOverlay').classList.remove('active');
+            if (modalWavesurfer) {
+                modalWavesurfer.pause();
+            }
+            document.getElementById('modal').classList.remove('active');
             document.body.style.overflow = '';
         }
 
-        function toggleMobileMenu() {
-            document.getElementById('navLinks').classList.toggle('open');
+        // ============================================
+        // MENU
+        // ============================================
+        function toggleMenu() {
+            document.getElementById('nav').classList.toggle('open');
         }
 
-        document.addEventListener('keydown', (e) => {
+        // ============================================
+        // PRELOADER & ANIMATIONS
+        // ============================================
+        let loadProgress = 0;
+        const progressEl = document.getElementById('preloaderProgress');
+
+        function updateProgress() {
+            loadProgress += Math.random() * 15;
+            if (loadProgress > 100) loadProgress = 100;
+            progressEl.style.width = loadProgress + '%';
+            
+            if (loadProgress < 100) {
+                setTimeout(updateProgress, 100);
+            }
+        }
+
+        updateProgress();
+
+        window.addEventListener('load', () => {
+            // Complete the progress bar
+            progressEl.style.width = '100%';
+            
+            setTimeout(() => {
+                // Hide preloader
+                document.getElementById('preloader').classList.add('hidden');
+                
+                // Show page content
+                document.getElementById('pageContent').classList.add('loaded');
+                
+                // Show header
+                document.getElementById('header').classList.add('visible');
+                
+                // Initialize scroll reveal
+                initScrollReveal();
+            }, 500);
+        });
+
+        // ============================================
+        // SCROLL REVEAL
+        // ============================================
+        function initScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            // Observe reveal elements
+            document.querySelectorAll('.reveal').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Observe cards with stagger
+            document.querySelectorAll('.card').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // ============================================
+        // SMOOTH SCROLL
+        // ============================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    document.getElementById('nav').classList.remove('open');
+                }
+            });
+        });
+
+        // Escape key closes modal
+        document.addEventListener('keydown', e => {
             if (e.key === 'Escape') closeModalDirect();
         });
     </script>
