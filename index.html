@@ -5,306 +5,767 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>JoeyFlavour — Beats</title>
 
-  <!-- Cymatics font you found -->
+  <!-- Font (matches what you found on Cymatics snippets: Karla) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- (Waveform skipped for now) -->
-  <!-- If you want to add it back later, we’ll re-enable WaveSurfer properly -->
-  <!-- <script src="https://unpkg.com/wavesurfer.js@7"></script> -->
+  <!-- External CSS -->
+  <link rel="stylesheet" href="./css/style.css">
 
-  <style>
-    :root {
-      --clr-bg: rgb(14 14 20);
-      --clr-neon: #3154ff;
+  <!-- WaveSurfer v1.x (matches the Wavesurfer 1.0.57 you found) -->
+  <script src="https://unpkg.com/wavesurfer.js@1.0.57/dist/wavesurfer.min.js"></script>
+</head>
 
-      --clr-card: #1A1B1E;
-      --clr-card-hover: #1f2024;
-      --clr-border: #2a2a2e;
-      --clr-border-light: #3a3a3e;
+<body>
+  <!-- PRELOADER -->
+  <div id="preloader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">Loading Beats</div>
+  </div>
 
-      --clr-text: #f2f2f2;
-      --clr-text-secondary: #a0a0a4;
-      --clr-text-muted: #666669;
-      --clr-text-dim: #44444a;
+  <!-- AMBIENT -->
+  <div class="ambient"></div>
+  <div class="noise"></div>
 
-      --radius: 5px;
-      --radius-lg: 8px;
-      --radius-sm: 4px;
+  <!-- PAGE -->
+  <div class="page" id="page">
+    <!-- HEADER -->
+    <header class="header" id="header">
+      <div class="header-inner">
+        <a class="logo" href="#">
+          <div class="logo-mark">🎹</div>
+          <div class="logo-name">JoeyFlavour</div>
+        </a>
 
-      --container: 1200px;
-    }
+        <nav class="nav" aria-label="Main navigation">
+          <a class="nav-link active" href="#beats">Beats</a>
+          <a class="nav-link" href="#contact">Contact</a>
+          <button class="btn-prism-sm delay-2" type="button" onclick="scrollToId('beats')">Browse</button>
+        </nav>
 
-    @keyframes prismBtn {
-      0% {
-        text-shadow: 0 0 0.1em hsl(0, 100%, 50%), 0 0 0.2em hsl(0, 100%, 50%),
-                     0 0 0.6em hsl(0, 100%, 50%), 0 0 0.8em hsl(0, 100%, 50%);
-        box-shadow: 0 0 4px hsl(0 100% 50% / 0.15), 0 0 12px hsl(0 100% 50% / 0.08),
-                    inset 0 0 8px hsl(0 100% 50% / 0.03);
-        border-color: hsl(0, 100%, 80%);
+        <button class="mobile-btn" type="button" onclick="openMobileNav()" aria-label="Open menu">☰</button>
+      </div>
+    </header>
+
+    <!-- MOBILE NAV OVERLAY -->
+    <div class="overlay" id="mobileNav" aria-hidden="true">
+      <div class="overlay__backdrop" onclick="closeMobileNav()"></div>
+      <div class="overlay__panel" role="dialog" aria-modal="true">
+        <button class="btn-ghost-sm overlay__close" type="button" onclick="closeMobileNav()">Close</button>
+
+        <div class="overlay__stack">
+          <a class="btn-prism-md" href="#beats" onclick="closeMobileNav()">Beats</a>
+          <a class="btn-prism-md delay-2" href="#contact" onclick="closeMobileNav()">Contact</a>
+          <a class="btn-prism-md delay-3" href="https://instagram.com/joeyflavour" target="_blank" rel="noopener" onclick="closeMobileNav()">Instagram</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Open for Collaborations
+        </div>
+
+        <h1>Beats Ready for Your Voice</h1>
+        <p>Browse the catalog, press play, and hit me up on Instagram or email for collabs.</p>
+
+        <div class="hero-btns">
+          <a class="btn-prism" href="#beats">▶ Browse Beats</a>
+          <a class="btn-prism delay-2" href="#contact">✉ Contact</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats reveal">
+      <div>
+        <div class="stat-val">3</div>
+        <div class="stat-label">Beats Live</div>
+      </div>
+      <div>
+        <div class="stat-val">FREE</div>
+        <div class="stat-label">Needs Vocals</div>
+      </div>
+      <div>
+        <div class="stat-val">40px</div>
+        <div class="stat-label">Wave Height</div>
+      </div>
+      <div>
+        <div class="stat-val">DM/Email</div>
+        <div class="stat-label">Contact</div>
+      </div>
+    </div>
+
+    <!-- STORE -->
+    <div class="container" id="beats">
+      <div class="section-head reveal">
+        <h2>Beat Store</h2>
+
+        <div class="filters" id="filters">
+          <button class="filter-pill active" type="button" data-filter="all">All Beats</button>
+          <button class="filter-pill" type="button" data-filter="trap">Trap</button>
+          <button class="filter-pill" type="button" data-filter="drill">Drill</button>
+          <button class="filter-pill" type="button" data-filter="rnb">R&amp;B</button>
+        </div>
+      </div>
+
+      <ul class="grid" id="grid">
+        <!-- CARD 1 -->
+        <li class="grid__item reveal" data-genre="trap">
+          <article class="product-card">
+            <button class="card-media" type="button" onclick="openProduct('beat1')" aria-label="Open Abyss details">
+              <div class="card-badges"><span class="badge">Trap</span></div>
+              <div class="specs">
+                <span class="spec-tag">140 BPM</span>
+                <span class="spec-tag">D Min</span>
+              </div>
+
+              <div class="product-image-container">
+                <img
+                  class="product-image"
+                  src="./covers/ABYSS.png"
+                  alt="Abyss cover"
+                  onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=&quot;missing&quot;>Missing cover:<br>./covers/ABYSS.png</div>';"
+                >
+              </div>
+
+              <div class="card-play-overlay" aria-hidden="true">
+                <div class="play-square">
+                  <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"></polygon></svg>
+                </div>
+              </div>
+            </button>
+
+            <div class="card-body">
+              <div class="card-title">Abyss</div>
+              <div class="card-producer">Prod. <span>JoeyFlavour</span></div>
+
+              <div class="mini-player-row">
+                <div class="demo-btn-contain">
+                  <button type="button" onclick="playFromCard('beat1')" aria-label="Play Abyss">
+                    <span class="fa-inverse">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,3 19,12 5,21"></polygon></svg>
+                    </span>
+                  </button>
+                </div>
+                <div class="wave" id="wave-beat1"></div>
+              </div>
+
+              <div class="tags">
+                <span class="tag">Dark</span>
+                <span class="tag">Hard</span>
+                <span class="tag">808</span>
+              </div>
+
+              <div class="info-row">
+                <div class="label">Free — Needs Vocals</div>
+                <div class="status"><span class="dot"></span> Open</div>
+              </div>
+
+              <div class="actions">
+                <button class="btn-prism-sm" type="button" onclick="playFromCard('beat1')">▶ Play</button>
+                <button class="btn-ghost-sm" type="button" onclick="downloadBeat('beat1')">↓ Download</button>
+              </div>
+            </div>
+          </article>
+        </li>
+
+        <!-- CARD 2 -->
+        <li class="grid__item reveal" data-genre="drill">
+          <article class="product-card">
+            <button class="card-media" type="button" onclick="openProduct('beat2')" aria-label="Open Eclipse details">
+              <div class="card-badges"><span class="badge">Drill</span></div>
+              <div class="specs">
+                <span class="spec-tag">145 BPM</span>
+                <span class="spec-tag">G# Min</span>
+              </div>
+
+              <div class="product-image-container">
+                <img
+                  class="product-image"
+                  src="./covers/ECLIPSE.png"
+                  alt="Eclipse cover"
+                  onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=&quot;missing&quot;>Missing cover:<br>./covers/ECLIPSE.png</div>';"
+                >
+              </div>
+
+              <div class="card-play-overlay" aria-hidden="true">
+                <div class="play-square delay-1">
+                  <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"></polygon></svg>
+                </div>
+              </div>
+            </button>
+
+            <div class="card-body">
+              <div class="card-title">Eclipse</div>
+              <div class="card-producer">Prod. <span>JoeyFlavour</span></div>
+
+              <div class="mini-player-row">
+                <div class="demo-btn-contain">
+                  <button type="button" onclick="playFromCard('beat2')" aria-label="Play Eclipse">
+                    <span class="fa-inverse">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,3 19,12 5,21"></polygon></svg>
+                    </span>
+                  </button>
+                </div>
+                <div class="wave" id="wave-beat2"></div>
+              </div>
+
+              <div class="tags">
+                <span class="tag">UK Drill</span>
+                <span class="tag">Gritty</span>
+              </div>
+
+              <div class="info-row">
+                <div class="label">Free — Needs Vocals</div>
+                <div class="status"><span class="dot"></span> Open</div>
+              </div>
+
+              <div class="actions">
+                <button class="btn-prism-sm delay-1" type="button" onclick="playFromCard('beat2')">▶ Play</button>
+                <button class="btn-ghost-sm" type="button" onclick="downloadBeat('beat2')">↓ Download</button>
+              </div>
+            </div>
+          </article>
+        </li>
+
+        <!-- CARD 3 -->
+        <li class="grid__item reveal" data-genre="rnb">
+          <article class="product-card">
+            <button class="card-media" type="button" onclick="openProduct('beat3')" aria-label="Open Nightfall details">
+              <div class="card-badges"><span class="badge">R&amp;B</span></div>
+              <div class="specs">
+                <span class="spec-tag">90 BPM</span>
+                <span class="spec-tag">F Maj</span>
+              </div>
+
+              <div class="product-image-container">
+                <img
+                  class="product-image"
+                  src="./covers/NIGHTFALL.png"
+                  alt="Nightfall cover"
+                  onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=&quot;missing&quot;>Missing cover:<br>./covers/NIGHTFALL.png</div>';"
+                >
+              </div>
+
+              <div class="card-play-overlay" aria-hidden="true">
+                <div class="play-square delay-2">
+                  <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"></polygon></svg>
+                </div>
+              </div>
+            </button>
+
+            <div class="card-body">
+              <div class="card-title">Nightfall</div>
+              <div class="card-producer">Prod. <span>JoeyFlavour</span></div>
+
+              <div class="mini-player-row">
+                <div class="demo-btn-contain">
+                  <button type="button" onclick="playFromCard('beat3')" aria-label="Play Nightfall">
+                    <span class="fa-inverse">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,3 19,12 5,21"></polygon></svg>
+                    </span>
+                  </button>
+                </div>
+                <div class="wave" id="wave-beat3"></div>
+              </div>
+
+              <div class="tags">
+                <span class="tag">Smooth</span>
+                <span class="tag">Soul</span>
+                <span class="tag">Vocals</span>
+              </div>
+
+              <div class="info-row">
+                <div class="label">Free — Needs Vocals</div>
+                <div class="status"><span class="dot"></span> Open</div>
+              </div>
+
+              <div class="actions">
+                <button class="btn-prism-sm delay-2" type="button" onclick="playFromCard('beat3')">▶ Play</button>
+                <button class="btn-ghost-sm" type="button" onclick="downloadBeat('beat3')">↓ Download</button>
+              </div>
+            </div>
+          </article>
+        </li>
+      </ul>
+    </div>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="contact-card reveal">
+          <h2>Contact</h2>
+          <p>
+            Instagram:
+            <a href="https://instagram.com/joeyflavour" target="_blank" rel="noopener">@joeyflavour</a>
+            &nbsp;|&nbsp;
+            Email:
+            <a href="mailto:joeyflavourcollabs@gmail.com">joeyflavourcollabs@gmail.com</a>
+          </p>
+
+          <div class="contact-actions">
+            <a class="btn-prism-sm" href="https://instagram.com/joeyflavour" target="_blank" rel="noopener">Instagram DM</a>
+            <a class="btn-prism-sm delay-2" href="mailto:joeyflavourcollabs@gmail.com">Email Me</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">© 2026 JoeyFlavour</footer>
+  </div>
+
+  <!-- PRODUCT MODAL -->
+  <div class="overlay" id="productModal" aria-hidden="true">
+    <div class="overlay__backdrop" onclick="closeProduct()"></div>
+
+    <div class="overlay__panel overlay__panel--wide" role="dialog" aria-modal="true">
+      <button class="btn-ghost-sm overlay__close" type="button" onclick="closeProduct()">Close</button>
+
+      <div class="product-modal">
+        <div class="product-modal__media">
+          <img id="modalCover" class="product-modal__img" src="" alt="">
+        </div>
+
+        <div class="product-modal__content">
+          <div class="product-modal__kicker">Beat Preview</div>
+          <div class="product-modal__title" id="modalTitle">—</div>
+          <div class="product-modal__sub" id="modalMeta">—</div>
+
+          <div class="prism-box">
+            <h1>Audio Player</h1>
+            <div class="wave wave--modal" id="modalWave"></div>
+          </div>
+
+          <div class="copy-panel">
+            <div class="copy-scroll" id="modalInfo" style="max-height: 220px;">
+              <!-- Filled by JS -->
+            </div>
+          </div>
+
+          <div class="product-modal__actions">
+            <button class="btn-prism-md" type="button" id="modalPlayBtn">▶ Play</button>
+            <a class="btn-prism-md delay-2" id="modalEmailBtn" href="mailto:joeyflavourcollabs@gmail.com">✉ Email about this beat</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM PLAYER -->
+  <div class="player" id="player">
+    <div class="player-info">
+      <img class="player-thumb" id="pThumb" src="./covers/ABYSS.png" alt="">
+      <div>
+        <div class="player-title" id="pTitle">—</div>
+        <div class="player-artist">JoeyFlavour</div>
+      </div>
+    </div>
+
+    <div class="player-controls">
+      <button class="p-btn" type="button" onclick="prevTrack()">⏮</button>
+      <button class="p-play" id="pPlayBtn" type="button" onclick="togglePlayer()">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,3 19,12 5,21"></polygon></svg>
+      </button>
+      <button class="p-btn" type="button" onclick="nextTrack()">⏭</button>
+    </div>
+
+    <div class="player-wave">
+      <div class="wave" id="playerWave"></div>
+    </div>
+
+    <div class="player-time" id="pTime">0:00 / 0:00</div>
+
+    <div class="player-vol">
+      <span class="vol-icon">🔊</span>
+      <input id="volSlider" class="vol-range" type="range" min="0" max="100" value="80" oninput="setVol(this.value)">
+    </div>
+  </div>
+
+  <script>
+    // =========================
+    // DATA (set your preview URLs when ready)
+    // Put files in /preview (recommended):
+    // preview/ABYSS.mp3, preview/ECLIPSE.mp3, preview/NIGHTFALL.mp3
+    // =========================
+    const beats = {
+      beat1: {
+        id: "beat1",
+        name: "Abyss",
+        cover: "./covers/ABYSS.png",
+        previewUrl: "", // "./preview/ABYSS.mp3"
+        downloadUrl: "", // optional: "./tracks/ABYSS_full.mp3"
+        genre: "trap",
+        bpm: "140 BPM",
+        key: "D Min",
+        tags: ["Dark", "Hard", "808"],
+        description: "Dark, heavy trap energy. Open for hooks, rap verses, or melodic vocals."
+      },
+      beat2: {
+        id: "beat2",
+        name: "Eclipse",
+        cover: "./covers/ECLIPSE.png",
+        previewUrl: "", // "./preview/ECLIPSE.mp3"
+        downloadUrl: "",
+        genre: "drill",
+        bpm: "145 BPM",
+        key: "G# Min",
+        tags: ["UK Drill", "Gritty"],
+        description: "Gritty drill bounce with space for hard flows and tight pockets."
+      },
+      beat3: {
+        id: "beat3",
+        name: "Nightfall",
+        cover: "./covers/NIGHTFALL.png",
+        previewUrl: "", // "./preview/NIGHTFALL.mp3"
+        downloadUrl: "",
+        genre: "rnb",
+        bpm: "90 BPM",
+        key: "F Maj",
+        tags: ["Smooth", "Soul", "Vocals"],
+        description: "Smooth R&B atmosphere made for toplines and lush harmonies."
       }
-      25% {
-        text-shadow: 0 0 0.1em hsl(90, 100%, 50%), 0 0 0.2em hsl(90, 100%, 50%),
-                     0 0 0.6em hsl(90, 100%, 50%), 0 0 0.8em hsl(90, 100%, 50%);
-        box-shadow: 0 0 4px hsl(90 100% 50% / 0.15), 0 0 12px hsl(90 100% 50% / 0.08),
-                    inset 0 0 8px hsl(90 100% 50% / 0.03);
-        border-color: hsl(90, 100%, 80%);
+    };
+
+    const beatKeys = Object.keys(beats);
+    let currentBeatId = null;
+
+    // =========================
+    // PRELOADER + PAGE
+    // =========================
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("preloader").classList.add("done");
+        document.getElementById("page").classList.add("visible");
+        initReveal();
+        initFilters();
+        initCardWaveforms(); // draws waveforms if previewUrl exists
+      }, 650);
+    });
+
+    window.addEventListener("scroll", () => {
+      document.getElementById("header").classList.toggle("scrolled", window.scrollY > 40);
+    });
+
+    function scrollToId(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // =========================
+    // MOBILE NAV
+    // =========================
+    function openMobileNav() {
+      const o = document.getElementById("mobileNav");
+      o.classList.add("open");
+      o.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+    function closeMobileNav() {
+      const o = document.getElementById("mobileNav");
+      o.classList.remove("open");
+      o.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    // =========================
+    // REVEAL
+    // =========================
+    function initReveal() {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) e.target.classList.add("show");
+        });
+      }, { threshold: 0.1, rootMargin: "0px 0px -20px 0px" });
+
+      document.querySelectorAll(".reveal").forEach(el => obs.observe(el));
+    }
+
+    // =========================
+    // FILTERS
+    // =========================
+    function initFilters() {
+      const buttons = document.querySelectorAll(".filter-pill");
+      const items = document.querySelectorAll(".grid__item");
+
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          buttons.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+
+          const f = btn.dataset.filter;
+          items.forEach(it => {
+            const g = it.dataset.genre;
+            it.style.display = (f === "all" || g === f) ? "" : "none";
+          });
+        });
+      });
+    }
+
+    // =========================
+    // WAVESURFER HELPERS (v1.0.57)
+    // =========================
+    function createWaveSurfer(containerEl, opts = {}) {
+      const neon = getComputedStyle(document.documentElement).getPropertyValue("--clr-neon").trim() || "#3154ff";
+      return WaveSurfer.create(Object.assign({
+        container: containerEl,
+        height: 40,
+        waveColor: "#2a2a2e",
+        progressColor: neon,
+        cursorColor: neon,
+        cursorWidth: 0,
+        normalize: true,
+        interact: true,
+        dragSelection: false,
+        loopSelection: false,
+        scrollParent: false,
+        hideScrollbar: true,
+        fillParent: true
+      }, opts));
+    }
+
+    // Card waveforms (one per card) — optional until you add previewUrl
+    const cardWS = {};
+    function initCardWaveforms() {
+      for (const id of beatKeys) {
+        const b = beats[id];
+        const el = document.getElementById(`wave-${id}`);
+        if (!el) continue;
+
+        // If no URL yet, leave blank (layout still matches)
+        if (!b.previewUrl) continue;
+
+        const ws = createWaveSurfer(el, { interact: false });
+        ws.load(b.previewUrl);
+        cardWS[id] = ws;
       }
-      50% {
-        text-shadow: 0 0 0.1em hsl(180, 100%, 50%), 0 0 0.2em hsl(190, 100%, 50%),
-                     0 0 0.6em hsl(200, 100%, 50%), 0 0 0.8em hsl(210, 100%, 50%);
-        box-shadow: 0 0 4px hsl(200 100% 50% / 0.15), 0 0 12px hsl(200 100% 50% / 0.08),
-                    inset 0 0 8px hsl(200 100% 50% / 0.03);
-        border-color: hsl(200, 100%, 80%);
+    }
+
+    // =========================
+    // GLOBAL PLAYER (bottom bar)
+    // =========================
+    let playerWS = null;
+    let isPlaying = false;
+
+    const playerEl = document.getElementById("player");
+    const pThumb = document.getElementById("pThumb");
+    const pTitle = document.getElementById("pTitle");
+    const pPlayBtn = document.getElementById("pPlayBtn");
+    const pTime = document.getElementById("pTime");
+
+    const playSVG = `<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,3 19,12 5,21"></polygon></svg>`;
+    const pauseSVG = `<svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="5" y="3" width="4" height="18" rx="1"></rect>
+      <rect x="15" y="3" width="4" height="18" rx="1"></rect>
+    </svg>`;
+
+    function ensurePlayer() {
+      if (playerWS) return;
+      playerWS = createWaveSurfer(document.getElementById("playerWave"), { interact: true });
+
+      playerWS.on("audioprocess", () => updateTime());
+      playerWS.on("seek", () => updateTime());
+      playerWS.on("finish", () => {
+        isPlaying = false;
+        pPlayBtn.innerHTML = playSVG;
+        nextTrack();
+      });
+    }
+
+    function updateTime() {
+      if (!playerWS) return;
+      const cur = playerWS.getCurrentTime();
+      const dur = playerWS.getDuration();
+      pTime.textContent = `${fmt(cur)} / ${fmt(dur)}`;
+    }
+
+    function fmt(s) {
+      if (!isFinite(s)) return "0:00";
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${m}:${sec < 10 ? "0" : ""}${sec}`;
+    }
+
+    function setPlayerBeat(beatId) {
+      const b = beats[beatId];
+      if (!b) return;
+
+      currentBeatId = beatId;
+
+      pThumb.src = b.cover;
+      pTitle.textContent = b.name;
+
+      // show player bar
+      playerEl.classList.add("open");
+    }
+
+    function playFromCard(beatId) {
+      const b = beats[beatId];
+      if (!b) return;
+
+      if (!b.previewUrl) {
+        alert(`Add a preview MP3 for "${b.name}" and set previewUrl.\n\nExample:\npreviewUrl: "./preview/${b.name.toUpperCase()}.mp3"`);
+        return;
       }
-      75% {
-        text-shadow: 0 0 0.1em hsl(300, 100%, 50%), 0 0 0.2em hsl(280, 100%, 50%),
-                     0 0 0.6em hsl(290, 100%, 50%), 0 0 0.8em hsl(270, 100%, 50%);
-        box-shadow: 0 0 4px hsl(290 100% 50% / 0.15), 0 0 12px hsl(290 100% 50% / 0.08),
-                    inset 0 0 8px hsl(290 100% 50% / 0.03);
-        border-color: hsl(280, 100%, 80%);
+
+      ensurePlayer();
+      setPlayerBeat(beatId);
+
+      playerWS.load(b.previewUrl);
+      playerWS.once("ready", () => {
+        playerWS.setVolume(document.getElementById("volSlider").value / 100);
+        playerWS.play();
+        isPlaying = true;
+        pPlayBtn.innerHTML = pauseSVG;
+        updateTime();
+      });
+    }
+
+    function togglePlayer() {
+      if (!playerWS) return;
+      playerWS.playPause();
+      isPlaying = !isPlaying;
+      pPlayBtn.innerHTML = isPlaying ? pauseSVG : playSVG;
+    }
+
+    function nextTrack() {
+      if (!beatKeys.length) return;
+      const i = Math.max(0, beatKeys.indexOf(currentBeatId));
+      const next = beatKeys[(i + 1) % beatKeys.length];
+      playFromCard(next);
+    }
+
+    function prevTrack() {
+      if (!beatKeys.length) return;
+      const i = Math.max(0, beatKeys.indexOf(currentBeatId));
+      const prev = beatKeys[(i - 1 + beatKeys.length) % beatKeys.length];
+      playFromCard(prev);
+    }
+
+    function setVol(v) {
+      if (playerWS) playerWS.setVolume(v / 100);
+    }
+
+    // =========================
+    // PRODUCT MODAL (with its own waveform)
+    // =========================
+    let modalWS = null;
+
+    function openProduct(beatId) {
+      const b = beats[beatId];
+      if (!b) return;
+
+      // set cover + text
+      const img = document.getElementById("modalCover");
+      img.src = b.cover;
+      img.alt = b.name;
+
+      document.getElementById("modalTitle").textContent = b.name;
+      document.getElementById("modalMeta").textContent = `Prod. JoeyFlavour • ${b.bpm} • ${b.key}`;
+
+      // info (scroll box like Cymatics)
+      const info = document.getElementById("modalInfo");
+      info.innerHTML = `
+        <p class="modal-p"><strong>Info</strong><br>${escapeHtml(b.description)}</p>
+        <div class="modal-spacer"></div>
+        <p class="modal-p"><strong>Tags</strong><br>${b.tags.map(t => `<span class="modal-tag">${escapeHtml(t)}</span>`).join(" ")}</p>
+        <div class="modal-spacer"></div>
+        <p class="modal-p"><strong>Contact</strong><br>
+          Instagram: <a href="https://instagram.com/joeyflavour" target="_blank" rel="noopener">@joeyflavour</a><br>
+          Email: <a href="mailto:joeyflavourcollabs@gmail.com">joeyflavourcollabs@gmail.com</a>
+        </p>
+      `;
+
+      // play button
+      const playBtn = document.getElementById("modalPlayBtn");
+      playBtn.onclick = () => playFromCard(beatId);
+
+      // email button (subject)
+      const subject = encodeURIComponent(`Collab on beat: ${b.name}`);
+      document.getElementById("modalEmailBtn").href =
+        `mailto:joeyflavourcollabs@gmail.com?subject=${subject}`;
+
+      // open modal
+      const modal = document.getElementById("productModal");
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+
+      // modal waveform
+      const waveEl = document.getElementById("modalWave");
+      waveEl.innerHTML = ""; // clear previous wave
+
+      if (modalWS) {
+        try { modalWS.destroy(); } catch(e) {}
+        modalWS = null;
       }
-      100% {
-        text-shadow: 0 0 0.1em hsl(0, 100%, 50%), 0 0 0.2em hsl(0, 100%, 50%),
-                     0 0 0.6em hsl(0, 100%, 50%), 0 0 0.8em hsl(0, 100%, 50%);
-        box-shadow: 0 0 4px hsl(0 100% 50% / 0.15), 0 0 12px hsl(0 100% 50% / 0.08),
-                    inset 0 0 8px hsl(0 100% 50% / 0.03);
-        border-color: hsl(0, 100%, 80%);
+
+      if (b.previewUrl) {
+        modalWS = createWaveSurfer(waveEl, { interact: true });
+        modalWS.load(b.previewUrl);
+      } else {
+        waveEl.innerHTML = `<div class="missing">Add previewUrl to enable waveform.</div>`;
       }
     }
 
-    @keyframes prismBorder {
-      0%   { border-color: hsl(0, 80%, 65%); }
-      25%  { border-color: hsl(90, 80%, 65%); }
-      50%  { border-color: hsl(200, 80%, 65%); }
-      75%  { border-color: hsl(280, 80%, 65%); }
-      100% { border-color: hsl(0, 80%, 65%); }
+    function closeProduct() {
+      const modal = document.getElementById("productModal");
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+
+      if (modalWS) {
+        try { modalWS.destroy(); } catch(e) {}
+        modalWS = null;
+      }
     }
 
-    * , *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: Karla, sans-serif;
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 1.375;
-      color: var(--clr-text);
-      background: var(--clr-bg);
-      -webkit-font-smoothing: antialiased;
-      -webkit-text-size-adjust: 100%;
-      overflow-x: hidden;
-    }
-    a { color: #5086ff; text-decoration: none; transition: color .1s ease-in, background-color .1s ease-in; }
-    img { max-width: 100%; border: 0; vertical-align: middle; display: block; }
-    button { font-family: inherit; }
-
-    /* ambient bg */
-    .ambient { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-    .ambient::before {
-      content: "";
-      position: absolute;
-      top: -200px; left: 50%;
-      transform: translateX(-50%);
-      width: 900px; height: 500px;
-      background: radial-gradient(ellipse 50% 50%, rgba(49, 84, 255, 0.055), transparent 70%);
-    }
-    .ambient::after {
-      content: "";
-      position: absolute;
-      top: 420px; right: -220px;
-      width: 520px; height: 520px;
-      background: radial-gradient(circle, rgba(120, 60, 220, 0.03), transparent 60%);
-    }
-    .noise {
-      position: fixed; inset: 0; z-index: 1; pointer-events: none;
-      opacity: 0.02;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
-    /* Preloader */
-    #preloader {
-      position: fixed; inset: 0; z-index: 10000;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      background: var(--clr-bg);
-      transition: opacity .45s ease, visibility .45s ease;
-    }
-    #preloader.done { opacity: 0; visibility: hidden; pointer-events: none; }
-    .loader-ring {
-      width: 44px; height: 44px; border-radius: 50%;
-      border: 2px solid transparent;
-      border-top-color: hsl(0, 100%, 50%);
-      border-right-color: hsl(200, 100%, 50%);
-      animation: spin .7s linear infinite;
-      margin-bottom: 18px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loader-text {
-      font-size: 12px; font-weight: 600;
-      letter-spacing: .15em; text-transform: uppercase;
-      color: var(--clr-text-dim);
+    // =========================
+    // DOWNLOAD
+    // =========================
+    function downloadBeat(beatId) {
+      const b = beats[beatId];
+      if (!b) return;
+
+      const url = b.downloadUrl || b.previewUrl;
+      if (!url) {
+        alert(`No download file set for "${b.name}".\n\nSet downloadUrl or previewUrl.`);
+        return;
+      }
+      window.open(url, "_blank");
     }
 
-    .page { position: relative; z-index: 2; opacity: 0; transition: opacity .45s ease; }
-    .page.visible { opacity: 1; }
-    .container { max-width: var(--container); margin: 0 auto; padding: 0 24px; }
-
-    /* Header */
-    .header {
-      position: sticky; top: 0; z-index: 100;
-      height: 60px;
-      background: rgba(14, 14, 20, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--clr-border);
-      transition: background .3s ease;
-    }
-    .header.scrolled { background: rgba(14, 14, 20, 0.95); }
-    .header-inner {
-      max-width: var(--container);
-      height: 100%;
-      margin: 0 auto;
-      padding: 0 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-    }
-    .logo { display: flex; align-items: center; gap: 10px; color: var(--clr-text); }
-    .logo:hover { opacity: .85; }
-    .logo-mark {
-      width: 32px; height: 32px;
-      border-radius: var(--radius);
-      background: var(--clr-card);
-      border: 1px solid var(--clr-border);
-      display: flex; align-items: center; justify-content: center;
-      animation: prismBorder 10s linear infinite;
-    }
-    .logo-name { font-size: 17px; font-weight: 800; letter-spacing: -0.02em; }
-
-    .nav { display: flex; align-items: center; gap: 22px; }
-    .nav-link { font-size: 14px; font-weight: 600; color: var(--clr-text-secondary); }
-    .nav-link:hover, .nav-link.active { color: var(--clr-text); }
-
-    /* Buttons */
-    .btn-prism{
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 300px;
-      height: 70px;
-      background-color: #1A1B1E;
-      background: var(--clr-bg);
-      font-size: 20px;
-      font-weight: 700;
-      color: #f2f2f2 !important;
-      text-align: center;
-      padding: 17px 20px 10px 20px;
-      border-radius: 5px;
-      border: 2px solid hsl(0, 100%, 100%);
-      animation: prismBtn 10s linear infinite;
-      animation-direction: forward;
-      cursor: pointer;
-      user-select: none;
-      transition: transform .2s ease, background .2s ease;
-      text-decoration: none;
-    }
-    .btn-prism:hover{ transform: translateY(-2px); background: var(--clr-card-hover); }
-    .btn-prism:active{ transform: translateY(0); }
-
-    .btn-prism-sm{
-      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      height: 42px; padding: 8px 20px 6px 20px;
-      background: var(--clr-card);
-      color: var(--clr-text);
-      border: 2px solid #fff;
-      border-radius: var(--radius);
-      font-size: 13px; font-weight: 800;
-      animation: prismBtn 10s linear infinite;
-      cursor: pointer;
-      text-decoration: none;
-      transition: transform .2s ease, background .2s ease;
-    }
-    .btn-prism-sm:hover{ transform: translateY(-1px); background: var(--clr-card-hover); }
-
-    .btn-ghost-sm{
-      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      height: 42px; padding: 8px 20px 6px 20px;
-      background: transparent;
-      color: var(--clr-text-secondary);
-      border: 2px solid var(--clr-border);
-      border-radius: var(--radius);
-      font-size: 13px; font-weight: 800;
-      cursor: pointer;
-      text-decoration: none;
-      transition: transform .2s ease, border-color .2s ease, color .2s ease;
-    }
-    .btn-ghost-sm:hover{
-      color: var(--clr-text);
-      border-color: var(--clr-border-light);
-      transform: translateY(-1px);
-    }
-
-    .delay-1{ animation-delay:-2.5s; }
-    .delay-2{ animation-delay:-5s; }
-    .delay-3{ animation-delay:-7.5s; }
-
-    /* Hero */
-    .hero { padding: 90px 24px 60px; text-align: center; }
-    .hero-inner { max-width: 720px; margin: 0 auto; }
-    .hero-badge{
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 18px;
-      background: var(--clr-card);
-      border: 1px solid var(--clr-border);
-      border-radius: var(--radius);
-      font-size: 11px; font-weight: 800;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--clr-text-secondary);
-      margin-bottom: 28px;
-      animation: prismBorder 10s linear infinite;
-    }
-    .badge-dot{
-      width: 6px; height: 6px;
-      background: #22c55e;
-      border-radius: 50%;
-      box-shadow: 0 0 6px rgba(34,197,94,.55);
-    }
-    .hero h1{
-      font-size: clamp(32px, 5vw, 54px);
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      line-height: 1.08;
-      margin: 0 0 16px;
-    }
-    .hero p{
-      margin: 0 auto 34px;
-      max-width: 520px;
-      color: var(--clr-text-secondary);
-      line-height: 1.65;
-    }
-    .hero-btns{ display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-
-    /* Stats */
-    .stats{
-      border-top: 1px solid var(--clr-border);
-      border-bottom: 1px solid var(--clr-border);
-      padding: 32px 24px;
-      max-width: 820px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-      text-align: center;
-    }
-    .stat-val{ font-size: 22px; font-weight: 900; letter-spacing: -0.02em; }
-    .stat-label{
-      margin-top: 4px;
-      font-size: 10px;
+    // =========================
+    // KEYBOARD
+    // =========================
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeProduct();
+        closeMobileNav();
+      }
+      if (e.code === "Space" && playerWS) {
+        e.preventDefault();
+        togglePlayer();
+      }
+      if (e.code === "ArrowRight") nextTrack();
+      if (e.code === "ArrowLeft") prevTrack();
+    });
+  </script>
+</body>
+</html>
       font-weight: 800;
       letter-spacing: .14em;
       text-transform: uppercase;
