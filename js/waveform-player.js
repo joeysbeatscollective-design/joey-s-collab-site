@@ -1,4 +1,6 @@
-// WaveSurfer.js Integration for Professional Waveform Player
+// =============================================
+// WAVEFORM PLAYER - JOEY FLAVOUR BEATS
+// =============================================
 
 class WaveformPlayer {
   constructor() {
@@ -6,95 +8,114 @@ class WaveformPlayer {
     this.currentBeat = null;
     this.playlist = [];
     this.currentIndex = 0;
+    this.isReady = false;
     this.init();
   }
 
   init() {
-    // Initialize WaveSurfer
+    const waveformContainer = document.getElementById('waveform');
+    if (!waveformContainer) return;
+
     this.wavesurfer = WaveSurfer.create({
       container: '#waveform',
-      waveColor: 'rgba(255, 255, 255, 0.3)',
+      waveColor: 'rgba(255, 255, 255, 0.2)',
       progressColor: '#00b894',
-      cursorColor: '#ffffff',
+      cursorColor: 'transparent',
       barWidth: 2,
-      barRadius: 3,
-      cursorWidth: 1,
-      height: 60,
+      barRadius: 2,
       barGap: 2,
+      height: 40,
       responsive: true,
-      normalize: true,
-      backend: 'WebAudio'
+      normalize: true
     });
 
     this.attachEventListeners();
   }
 
   attachEventListeners() {
-    const audio = document.getElementById('audio-player');
+    if (!this.wavesurfer) return;
+
     const playPauseBtn = document.querySelector('.play-pause');
     const prevBtn = document.querySelector('.prev-track');
     const nextBtn = document.querySelector('.next-track');
     const currentTimeEl = document.querySelector('.current-time');
     const durationEl = document.querySelector('.duration');
+    const volumeSlider = document.querySelector('.volume-slider');
 
-    // WaveSurfer events
     this.wavesurfer.on('ready', () => {
-      durationEl.textContent = this.formatTime(this.wavesurfer.getDuration());
+      this.isReady = true;
+      if (durationEl) {
+        durationEl.textContent = this.formatTime(this.wavesurfer.getDuration());
+      }
     });
 
     this.wavesurfer.on('audioprocess', () => {
-      currentTimeEl.textContent = this.formatTime(this.wavesurfer.getCurrentTime());
+      if (currentTimeEl) {
+        currentTimeEl.textContent = this.formatTime(this.wavesurfer.getCurrentTime());
+      }
     });
 
-    this.wavesurfer.on('finish', () => {
-      this.playNext();
+    this.wavesurfer.on('finish', () => this.playNext());
+
+    this.wavesurfer.on('play', () => {
+      if (playPauseBtn) {
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      }
     });
 
-    // Play/Pause
-    playPauseBtn.addEventListener('click', () => {
-      this.togglePlayPause();
+    this.wavesurfer.on('pause', () => {
+      if (playPauseBtn) {
+        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+      }
     });
 
-    // Previous track
-    prevBtn.addEventListener('click', () => {
-      this.playPrevious();
-    });
+    if (playPauseBtn) {
+      playPauseBtn.addEventListener('click', () => this.togglePlayPause());
+    }
 
-    // Next track
-    nextBtn.addEventListener('click', () => {
-      this.playNext();
-    });
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => this.playPrevious());
+    }
 
-    // Click on waveform to seek
-    this.wavesurfer.on('interaction', () => {
-      this.wavesurfer.play();
-      playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    });
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => this.playNext());
+    }
+
+    if (volumeSlider) {
+      volumeSlider.addEventListener('input', (e) => {
+        this.wavesurfer.setVolume(e.target.value / 100);
+      });
+    }
   }
 
   loadBeat(beat) {
+    if (!this.wavesurfer) return;
+
     this.currentBeat = beat;
-    
+
     // Update UI
     const playerCover = document.querySelector('.player-cover img');
     const trackTitle = document.querySelector('.track-title');
-    const trackArtist = document.querySelector('.track-artist');
-    
-    playerCover.src = beat.cover;
-    trackTitle.textContent = beat.title;
-    trackArtist.textContent = `${beat.bpm} BPM • ${beat.key}`;
+    const trackMeta = document.querySelector('.track-meta');
 
-    // Load audio into WaveSurfer
+    if (playerCover) playerCover.src = beat.cover;
+    if (trackTitle) trackTitle.textContent = beat.title;
+    if (trackMeta) trackMeta.textContent = `${beat.bpm} BPM • ${beat.key}`;
+
+    // Load audio
     this.wavesurfer.load(beat.audioPreview);
-    
-    // Show player
-    document.getElementById('global-player').classList.add('active');
 
-    // Log play event
-    analytics.logEvent('beat_played', {
-      beat_id: beat.id,
-      beat_title: beat.title
-    });
+    // Show player
+    const player = document.getElementById('global-player');
+    if (player) player.classList.add('active');
+
+    // Log analytics
+    if (typeof analytics !== 'undefined') {
+      analytics.logEvent('beat_played', {
+        beat_id: beat.id,
+        beat_title: beat.title
+      });
+    }
   }
 
   setPlaylist(beats) {
@@ -102,53 +123,45 @@ class WaveformPlayer {
   }
 
   play() {
-    this.wavesurfer.play();
-    document.querySelector('.play-pause').innerHTML = '<i class="fas fa-pause"></i>';
-    
-    // Update all beat cards
-    this.updateBeatCardButtons();
+    if (this.wavesurfer && this.isReady) {
+      this.wavesurfer.play();
+      this.updateBeatCardButtons();
+    }
   }
 
   pause() {
-    this.wavesurfer.pause();
-    document.querySelector('.play-pause').innerHTML = '<i class="fas fa-play"></i>';
-    this.updateBeatCardButtons();
+    if (this.wavesurfer) {
+      this.wavesurfer.pause();
+      this.updateBeatCardButtons();
+    }
   }
 
   togglePlayPause() {
-    if (this.wavesurfer.isPlaying()) {
-      this.pause();
-    } else {
-      this.play();
+    if (this.wavesurfer) {
+      this.wavesurfer.playPause();
     }
   }
 
   playNext() {
     if (this.playlist.length === 0) return;
-    
     this.currentIndex = (this.currentIndex + 1) % this.playlist.length;
-    const nextBeat = this.playlist[this.currentIndex];
-    this.loadBeat(nextBeat);
-    this.play();
+    this.loadBeat(this.playlist[this.currentIndex]);
+    setTimeout(() => this.play(), 100);
   }
 
   playPrevious() {
     if (this.playlist.length === 0) return;
-    
     this.currentIndex = (this.currentIndex - 1 + this.playlist.length) % this.playlist.length;
-    const prevBeat = this.playlist[this.currentIndex];
-    this.loadBeat(prevBeat);
-    this.play();
+    this.loadBeat(this.playlist[this.currentIndex]);
+    setTimeout(() => this.play(), 100);
   }
 
   updateBeatCardButtons() {
-    // Reset all play buttons
     document.querySelectorAll('.play-btn').forEach(btn => {
       btn.innerHTML = '<i class="fas fa-play"></i>';
     });
 
-    // Update current beat's button
-    if (this.currentBeat && this.wavesurfer.isPlaying()) {
+    if (this.currentBeat && this.wavesurfer && this.wavesurfer.isPlaying()) {
       const currentCard = document.querySelector(`[data-beat-id="${this.currentBeat.id}"]`);
       if (currentCard) {
         const playBtn = currentCard.querySelector('.play-btn');
@@ -160,14 +173,14 @@ class WaveformPlayer {
   }
 
   formatTime(seconds) {
-    if (!seconds) return '0:00';
+    if (!seconds || isNaN(seconds)) return '0:00';
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   }
 }
 
-// Initialize global player
+// Initialize
 let waveformPlayer;
 document.addEventListener('DOMContentLoaded', () => {
   waveformPlayer = new WaveformPlayer();
