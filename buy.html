@@ -2,29 +2,187 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Buy Beats - Joey Flavour</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buy Premium Beats - Joey Flav</title>
+  <meta name="description" content="Purchase exclusive beat licenses with instant delivery. Basic, Premium & Exclusive rights available.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header>
-    <h1>Buy Beats 💳</h1>
-    <button id="dark-mode-toggle">🌙 Dark Mode</button>
+  
+  <!-- Navigation (same as index.html) -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">
+        <h1>JOEY<span>FLAV</span></h1>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">FREE COLLABS</a></li>
+        <li><a href="buy.html" class="active">BUY BEATS</a></li>
+        <li><a href="contact.html">CONTACT</a></li>
+      </ul>
+      <div class="social-icons">
+        <a href="https://instagram.com/joeyflav" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://youtube.com/@joeyflav" target="_blank"><i class="fab fa-youtube"></i></a>
+        <a href="mailto:joeyflavourcollab@gmail.com"><i class="fas fa-envelope"></i></a>
+      </div>
+      <button class="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero hero-small">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Premium Beat Licenses</h1>
+      <p>Instant delivery • Untagged files • Commercial rights</p>
+    </div>
   </header>
 
-  <section class="beat-grid">
-    <div class="beat-card">
-      <img src="covers/cover3.jpg" alt="Beat Cover">
-      <audio class="waveform-player" src="audio/tracks/beat3.mp3"></audio>
-      <select class="license-select">
-        <option value="mp3">MP3 License</option>
-        <option value="wav">WAV License</option>
-        <option value="stems">STEMS License</option>
-      </select>
-      <button class="buy-stripe">Buy with Stripe</button>
-      <button class="buy-paypal">Buy with PayPal</button>
+  <!-- License Comparison Table -->
+  <section class="license-comparison">
+    <div class="container">
+      <h2>Choose Your License</h2>
+      <div class="license-table">
+        <div class="license-column">
+          <div class="license-header basic">
+            <h3>Basic</h3>
+            <p class="price">$29.99</p>
+          </div>
+          <ul class="license-features">
+            <li><i class="fas fa-check"></i> MP3 + WAV files</li>
+            <li><i class="fas fa-check"></i> 10,000 streams</li>
+            <li><i class="fas fa-check"></i> Music videos allowed</li>
+            <li><i class="fas fa-check"></i> Radio play allowed</li>
+            <li><i class="fas fa-times"></i> No distribution rights</li>
+            <li><i class="fas fa-times"></i> Producer credit required</li>
+          </ul>
+        </div>
+
+        <div class="license-column featured">
+          <div class="license-badge">MOST POPULAR</div>
+          <div class="license-header premium">
+            <h3>Premium</h3>
+            <p class="price">$79.99</p>
+          </div>
+          <ul class="license-features">
+            <li><i class="fas fa-check"></i> MP3 + WAV + Stems</li>
+            <li><i class="fas fa-check"></i> Unlimited streams</li>
+            <li><i class="fas fa-check"></i> Music videos allowed</li>
+            <li><i class="fas fa-check"></i> Radio + TV allowed</li>
+            <li><i class="fas fa-check"></i> Distribution rights</li>
+            <li><i class="fas fa-times"></i> Producer credit required</li>
+          </ul>
+        </div>
+
+        <div class="license-column">
+          <div class="license-header exclusive">
+            <h3>Exclusive</h3>
+            <p class="price">$299.99</p>
+          </div>
+          <ul class="license-features">
+            <li><i class="fas fa-check"></i> Full trackout stems</li>
+            <li><i class="fas fa-check"></i> Unlimited streams</li>
+            <li><i class="fas fa-check"></i> All rights included</li>
+            <li><i class="fas fa-check"></i> Beat removed from sale</li>
+            <li><i class="fas fa-check"></i> Distribution rights</li>
+            <li><i class="fas fa-check"></i> No producer credit needed</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
-  <script src="js/scripts.js" defer></script>
+  <!-- Premium Beats Grid -->
+  <section id="beats" class="beats-section">
+    <div class="container">
+      <h2>💎 Premium Beats</h2>
+      
+      <!-- Filter/Search -->
+      <div class="beat-filters">
+        <input type="text" id="search-beats" placeholder="🔍 Search beats..." class="search-input">
+        <div class="filter-tags">
+          <button class="tag-filter active" data-tag="all">All</button>
+          <button class="tag-filter" data-tag="trap">Trap</button>
+          <button class="tag-filter" data-tag="drill">Drill</button>
+          <button class="tag-filter" data-tag="afrobeat">Afrobeat</button>
+          <button class="tag-filter" data-tag="lofi">Lofi</button>
+        </div>
+      </div>
+
+      <!-- Beats Grid -->
+      <div class="beat-grid">
+        <!-- Populated by beat-loader.js with type="paid" -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (same as index.html) -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <h3>JOEY<span>FLAV</span></h3>
+          <p>Premium beats & free collabs</p>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Free Collabs</a></li>
+            <li><a href="buy.html">Buy Beats</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h4>Follow Me</h4>
+          <div class="social-icons">
+            <a href="https://instagram.com/joeyflav"><i class="fab fa-instagram"></i></a>
+            <a href="https://youtube.com/@joeyflav"><i class="fab fa-youtube"></i></a>
+            <a href="mailto:joeyflavourcollab@gmail.com"><i class="fas fa-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Joey Flav. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Global Player -->
+  <div id="global-player">
+    <div class="player-cover">
+      <img src="covers/default.jpg" alt="Now Playing">
+    </div>
+    <div class="player-info">
+      <div class="track-title">Select a beat to play</div>
+      <div class="track-artist"></div>
+    </div>
+    <div class="player-controls">
+      <button class="prev-track"><i class="fas fa-step-backward"></i></button>
+      <button class="play-pause"><i class="fas fa-play"></i></button>
+      <button class="next-track"><i class="fas fa-step-forward"></i></button>
+      <div class="waveform-container">
+        <div id="waveform"></div>
+      </div>
+      <div class="time-display">
+        <span class="current-time">0:00</span> / <span class="duration">0:00</span>
+      </div>
+    </div>
+    <audio id="audio-player"></audio>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="https://unpkg.com/wavesurfer.js@7"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/beats-data.js"></script>
+  <script src="js/waveform-player.js"></script>
+  <script src="js/beat-loader.js"></script>
 </body>
 </html>
