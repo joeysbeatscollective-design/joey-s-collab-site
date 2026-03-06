@@ -1,73 +1,111 @@
-/* General */
-body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    background: #111;
-    color: #eee;
+/* General Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
 }
-a { text-decoration: none; color: inherit; }
 
-/* Dark/Light toggle */
-body.light { background: #fff; color: #111; }
+/* Body */
+body {
+  background: #f5f5f5;
+  color: #111;
+  transition: background 0.3s, color 0.3s;
+}
 
-/* Grid Layout */
+/* Dark Mode */
+body.dark-mode {
+  background: #111;
+  color: #fff;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #222;
+  color: #fff;
+}
+
+header a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 1rem;
+}
+
+/* Beat Grid */
 .beat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
 }
 
 /* Beat Card */
 .beat-card {
-    background: #222;
-    border-radius: 12px;
-    overflow: hidden;
-    text-align: center;
-    transition: transform 0.3s;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  padding-bottom: 1rem;
 }
-.beat-card:hover { transform: scale(1.05); }
-.beat-card img { width: 100%; display: block; }
-.beat-card .beat-title { padding: 10px; font-weight: bold; }
 
-/* FREE Download Button */
-.free-btn {
-    display: inline-block;
-    margin: 10px auto 20px;
-    padding: 8px 20px;
-    background: #ff2a68;
-    color: #fff;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s;
+body.dark-mode .beat-card {
+  background: #222;
 }
-.free-btn:hover { background: #e60050; }
+
+/* Cover Art */
+.beat-card img {
+  width: 100%;
+  display: block;
+}
 
 /* Waveform Player */
-.waveform-container { margin: 10px auto; }
-
-/* Sticky Bottom Player */
-.sticky-player {
-    position: fixed;
-    bottom: 0; left: 0;
-    width: 100%;
-    background: #111;
-    border-top: 1px solid #333;
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    z-index: 1000;
-}
-.sticky-player audio { width: 100%; }
-
-/* Dark Mode Toggle Button */
-#darkToggle {
-    position: fixed; top: 10px; right: 20px;
-    background: #ff2a68;
-    border: none; padding: 8px 12px; color: #fff;
-    cursor: pointer; border-radius: 6px;
+.waveform-player {
+  width: 90%;
+  margin: 0.5rem auto;
 }
 
-/* Cart Section */
-.cart { background: #222; padding: 20px; border-radius: 12px; margin: 20px 0; }
-.cart button { background: #ff2a68; border: none; padding: 10px 15px; color: #fff; border-radius: 6px; cursor: pointer; }
+/* Buttons */
+button, select {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  font-weight: bold;
+}
+
+button.free-download {
+  background: #00b894;
+  color: #fff;
+}
+
+button.buy-stripe, button.buy-paypal {
+  background: #0984e3;
+  color: #fff;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* License Dropdown */
+.license-select {
+  margin-top: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Dashboard */
+.dashboard {
+  padding: 2rem;
+}
+
+#beat-upload {
+  display: block;
+  margin-bottom: 1rem;
+}
