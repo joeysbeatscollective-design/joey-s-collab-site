@@ -1,1 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Producer Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Producer Dashboard 🎚</h1>
+    <button id="dark-mode-toggle">🌙 Dark Mode</button>
+  </header>
 
+  <section class="dashboard">
+    <input type="file" id="beat-upload" multiple>
+    <button id="upload-button">Upload Beats</button>
+
+    <h2>Analytics</h2>
+    <div id="analytics">
+      <!-- Download counts, email captures, etc. -->
+    </div>
+
+    <h2>Your Beats</h2>
+    <div id="beat-list">
+      <!-- Beat list with waveform players -->
+    </div>
+  </section>
+
+  <script src="js/scripts.js" defer></script>
+</body>
+</html>
