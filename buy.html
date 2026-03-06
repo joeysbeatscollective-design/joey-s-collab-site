@@ -1,1 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JoeyFlavour — Buy Beats</title>
+<link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
 
+<header class="header">
+  <a class="nav-link" href="#">JoeyFlavour</a>
+  <nav class="nav">
+    <a class="nav-link active" href="#beats">Buy Beats</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Purchase Your Favorite Beats</h1>
+  <p>Choose a license and pay securely via Stripe or PayPal. Instant email delivery of licenses.</p>
+</section>
+
+<section id="beats" class="grid">
+  <div class="product-card">
+    <div class="product-image-container">
+      <img class="product-image" src="./covers/ECLIPSE.png" alt="Eclipse Cover">
+    </div>
+    <div class="card-body">
+      <div class="card-title">Eclipse</div>
+      <div class="card-producer">Prod. JoeyFlavour</div>
+      <div class="wave" id="wave-buy-beat1"></div>
+      <div class="tags"><span class="tag">Fast</span> <span class="tag">Bouncy</span></div>
+      <select id="license1">
+        <option value="MP3">MP3 License</option>
+        <option value="WAV">WAV License</option>
+        <option value="STEMS">STEMS License</option>
+      </select>
+      <button class="btn-buy" onclick="checkoutBeat('Eclipse', 'license1')">Buy Now</button>
+    </div>
+  </div>
+  <!-- Add more beats similarly -->
+</section>
+
+<script src="./js/main.js"></script>
+</body>
+</html>
