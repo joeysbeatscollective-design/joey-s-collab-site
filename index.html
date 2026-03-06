@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Joey Flav - Free Collab Beats</title>
+  <title>Joey Flavour - Free Collab Beats</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Download free beats for collaborations. Hip-hop, trap, drill, afrobeat instrumentals by Joey Flav.">
-  <meta name="keywords" content="free beats, hip hop beats, trap beats, collaboration beats, instrumentals">
+  <meta name="description" content="Download free beats for collaborations. Hip-hop, trap, drill, afrobeat instrumentals by Joey Flavour.">
+  <meta name="keywords" content="free beats, hip hop beats, trap beats, collaboration beats, instrumentals, Joey Flavour">
+  <meta name="author" content="Joey Flavour">
   
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Joey Flavour - Free Collab Beats">
+  <meta property="og:description" content="Download free untagged beats for collabs. Tag @joeyflavour and let's go viral!">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://joeyflavour.com">
   
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,55 +27,80 @@
   <!-- Navigation -->
   <nav class="navbar">
     <div class="container">
-      <div class="logo">
-        <h1>JOEY<span>FLAV</span></h1>
-      </div>
+      <a href="index.html" class="logo">
+        <h1>JOEY<span>FLAVOUR</span></h1>
+      </a>
       <ul class="nav-links">
         <li><a href="index.html" class="active">FREE COLLABS</a></li>
         <li><a href="buy.html">BUY BEATS</a></li>
         <li><a href="contact.html">CONTACT</a></li>
       </ul>
-      <div class="social-icons">
-        <a href="https://instagram.com/joeyflav" target="_blank"><i class="fab fa-instagram"></i></a>
-        <a href="https://youtube.com/@joeyflav" target="_blank"><i class="fab fa-youtube"></i></a>
-        <a href="mailto:joeyflavourcollab@gmail.com"><i class="fas fa-envelope"></i></a>
+      <div class="nav-right">
+        <a href="https://instagram.com/joeyflavour" target="_blank" class="social-link">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="mailto:joeyflavourcollabs@gmail.com" class="social-link">
+          <i class="fas fa-envelope"></i>
+        </a>
       </div>
-      <button class="mobile-menu-toggle">
-        <i class="fas fa-bars"></i>
+      <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        <span class="hamburger"></span>
       </button>
     </div>
   </nav>
 
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <ul>
+      <li><a href="index.html">FREE COLLABS</a></li>
+      <li><a href="buy.html">BUY BEATS</a></li>
+      <li><a href="contact.html">CONTACT</a></li>
+    </ul>
+    <div class="mobile-social">
+      <a href="https://instagram.com/joeyflavour" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="mailto:joeyflavourcollabs@gmail.com"><i class="fas fa-envelope"></i></a>
+    </div>
+  </div>
+
   <!-- Hero Section -->
   <header class="hero">
-    <div class="hero-overlay"></div>
+    <div class="hero-bg"></div>
     <div class="hero-content">
-      <h1 class="glitch" data-text="FREE BEATS">FREE BEATS</h1>
-      <p class="hero-subtitle">Download untagged beats for collabs • Tag me and let's go viral 🚀</p>
+      <p class="hero-tag">PRODUCER • ARTIST • CREATOR</p>
+      <h1 class="hero-title">FREE BEATS</h1>
+      <p class="hero-subtitle">Download untagged beats for collabs<br>Tag me and let's go viral 🚀</p>
       <div class="hero-cta">
         <a href="#beats" class="btn-primary">
-          <i class="fas fa-download"></i> BROWSE BEATS
+          <i class="fas fa-download"></i>
+          <span>BROWSE BEATS</span>
         </a>
         <a href="buy.html" class="btn-secondary">
-          <i class="fas fa-crown"></i> EXCLUSIVE LICENSES
+          <i class="fas fa-crown"></i>
+          <span>EXCLUSIVE LICENSES</span>
         </a>
       </div>
       
-      <!-- Stats Counter -->
+      <!-- Stats -->
       <div class="stats">
-        <div class="stat-item">
-          <h3 class="stat-number" data-target="500">0</h3>
-          <p>Downloads</p>
+        <div class="stat">
+          <span class="stat-number" data-target="500">0</span>
+          <span class="stat-label">Downloads</span>
         </div>
-        <div class="stat-item">
-          <h3 class="stat-number" data-target="50">0</h3>
-          <p>Collabs</p>
+        <div class="stat">
+          <span class="stat-number" data-target="50">0</span>
+          <span class="stat-label">Collabs</span>
         </div>
-        <div class="stat-item">
-          <h3 class="stat-number" data-target="1000000">0</h3>
-          <p>Total Streams</p>
+        <div class="stat">
+          <span class="stat-number" data-target="1000000">0</span>
+          <span class="stat-label">Total Streams</span>
         </div>
       </div>
+    </div>
+    
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator">
+      <span>SCROLL</span>
+      <div class="scroll-line"></div>
     </div>
   </header>
 
@@ -80,24 +108,28 @@
   <section id="beats" class="beats-section">
     <div class="container">
       <div class="section-header">
-        <h2>🔥 Free Collab Beats</h2>
-        <p>Download, record, tag me @joeyflav and blow up 🚀</p>
+        <h2>Free Collab Beats</h2>
+        <p>Download, record, tag @joeyflavour and blow up</p>
       </div>
 
       <!-- Filter/Search -->
       <div class="beat-filters">
-        <input type="text" id="search-beats" placeholder="🔍 Search beats..." class="search-input">
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="search-beats" placeholder="Search beats..." class="search-input">
+        </div>
         <div class="filter-tags">
           <button class="tag-filter active" data-tag="all">All</button>
           <button class="tag-filter" data-tag="trap">Trap</button>
           <button class="tag-filter" data-tag="drill">Drill</button>
           <button class="tag-filter" data-tag="afrobeat">Afrobeat</button>
           <button class="tag-filter" data-tag="lofi">Lofi</button>
+          <button class="tag-filter" data-tag="rnb">R&B</button>
         </div>
       </div>
 
-      <!-- Beats Grid (populated by JS) -->
-      <div class="beat-grid">
+      <!-- Beats Grid -->
+      <div class="beat-grid" id="beat-grid">
         <!-- Dynamically loaded by beat-loader.js -->
       </div>
     </div>
@@ -106,88 +138,123 @@
   <!-- How It Works -->
   <section class="how-it-works">
     <div class="container">
-      <h2>How Free Collabs Work</h2>
+      <div class="section-header">
+        <h2>How Free Collabs Work</h2>
+      </div>
       <div class="steps">
         <div class="step">
-          <div class="step-icon">1</div>
-          <h3>Download Beat</h3>
-          <p>Enter your email and get instant untagged download</p>
+          <div class="step-number">01</div>
+          <div class="step-content">
+            <h3>Download Beat</h3>
+            <p>Enter your email and get instant untagged download</p>
+          </div>
         </div>
         <div class="step">
-          <div class="step-icon">2</div>
-          <h3>Record Your Track</h3>
-          <p>Use the beat commercially - just credit me!</p>
+          <div class="step-number">02</div>
+          <div class="step-content">
+            <h3>Record Your Track</h3>
+            <p>Use the beat commercially - just credit me!</p>
+          </div>
         </div>
         <div class="step">
-          <div class="step-icon">3</div>
-          <h3>Tag & Upload</h3>
-          <p>Tag @joeyflav on Instagram/YouTube and we both win!</p>
+          <div class="step-number">03</div>
+          <div class="step-content">
+            <h3>Tag & Upload</h3>
+            <p>Tag @joeyflavour on Instagram and we both win!</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Newsletter Signup -->
+  <!-- Newsletter -->
   <section class="newsletter">
     <div class="container">
-      <h2>🔔 Get Notified of New Beats</h2>
-      <p>Join 500+ artists getting free beats weekly</p>
-      <form id="newsletter-form" class="newsletter-form">
-        <input type="email" placeholder="your@email.com" required>
-        <button type="submit" class="btn-primary">SUBSCRIBE</button>
-      </form>
+      <div class="newsletter-content">
+        <h2>Get Notified of New Beats</h2>
+        <p>Join 500+ artists getting free beats weekly</p>
+        <form id="newsletter-form" class="newsletter-form">
+          <input type="email" placeholder="your@email.com" required>
+          <button type="submit" class="btn-primary">
+            <span>SUBSCRIBE</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </form>
+      </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-content">
+      <div class="footer-main">
         <div class="footer-brand">
-          <h3>JOEY<span>FLAV</span></h3>
+          <h3>JOEY<span>FLAVOUR</span></h3>
           <p>Premium beats & free collabs</p>
+          <div class="footer-social">
+            <a href="https://instagram.com/joeyflavour" target="_blank" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="mailto:joeyflavourcollabs@gmail.com" aria-label="Email">
+              <i class="fas fa-envelope"></i>
+            </a>
+          </div>
         </div>
         <div class="footer-links">
-          <h4>Quick Links</h4>
+          <h4>Links</h4>
           <ul>
             <li><a href="index.html">Free Collabs</a></li>
             <li><a href="buy.html">Buy Beats</a></li>
             <li><a href="contact.html">Contact</a></li>
           </ul>
         </div>
-        <div class="footer-social">
-          <h4>Follow Me</h4>
-          <div class="social-icons">
-            <a href="https://instagram.com/joeyflav"><i class="fab fa-instagram"></i></a>
-            <a href="https://youtube.com/@joeyflav"><i class="fab fa-youtube"></i></a>
-            <a href="mailto:joeyflavourcollab@gmail.com"><i class="fas fa-envelope"></i></a>
-          </div>
+        <div class="footer-contact">
+          <h4>Contact</h4>
+          <p><a href="mailto:joeyflavourcollabs@gmail.com">joeyflavourcollabs@gmail.com</a></p>
+          <p><a href="https://instagram.com/joeyflavour" target="_blank">@joeyflavour</a></p>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2024 Joey Flav. All beats © Joey Flav. Free downloads for promotional use with credit.</p>
+        <p>&copy; 2024 Joey Flavour. All beats © Joey Flavour. Free downloads for promotional use with credit.</p>
       </div>
     </div>
   </footer>
 
-  <!-- Global Audio Player (Sticky Bottom) -->
+  <!-- Global Audio Player -->
   <div id="global-player">
-    <div class="player-cover">
-      <img src="covers/default.jpg" alt="Now Playing">
-    </div>
-    <div class="player-info">
-      <div class="track-title">Select a beat to play</div>
-      <div class="track-artist"></div>
-    </div>
-    <div class="player-controls">
-      <button class="prev-track"><i class="fas fa-step-backward"></i></button>
-      <button class="play-pause"><i class="fas fa-play"></i></button>
-      <button class="next-track"><i class="fas fa-step-forward"></i></button>
-      <div class="waveform-container">
-        <div id="waveform"></div>
+    <div class="player-left">
+      <div class="player-cover">
+        <img src="covers/default.jpg" alt="Now Playing">
       </div>
-      <div class="time-display">
-        <span class="current-time">0:00</span> / <span class="duration">0:00</span>
+      <div class="player-info">
+        <div class="track-title">Select a beat</div>
+        <div class="track-meta"></div>
+      </div>
+    </div>
+    <div class="player-center">
+      <div class="player-controls">
+        <button class="player-btn prev-track" aria-label="Previous">
+          <i class="fas fa-step-backward"></i>
+        </button>
+        <button class="player-btn play-pause" aria-label="Play/Pause">
+          <i class="fas fa-play"></i>
+        </button>
+        <button class="player-btn next-track" aria-label="Next">
+          <i class="fas fa-step-forward"></i>
+        </button>
+      </div>
+      <div class="player-progress">
+        <span class="current-time">0:00</span>
+        <div class="waveform-container">
+          <div id="waveform"></div>
+        </div>
+        <span class="duration">0:00</span>
+      </div>
+    </div>
+    <div class="player-right">
+      <div class="volume-control">
+        <i class="fas fa-volume-up"></i>
+        <input type="range" class="volume-slider" min="0" max="100" value="80">
       </div>
     </div>
     <audio id="audio-player"></audio>
